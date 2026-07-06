@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 // ─── IMAGE PATHS — upload originals to /public/images/ in your Cloudflare project ───
 // RENAME MAP (your upload filename → clean name for /public/images/):
-//  1781385919270_5_47_MB_Picture.png          → vaani.jpg
+//  Vaani PM Portfolio.jpg                     → vaani.jpg
 //  1781394291519_image.png                    → coll-dash-1.jpg
 //  1781394378793_image.png                    → coll-dash-2.jpg
 //  1781394792256_image.png                    → coll-dash-3.jpg
