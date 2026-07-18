@@ -770,7 +770,7 @@ function AboutWithQuote(){
           <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
         </div>
         {/* About — right side */}
-        <div style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+        <div style={{padding:"72px 64px 72px 100px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <div className="ov" style={{marginBottom:11}}>About</div>
           <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
           <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
