@@ -760,7 +760,7 @@ function AboutWithQuote(){
   return(
     <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
       {/* Plum diagonal half — upper left */}
-      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 38% 0, 62% 100%, 0 100%)",zIndex:0}}/>
+      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 59% 0, 35% 100%, 0 100%)",zIndex:0}}/>
       {/* Quote — left side */}
       <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
         <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
