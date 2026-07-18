@@ -754,33 +754,29 @@ function IntelSection(){
   );
 }
 
-// ─── ABOUT + FOOTER ───────────────────────────────────────────────────────────
-function PullQuote(){
+// ─── QUOTE + ABOUT + FOOTER ───────────────────────────────────────────────────────────
+function AboutWithQuote(){
   const ref=useInView();
   return(
-    <section ref={ref} className="iv" style={{background:"var(--plum)",padding:"80px 64px",textAlign:"center"}}>
-      <div style={{maxWidth:720,margin:"0 auto"}}>
-        <div style={{fontFamily:"var(--l)",fontSize:10.5,letterSpacing:3,textTransform:"uppercase",color:"rgba(255,255,255,.55)",marginBottom:24,fontWeight:600}}>On product leadership</div>
-        <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(22px,3vw,38px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.35,letterSpacing:-.3,margin:0}}>
-          "Venture into the overlooked. Question the default. Defy the status quo with the clarity to insist on what is right."
-        </blockquote>
-        <div style={{marginTop:28,width:40,height:1.5,background:"rgba(255,255,255,.35)",margin:"28px auto 0"}}/>
-        <div style={{fontFamily:"var(--l)",fontSize:11.5,color:"rgba(255,255,255,.6)",marginTop:16,letterSpacing:.5}}>Vaani Gupta</div>
-      </div>
-    </section>
-  );
-}
-
-function About(){
-  const ref=useInView();
-  return(
-    <section id="about" style={{padding:"84px 64px",background:"var(--cream)"}}>
-      <div ref={ref} className="iv">
-        <div className="ov" style={{marginBottom:11}}>About</div>
-        <h2 style={{fontFamily:"var(--h)",fontSize:32,fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:20,maxWidth:640}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
-        <p style={{fontSize:14,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14,maxWidth:680}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
-        <div className="abs" style={{maxWidth:680}}>What makes me distinctly good at this: I'm intuitive, a fast learner, a researcher, a strong communicator across both engineering and business stakeholders, and someone who brings genuine product leadership — not just coordination — to every team I work with.</div>
-        <div className="abtg"><span className="abt ft">AI-First Workflow</span><span className="abt">B.Tech CSE + MBA</span><span className="abt">2× ML Research Publications</span></div>
+    <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
+      {/* Plum diagonal half — upper left */}
+      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 62% 0, 38% 100%, 0 100%)",zIndex:0}}/>
+      {/* Quote — left side */}
+      <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
+        <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+          <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(26px,2.8vw,40px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.22,letterSpacing:-.5,margin:0}}>
+            "Venture<br/>into the<br/>overlooked.<br/>Question<br/>the default.<br/>Defy<br/>the status quo."
+          </blockquote>
+          <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
+        </div>
+        {/* About — right side */}
+        <div style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+          <div className="ov" style={{marginBottom:11}}>About</div>
+          <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
+          <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
+          <div className="abs" style={{fontSize:13.5}}>What makes me distinctly good at this: I'm intuitive, a fast learner, a researcher, a strong communicator across both engineering and business stakeholders, and someone who brings genuine product leadership — not just coordination — to every team I work with.</div>
+          <div className="abtg" style={{marginTop:18}}><span className="abt ft">AI-First Workflow</span><span className="abt">B.Tech CSE + MBA</span><span className="abt">2× ML Research Publications</span></div>
+        </div>
       </div>
     </section>
   );
@@ -829,8 +825,7 @@ export default function Portfolio(){
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
       <section style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
-      <PullQuote/>
-      <About/>
+      <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
       {activeAnalysis&&<AnalysisModal item={activeAnalysis} onClose={()=>setActiveAnalysis(null)}/>}
