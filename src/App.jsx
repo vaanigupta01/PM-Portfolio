@@ -760,12 +760,12 @@ function AboutWithQuote(){
   return(
     <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
       {/* Plum diagonal half — upper left */}
-      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 55% 0, 45% 100%, 0 100%)",zIndex:0}}/>
+      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 38% 0, 62% 100%, 0 100%)",zIndex:0}}/>
       {/* Quote — left side */}
       <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
         <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(26px,2.8vw,40px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.22,letterSpacing:-.5,margin:0}}>
-            "Venture into<br/>the overlooked.<br/>Question the default.<br/>Defy the status quo<br/>with the clarity<br/>to insist<br/>on what is right."
+            "Venture into<br/>the overlooked.<br/>Question<br/>the default.<br/>Defy the status quo<br/>with the clarity<br/>to insist<br/>on what is right."
           </blockquote>
           <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
         </div>
