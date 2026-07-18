@@ -760,17 +760,17 @@ function AboutWithQuote(){
   return(
     <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
       {/* Plum diagonal half — upper left */}
-      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 62% 0, 38% 100%, 0 100%)",zIndex:0}}/>
+      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 55% 0, 45% 100%, 0 100%)",zIndex:0}}/>
       {/* Quote — left side */}
       <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
         <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(26px,2.8vw,40px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.22,letterSpacing:-.5,margin:0}}>
-            "Venture<br/>into the<br/>overlooked.<br/>Question<br/>the default.<br/>Defy<br/>the status quo."
+            "Venture into<br/>the overlooked.<br/>Question the default.<br/>Defy the status quo<br/>with the clarity<br/>to insist<br/>on what is right."
           </blockquote>
           <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
         </div>
         {/* About — right side */}
-        <div style={{padding:"72px 64px 72px 100px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+        <div style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <div className="ov" style={{marginBottom:11}}>About</div>
           <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
           <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
