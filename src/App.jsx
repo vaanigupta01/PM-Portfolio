@@ -430,18 +430,188 @@ function MoreCard({card}){
 // ─── WEDDING + KITCHEN ────────────────────────────────────────────────────────
 function WeddingCard(){
   const ref=useInView();
+  const[rot,setRot]=useState(-20);
+  const[hovering,setHovering]=useState(false);
+  const[dragging,setDragging]=useState(false);
+  const[startX,setStartX]=useState(0);
+  const[startRot,setStartRot]=useState(0);
+  const rafRef=useRef(null);
+  const hoverRef=useRef(false); // stable ref for hover state inside RAF
+
+  useEffect(()=>{
+    const tick=()=>{
+      if(!hoverRef.current){
+        setRot(r=>r-0.25);
+      }
+      rafRef.current=requestAnimationFrame(tick);
+    };
+    rafRef.current=requestAnimationFrame(tick);
+    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+  },[]); // single RAF loop, never restarts
+
+  const setHover=v=>{hoverRef.current=v;setHovering(v);};
+
+  const onMouseDown=e=>{setDragging(true);hoverRef.current=true;setStartX(e.clientX);setStartRot(rot);};
+  const onMouseMove=e=>{if(!dragging)return;setRot(startRot+(e.clientX-startX)*0.3);};
+  const onMouseUp=()=>{setDragging(false);hoverRef.current=hovering;};
+  const onTouchStart=e=>{hoverRef.current=true;setDragging(true);setStartX(e.touches[0].clientX);setStartRot(rot);};
+  const onTouchMove=e=>{if(!dragging)return;setRot(startRot+(e.touches[0].clientX-startX)*0.3);};
+  const onTouchEnd=()=>{hoverRef.current=false;setDragging(false);};
+
+  const FACE_COUNT=3;
+  const CARD_W=440;
+  const CARD_H=290;
+  // Increase radius so faces don't overlap/pierce each other
+  const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT)));
+
+  const cards=[
+    {
+      id:"personas",label:"User Personas",accent:"#9B2D5E",
+      bg:"linear-gradient(135deg,#2D0A1E,#5C1A38)",
+      body:(
+        <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>3 archetypes · Figma</div>
+          <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
+            <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
+              style={{width:"100%",height:"100%",border:"none",display:"block"}} loading="lazy" title="User Personas"/>
+          </div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+            {["Detail-Obsessed Planner","Budget-First Pragmatist","Aesthetics-Led Dreamer"].map((a,i)=>(
+              <span key={i} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)"}}>{a}</span>
+            ))}
+          </div>
+          <a href="https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
+            target="_blank" rel="noreferrer"
+            style={{display:"inline-flex",alignItems:"center",gap:5,color:"rgba(255,255,255,.55)",fontSize:10.5,fontFamily:"var(--l)",textDecoration:"none"}}>
+            <LogoSVG tool="Figma" size={14}/>Open in Figma →
+          </a>
+        </div>
+      )
+    },
+    {
+      id:"companalysis",label:"Competitor Analysis",accent:"#2A5C4A",
+      bg:"linear-gradient(135deg,#0A1F18,#143828)",
+      body:(
+        <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>Benchmarked across market position, features, UX, USP, and social proof</div>
+          <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
+            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{width:"auto",height:"auto",minWidth:"100%",display:"block"}}/>
+          </div>
+          <div style={{background:"rgba(255,255,255,.09)",border:"1px solid rgba(255,255,255,.18)",borderRadius:8,padding:"8px 12px",display:"flex",gap:8,alignItems:"flex-start"}}>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",color:"white",fontWeight:700,flexShrink:0,marginTop:1}}>Gap</span>
+            <span style={{fontSize:11.5,color:"rgba(255,255,255,.85)",fontFamily:"var(--h)"}}>End-to-end workflow integration — no player connects discovery, budgeting, and planning in one place.</span>
+          </div>
+        </div>
+      )
+    },
+    {
+      id:"scope",label:"Product Scope",accent:"#8C6A1E",
+      bg:"linear-gradient(135deg,#1F1506,#3A2808)",
+      body:(
+        <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:12}}>6 core features · Discovery complete</div>
+          <div style={{flex:1,display:"flex",flexDirection:"column",gap:9,justifyContent:"center"}}>
+            {["Vendor Discovery with Filter & Sort",
+              "Affinity-based Matchmaking Algorithm",
+              "Budget Tracker",
+              "Milestone-driven Timeline & Checklist",
+              "Vendor Package Builder",
+              "Inspiration Layer with Curated Moodboards"
+            ].map((f,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{width:20,height:20,borderRadius:"50%",background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.18)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontFamily:"var(--l)",fontSize:9,color:"rgba(255,255,255,.5)"}}>{"0"+(i+1)}</div>
+                <div style={{fontSize:12.5,color:"rgba(255,255,255,.82)",fontWeight:300}}>{f}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  ];
+
   return(
-    <div ref={ref} className="wc iv">
-      <div className="wch">
-        <div><div style={{marginBottom:7}}><Tag label="Personal Product Work"/><Tag label="Research Stage"/></div><div className="wct">Wedding Planning Platform</div><p style={{fontSize:13,color:"var(--ink-mu)",fontWeight:300,marginTop:4,maxWidth:440,lineHeight:1.7}}>Addressing vendor-discovery fragmentation for engaged couples — building a matchmaking-algorithm-driven platform.</p></div>
-        <LogoRow tools={["ChatGPT","Figma"]} size={24}/>
+    <div ref={ref} className="wc iv" style={{overflow:"visible"}}>
+      {/* HEADER — dark, matches portfolio */}
+      <div style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20}}>
+        <div>
+          <div style={{marginBottom:8}}>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,marginRight:6,background:"rgba(155,45,94,.2)",color:"#D97FA0",border:"1px solid rgba(155,45,94,.35)"}}>Personal Product Work</span>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)"}}>Research Stage</span>
+          </div>
+          <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3,marginBottom:4}}>Wedding Planning Platform</div>
+          <p style={{fontSize:13,color:"rgba(255,255,255,.55)",fontWeight:300,maxWidth:480,lineHeight:1.65}}>Addressing vendor-discovery fragmentation for engaged couples — building a matchmaking-algorithm-driven platform.</p>
+        </div>
+        <div style={{background:"rgba(155,45,94,.2)",border:"1px solid rgba(155,45,94,.4)",borderRadius:14,padding:"14px 20px",textAlign:"center",flexShrink:0,minWidth:180}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(155,45,94,.8)",marginBottom:6,fontWeight:600}}>Primary Metric</div>
+          <div style={{fontFamily:"var(--h)",fontSize:14,fontWeight:600,color:"white",lineHeight:1.35}}>Shortlist-to-booking<br/>conversion rate</div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,.4)",marginTop:5,fontWeight:300}}>Discovery experience signal</div>
+        </div>
       </div>
-      <div className="wcb">
-        <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.78,fontWeight:300,marginBottom:18}}>Couples planning weddings navigate a deeply fragmented experience — vendor discovery scattered across Instagram, WeddingWire, and word of mouth; budgets in Google Sheets; timelines across WhatsApp groups. I ran structured user research across three cohorts and found the same core pain point across all: vendor discovery is fragmented, comparison is near-impossible, and the process is overwhelming by design. I found it frustrating enough to want to fix it myself.</p>
-        <div className="wca">
-          <div className="wa"><div className="wai"><iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219" style={{width:"100%",height:"100%",border:"none"}} loading="lazy" title="Personas"/></div><div className="wab"><div className="wat">User Personas (Figma)</div><div className="wad">3 archetypes: detail-obsessed planner, budget-first pragmatist, aesthetics-led dreamer.</div><a href="https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219" target="_blank" rel="noreferrer" className="wal"><LogoSVG tool="Figma" size={14}/>Open in Figma →</a></div></div>
-          <div className="wa"><div className="wai"><img src={SS.compGridWedding} alt="Competitor Analysis" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",display:"block"}}/></div><div className="wab"><div className="wat">Competitor Analysis</div><div className="wad">WeddingBazaar, WedMeGood, WeddingWire. WeddingWire leads on scale & AI; WedMeGood on design. Gap: end-to-end workflow integration.</div></div></div>
-          <div className="wa"><div className="wai" style={{background:"var(--paper)",display:"flex",alignItems:"center",justifyContent:"center",padding:10}}><div style={{textAlign:"center"}}>{["Vendor discovery","Matchmaking algorithm","Budget tracker","Timeline/checklist","Package builder","Inspiration layer"].map((f,i)=><div key={i} style={{fontSize:10,color:"var(--ink-mu)",fontFamily:"var(--l)",padding:"2px 0"}}>{f}</div>)}</div></div><div className="wab"><div className="wat">Product Scope</div><div className="wad">AI-simulated interviews across 3 cohorts. Primary metric: shortlist-to-booking conversion rate.</div></div></div>
+
+      {/* BODY — responsive: stacks on mobile, side-by-side on desktop */}
+      <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:28,padding:"24px 32px 28px",alignItems:"center"}}
+        className="wed-body-grid">
+        <style>{`
+          @media(max-width:900px){
+            .wed-body-grid{grid-template-columns:1fr!important;}
+            .wed-carousel-col{width:100%!important;max-width:100%!important;}
+            .wed-carousel-inner{width:100%!important;}
+          }
+        `}</style>
+
+        {/* LEFT — problem + research */}
+        <div>
+          <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",fontWeight:600,marginBottom:10}}>The Problem</div>
+          <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.8,fontWeight:300,marginBottom:10}}>Couples planning weddings navigate a deeply fragmented experience — vendor discovery scattered across Instagram, WeddingWire, and word of mouth; budgets in Google Sheets; timelines across WhatsApp groups.</p>
+          <p style={{fontSize:13.5,color:"var(--ink)",lineHeight:1.8,fontWeight:500,marginBottom:22,fontStyle:"italic",fontFamily:"var(--h)"}}>I found it frustrating enough to want to fix it myself.</p>
+          <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",fontWeight:600,marginBottom:10}}>Research Completed</div>
+          <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.8,fontWeight:300,marginBottom:14}}>Structured user research across three cohorts —</p>
+          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:14}}>
+            {["Actively planning couples","Recently married couples","Professional wedding planners"].map((c,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{width:6,height:6,borderRadius:"50%",background:"var(--plum)",flexShrink:0}}/>
+                <span style={{fontSize:13.5,color:"var(--ink)",fontWeight:500}}>{c}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300,marginBottom:18}}>All three surfaced the same core pain: vendor discovery is fragmented, comparison is near-impossible, and the process is overwhelming by design.</p>
+          <LogoRow tools={["ChatGPT","Figma"]} size={22}/>
+        </div>
+
+        {/* RIGHT — 3D carousel */}
+        <div style={{width:CARD_W+40,flexShrink:0}} className="wed-carousel-col">
+          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:10,textAlign:"center"}}>Drag or hover to explore</div>
+          <div
+            style={{height:CARD_H+60,perspective:"900px",cursor:dragging?"grabbing":"grab",userSelect:"none"}}
+            onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={()=>{onMouseUp();setHover(false);}}
+            onMouseEnter={()=>setHover(true)}
+            onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+            <div className="wed-carousel-inner" style={{
+              width:CARD_W,height:CARD_H,
+              position:"relative",transformStyle:"preserve-3d",
+              transform:`rotateY(${rot}deg)`,
+              margin:"30px auto 0",
+            }}>
+              {cards.map((card,i)=>{
+                const angle=i*(360/FACE_COUNT);
+                return(
+                  <div key={card.id} style={{
+                    position:"absolute",width:CARD_W,height:CARD_H,top:0,left:0,
+                    transform:`rotateY(${angle}deg) translateZ(${radius}px)`,
+                    background:card.bg,borderRadius:16,overflow:"hidden",
+                    border:"1px solid rgba(255,255,255,.12)",
+                    boxShadow:"0 12px 40px rgba(0,0,0,0.4)",
+                  }}>
+                    <div style={{padding:"10px 18px 8px",borderBottom:"1px solid rgba(255,255,255,.08)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                      <div style={{fontFamily:"var(--h)",fontSize:16,fontWeight:600,color:"white"}}>{card.label}</div>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:card.accent}}/>
+                    </div>
+                    <div style={{height:CARD_H-44,overflow:"hidden"}}>{card.body}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -716,40 +886,59 @@ function AnalysisCard({item,onClick}){
 function IntelSection(){
   const[exp,setExp]=useState(false);
   const ref=useInView();
+  const DECK_W=520;
+  const DECK_H=Math.round(DECK_W*9/16);
   return(
-    <div ref={ref} className="iw iv">
-      <div style={{height:200,overflow:"hidden",borderBottom:"1px solid var(--rule)",position:"relative"}}>
-        <div className="eml" style={{position:"absolute"}}>Competitive landscape grid</div>
-        <Img src={SS.compGridHooliv} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
-      </div>
-      <div className="iwhd">
-        <div style={{flex:1}}>
+    <div ref={ref} className="iw iv" style={{position:"relative"}}>
+      <style>{`
+        @media(max-width:900px){
+          .intel-top-grid{grid-template-columns:1fr!important;}
+          .intel-exp-grid{grid-template-columns:1fr!important;}
+          .intel-deck-col iframe{height:240px!important;}
+          .intel-sheet-col iframe{height:240px!important;}
+        }
+      `}</style>
+      {/* TOP — deck left, info right */}
+      <div style={{display:"grid",gridTemplateColumns:`min(${DECK_W}px,100%) 1fr`,gap:32,padding:"32px 40px 28px",alignItems:"start"}} className="intel-top-grid">
+        <div className="intel-deck-col">
+          <SlidesEmbed url="https://docs.google.com/presentation/d/1KJW4MiMjfGnHi1_yc1tNKRWu2d3taENu/edit" label="Competitive Analysis Deck" height={DECK_H}/>
+        </div>
+        <div>
           <div style={{fontFamily:"var(--l)",fontSize:10.5,letterSpacing:2.5,color:"var(--forest)",marginBottom:9,textTransform:"uppercase",fontWeight:600}}>Market & Competitive Intelligence</div>
           <div className="iwti">HooLiv <em>Competitive Landscape</em> Analysis</div>
-          <p className="iwde">India's coliving and student housing market — benchmarking 12 players across business model, funding, pricing, VAS, and technology. The company's first structured competitive intelligence exercise, used in investor presentations and internal strategy discussions.</p>
-          <div className="iwst">{[["12","Companies benchmarked"],["515%","HooLiv growth rate"],["$445M","Market peak funding (2021)"],["80% vs 97%","HooLiv vs best-in-class occupancy"]].map(([n,l])=><div key={n}><div className="iwsn">{n}</div><div className="iwsl">{l}</div></div>)}</div>
-          <button className="iweb" onClick={()=>setExp(!exp)}>{exp?"Show less ↑":"See the full breakdown ↓"}</button>
-        </div>
-        <div style={{display:"flex",flexDirection:"column",gap:7,flexShrink:0}}>
-          <LinkCTA label="View Deck" url="https://docs.google.com/presentation/d/1KJW4MiMjfGnHi1_yc1tNKRWu2d3taENu/" tool="GoogleSlides"/>
-          <LinkCTA label="Research Data" url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/" tool="GoogleSheets"/>
+          <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.8,fontWeight:300,marginBottom:18}}>Indian and global coliving market — the <strong style={{color:"var(--ink)",fontWeight:600}}>company's first structured competitive intelligence exercise</strong> benchmarking <strong style={{color:"var(--ink)",fontWeight:600}}>12 players</strong> across business model, funding, pricing, VAS, and technology. Used directly in <strong style={{color:"var(--ink)",fontWeight:600}}>investor presentations and internal strategy discussions</strong>.</p>
+          <div className="stb" style={{marginBottom:0}}>
+            <div className="stbl">Strategic Implication — and What I Did About It</div>
+            <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>HooLiv's 80% occupancy vs 90–97% for top players pointed to a retention and discovery problem, not just a supply problem. Competitors using VAS and community programming as primary retention levers consistently outperformed on occupancy. I identified this as a product problem worth solving — <strong style={{color:"var(--ink)",fontWeight:600}}>and led the product strategy to address it.</strong></p>
+          </div>
         </div>
       </div>
+
+      {/* EXPANDED PANEL — findings start at deck's lower edge, sheet right */}
       {exp&&(
-        <div className="iwex" style={{paddingTop:24}}>
-          <div style={{marginBottom:18}}><SlidesEmbed url="https://docs.google.com/presentation/d/1KJW4MiMjfGnHi1_yc1tNKRWu2d3taENu/edit" label="Competitive Analysis Deck" height={300}/></div>
-          <ul className="iwli">
-            <li>BCG matrix positioning — HooLiv in high-risk/high-reward growth position alongside The Hosteller; ZoloStays in harvest mode with 50K beds across 10 metros</li>
-            <li>Funding landscape: $445.6M peak in 2021, 35% decline through 2023; Stanza Living dominant at $230M total funding vs HooLiv's Pre-Series A stage</li>
-            <li>Business model analysis — asset-light vs asset-heavy, lease & operate, management contract, BTS models, franchise across 12 players</li>
-            <li>Pricing strategy benchmarking — ₹375/night (The Hosteller) to ₹45,000/month (premium players)</li>
-            <li>VAS and differentiation analysis — Stanza Springboard, Settl Connect, Your-Space tech safety features</li>
-            <li>Technology and geographic reach mapping across all 12 players</li>
-          </ul>
-          <div style={{marginBottom:16}}><SheetEmbed url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/edit" label="Full Research Dataset" height={280}/></div>
-          <div className="stb"><div className="stbl">Strategic Implication Surfaced</div><p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>HooLiv's 80% occupancy vs 90–97% for top players points to a retention and discovery problem, not just a supply problem. Competitors using VAS and community programming as primary retention levers consistently outperform on occupancy. That's a product problem worth solving.</p></div>
+        <div style={{padding:"0 40px 0"}} className="intel-exp-grid-wrap">
+          <div style={{display:"grid",gridTemplateColumns:"1fr min(500px,100%)",gap:32,alignItems:"start"}} className="intel-exp-grid">
+            {/* Left col — findings start at top of this grid row, aligning with deck bottom */}
+            <div style={{paddingTop:24,paddingBottom:36}}>
+              <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--forest)",fontWeight:600,marginBottom:14}}>Key Findings & Insights</div>
+              <ul className="iwli">
+                <li>BCG matrix positioning — HooLiv in high-risk/high-reward growth position alongside The Hosteller; ZoloStays in harvest mode with 50K beds across 10 metros</li>
+                <li>Business model analysis — asset-light vs asset-heavy, lease & operate, management contract, BTS models, franchise across players</li>
+                <li>Funding trajectory, pricing strategy benchmarking, technology adoption, and geographic reach mapped across players — revealing the white space HooLiv is positioned to occupy as the category matures</li>
+              </ul>
+            </div>
+            {/* Right col — sheet, aligned to top */}
+            <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:36}}>
+              <SheetEmbed url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/edit" label="Full Research Dataset" height={320}/>
+            </div>
+          </div>
         </div>
       )}
+
+      {/* CTA */}
+      <div style={{padding:"0 40px 20px"}}>
+        <button onClick={()=>setExp(!exp)} className="iweb">{exp?"Show less ↑":"See the full breakdown with data ↓"}</button>
+      </div>
     </div>
   );
 }
