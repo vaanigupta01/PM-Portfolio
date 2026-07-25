@@ -187,7 +187,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .li-b{position:absolute;top:-14px;right:-14px;z-index:2;width:42px;height:42px;background:#FFF;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(34,29,25,.18);text-decoration:none;border:1px solid var(--rule);transition:transform .2s;}.li-b:hover{transform:scale(1.08);}.li-b svg{width:20px;height:20px;fill:#0077B5;}
 .ov{font-family:var(--l);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--plum);margin-bottom:10px;display:flex;align-items:center;gap:9px;font-weight:600;}.ov::after{content:'';width:34px;height:1.5px;background:var(--plum);}
 .st{font-family:var(--h);font-size:clamp(28px,3.1vw,42px);font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:-.6px;margin-bottom:36px;}.st em{font-style:italic;color:var(--plum);font-weight:500;}
-.csg{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.csg{display:grid;grid-template-columns:1fr;gap:20px;}
 .hgc{position:relative;border-radius:22px;overflow:hidden;cursor:pointer;aspect-ratio:4/5;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease;background:#1a1410;}.hgc.feat{grid-column:1/-1;aspect-ratio:21/9;}.hgc:hover{transform:translateY(-6px);box-shadow:0 36px 70px rgba(20,15,12,.32);}
 .hgbg{position:absolute;inset:0;z-index:0;overflow:hidden;}.hgbg img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .7s cubic-bezier(.2,.8,.2,1);}.hgc:hover .hgbg img{transform:scale(1.08);}
 .hgsc{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,var(--sc,.9)0%,var(--sm,.55)38%,rgba(20,15,12,.08)64%,transparent 78%);transition:background .45s ease;}
@@ -206,7 +206,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .hgft{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .hgct{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--ink);padding:10px 18px;border-radius:30px;font-family:var(--l);font-size:12px;font-weight:600;}.hgct svg{transition:transform .25s;}.hgc:hover .hgct svg{animation:aN .8s ease-in-out infinite;}
 .hgtl{display:flex;gap:5px;}.hgto{width:22px;height:22px;border-radius:6px;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.mg{display:grid;grid-template-columns:1fr;gap:18px;}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .mo{position:fixed;inset:0;z-index:200;background:rgba(34,29,25,.6);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:28px 18px;overflow-y:auto;animation:fIn .2s ease;}
 .modal{background:var(--iv);border-radius:22px;width:100%;max-width:840px;position:relative;overflow:hidden;animation:sUp .28s ease;margin:auto;box-shadow:0 40px 90px rgba(0,0,0,.3);}
@@ -373,7 +373,7 @@ const CASES=[
   {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Explore the Build",chips:["15 app screens","35 CRM screens","Full PRD"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaCrm1]},
   {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Watch the Walkthrough",hasVideo:true,chips:["Walkthrough video","Full PRD","Outpass logic"],imgs:[SS.parentHome,SS.outpassTenant,SS.parentPay]},
   {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Operations & Internal Tools","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See How I Shipped It",chips:["Mobile + Web","Full PRD","150+ employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
-  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Operations & Internal Tools","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found a recurring ops process that had never been looked at through a product lens — and fixed it.",tools:["ChatGPT","v0","Bolt"],cta:"See the Fix",chips:["Live KPI view","Full PRD","Credit Notes"],imgs:[SS.b2b1,SS.b2b2]},
+  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Operations & Internal Tools","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found a recurring ops process that had never been looked at through a product lens — and fixed it.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI view","Full PRD","Credit Notes"],imgs:[SS.b2b1,SS.b2b2]},
 ];
 function CaseCard({cs,onClick}){
   const ref=useInView();
@@ -495,7 +495,7 @@ function WeddingCard(){
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>Benchmarked across market position, features, UX, USP, and social proof</div>
           <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
-            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{ width:"100%", height:"auto", display:"block", transform:"scale(1.15)", transformOrigin:"top left" }}/>
+            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{ width:"100%", height:"auto", display:"block", transform:"scale(1.35)", transformOrigin:"top left" }}/>
           </div>
           <div style={{background:"rgba(255,255,255,.09)",border:"1px solid rgba(255,255,255,.18)",borderRadius:8,padding:"8px 12px",display:"flex",gap:8,alignItems:"flex-start"}}>
             <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",color:"white",fontWeight:700,flexShrink:0,marginTop:1}}>Gap</span>
