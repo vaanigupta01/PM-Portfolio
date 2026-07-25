@@ -347,7 +347,7 @@ function NotionEmbed({url,title,embedUrl=null,height=460}){
 }
 function SheetEmbed({url,label="Sheet",height=280}){
   const eu=url.replace(/\/edit.*$/,"/preview")+(url.includes("gid=")?"?"+url.split("?")[1]:"");
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{ height, transform:"scale(0.85)", transformOrigin:"top left", width:"118%", border:"none", display:"block" }};
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function SlidesEmbed({url,label="Deck",height=280}){
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{height}} title={label} loading="lazy"/></div>);
