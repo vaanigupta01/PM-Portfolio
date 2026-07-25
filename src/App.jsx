@@ -347,10 +347,10 @@ function NotionEmbed({url,title,embedUrl=null,height=460}){
 }
 function SheetEmbed({url,label="Sheet",height=280}){
   const eu=url.replace(/\/edit.*$/,"/preview")+(url.includes("gid=")?"?"+url.split("?")[1]:"");
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{ height, transform:"scale(0.85)", transformOrigin:"top left", width:"118%", border:"none", display:"block" }};
 }
 function SlidesEmbed({url,label="Deck",height=280}){
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{ height, transform:"scale(0.85)", transformOrigin:"top left", width:"118%", border:"none", display:"block" }} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function VideoEmbed({url,height=300}){
   const id=url.match(/\/d\/([^/]+)/)?.[1];
@@ -495,7 +495,7 @@ function WeddingCard(){
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>Benchmarked across market position, features, UX, USP, and social proof</div>
           <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
-            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{ width:"100%", height:"auto", display:"block", transform:"scale(0.8)", transformOrigin:"top left" }}/>
+            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{ width:"100%", height:"auto", display:"block", transform:"scale(1.15)", transformOrigin:"top left" }}/>
           </div>
           <div style={{background:"rgba(255,255,255,.09)",border:"1px solid rgba(255,255,255,.18)",borderRadius:8,padding:"8px 12px",display:"flex",gap:8,alignItems:"flex-start"}}>
             <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",color:"white",fontWeight:700,flexShrink:0,marginTop:1}}>Gap</span>
