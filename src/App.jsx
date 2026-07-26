@@ -187,7 +187,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .li-b{position:absolute;top:-14px;right:-14px;z-index:2;width:42px;height:42px;background:#FFF;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(34,29,25,.18);text-decoration:none;border:1px solid var(--rule);transition:transform .2s;}.li-b:hover{transform:scale(1.08);}.li-b svg{width:20px;height:20px;fill:#0077B5;}
 .ov{font-family:var(--l);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--plum);margin-bottom:10px;display:flex;align-items:center;gap:9px;font-weight:600;}.ov::after{content:'';width:34px;height:1.5px;background:var(--plum);}
 .st{font-family:var(--h);font-size:clamp(28px,3.1vw,42px);font-weight:600;color:var(--ink);line-height:1.1;letter-spacing:-.6px;margin-bottom:36px;}.st em{font-style:italic;color:var(--plum);font-weight:500;}
-.csg{display:grid;grid-template-columns:1fr;gap:20px;}
+.csg{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 .hgc{position:relative;border-radius:22px;overflow:hidden;cursor:pointer;aspect-ratio:4/5;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease;background:#1a1410;}.hgc.feat{grid-column:1/-1;aspect-ratio:21/9;}.hgc:hover{transform:translateY(-6px);box-shadow:0 36px 70px rgba(20,15,12,.32);}
 .hgbg{position:absolute;inset:0;z-index:0;overflow:hidden;}.hgbg img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .7s cubic-bezier(.2,.8,.2,1);}.hgc:hover .hgbg img{transform:scale(1.08);}
 .hgsc{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,var(--sc,.9)0%,var(--sm,.55)38%,rgba(20,15,12,.08)64%,transparent 78%);transition:background .45s ease;}
@@ -206,7 +206,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .hgft{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .hgct{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--ink);padding:10px 18px;border-radius:30px;font-family:var(--l);font-size:12px;font-weight:600;}.hgct svg{transition:transform .25s;}.hgc:hover .hgct svg{animation:aN .8s ease-in-out infinite;}
 .hgtl{display:flex;gap:5px;}.hgto{width:22px;height:22px;border-radius:6px;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.mg{display:grid;grid-template-columns:1fr;gap:18px;}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .mo{position:fixed;inset:0;z-index:200;background:rgba(34,29,25,.6);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:28px 18px;overflow-y:auto;animation:fIn .2s ease;}
 .modal{background:var(--iv);border-radius:22px;width:100%;max-width:840px;position:relative;overflow:hidden;animation:sUp .28s ease;margin:auto;box-shadow:0 40px 90px rgba(0,0,0,.3);}
@@ -494,8 +494,17 @@ function WeddingCard(){
       body:(
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>Benchmarked across market position, features, UX, USP, and social proof</div>
-          <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
-            <img src={SS.compGridWedding} alt="Competitor Analysis Grid" style={{ width:"100%", height:"auto", display:"block", transform:"scale(1.35)", transformOrigin:"top left" }}/>
+          <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10,scrollbarWidth:"thin",scrollbarColor:"rgba(255,255,255,.25) transparent"}}>
+            <div style={{position:"relative"}}>
+              <img src={SS.compGridWedding} alt="Competitor Analysis Grid"
+                style={{width:"135%",height:"auto",display:"block",cursor:"zoom-in"}}
+                onClick={e=>{e.stopPropagation();window.open(SS.compGridWedding,"_blank");}}/>
+              <a href={SS.compGridWedding} target="_blank" rel="noreferrer"
+                onClick={e=>e.stopPropagation()}
+                style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:6,background:"rgba(255,255,255,.9)",display:"flex",alignItems:"center",justifyContent:"center",textDecoration:"none",boxShadow:"0 2px 8px rgba(0,0,0,.25)"}}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
           </div>
           <div style={{background:"rgba(255,255,255,.09)",border:"1px solid rgba(255,255,255,.18)",borderRadius:8,padding:"8px 12px",display:"flex",gap:8,alignItems:"flex-start"}}>
             <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",color:"white",fontWeight:700,flexShrink:0,marginTop:1}}>Gap</span>
