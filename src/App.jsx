@@ -369,32 +369,155 @@ const SC={
   b2b:{"--sc":"rgba(70,32,18,.93)","--sm":"rgba(70,32,18,.5)","--sch":"rgba(70,32,18,.97)","--smh":"rgba(70,32,18,.82)"},
 };
 const CASES=[
-  {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"See the Dashboards",chips:["5 dashboards","4 req. sheets","Replit build"],imgs:[SS.collDash1,SS.collDash3,SS.unitEco1,SS.collDash2]},
-  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Explore the Build",chips:["15 app screens","35 CRM screens","Full PRD"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaCrm1]},
-  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Watch the Walkthrough",hasVideo:true,chips:["Walkthrough video","Full PRD","Outpass logic"],imgs:[SS.parentHome,SS.outpassTenant,SS.parentPay]},
+  {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"See the Dashboards",chips:["5 dashboards","4 req. sheets","Replit build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
+  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Explore the Build",chips:["15 app screens","35 CRM screens","Full PRD"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
+  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Watch the Walkthrough",hasVideo:true,chips:["Walkthrough video","Full PRD","Outpass logic"]},
   {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Operations & Internal Tools","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See How I Shipped It",chips:["Mobile + Web","Full PRD","150+ employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
   {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Operations & Internal Tools","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found a recurring ops process that had never been looked at through a product lens — and fixed it.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI view","Full PRD","Credit Notes"],imgs:[SS.b2b1,SS.b2b2]},
 ];
-function CaseCard({cs,onClick}){
+
+// Phone-screen dimensions used for portrait cards
+const PHONE_W=240;
+const PHONE_H=440;
+const LAND_W=496;
+const LAND_H=230;
+const GRID_GAP=20;
+// Separate, larger dimensions for the Product Work CaseGrid specifically —
+// narrower landscape (closes the col1/col2 gap, stops B2B clipping the viewport
+// edge), wider + taller portrait cards (fills the blank space beside LMS),
+// everything scaled up overall per feedback that cards read too small.
+const CW_LAND_W=420;
+const CW_LAND_H=270;
+const CW_PHONE_W=280;
+const CW_PHONE_H=500;
+ 
+function VideoCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
+  const vidId="1Qznde8tS6Yhmpa9F8zz8CLTp61vQbCtS";
   return(
-    <div ref={ref} className={`hgc iv${cs.feat?" feat":""}`} style={SC[cs.id]} onClick={onClick}>
-      <div className="hgbg"><AutoCarousel images={cs.imgs}/></div>
+    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
+     <div className="hgbg">
+        <iframe
+          src={`https://drive.google.com/file/d/${vidId}/preview?autoplay=1&mute=0`}
+          style={{width:"100%",height:"100%",border:"none"}}
+          allow="autoplay; fullscreen"
+          allowFullScreen
+          title="Parent App Walkthrough"
+          loading="lazy"
+        />
+      </div>
       <div className="hgsc"/>
       <div className="hgpl">{cs.pill}</div>
-      {cs.hasVideo&&<div className="hgpv"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--ink)"><path d="M8 5v14l11-7z"/></svg></div>}
+      <div className="hgpv"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--ink)"><path d="M8 5v14l11-7z"/></svg></div>
       <div className="hghi"><Arrow/></div>
       <div className="hgcon">
         <div className="hgtags">{cs.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
-        <div className="hgti">{cs.title}</div>
+        <div className="hgti" style={{fontSize:18}}>{cs.title}</div>
         <div className="hgrv">
-          <p className="hgde">{cs.desc}</p>
+          <p className="hgde" style={{fontSize:11}}>{cs.desc}</p>
+          <div className="hgch">{cs.chips.map((c,i)=><span key={i} className="hgcp">{c}</span>)}</div>
+          <div className="hgft"><div className="hgct" style={{fontSize:11,padding:"8px 14px"}}>{cs.cta} <Arrow/></div><div className="hgtl">{cs.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+ 
+function PhoneCard({cs,onClick,fillHeight=false}){
+  const ref=useInView();
+  return(
+    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
+      <div className="hgbg"><AutoCarousel images={cs.imgs} interval={2400}/></div>
+      <div className="hgsc"/>
+      <div className="hgpl">{cs.pill}</div>
+      <div className="hghi"><Arrow/></div>
+      <div className="hgcon">
+        <div className="hgtags">{cs.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
+        <div className="hgti" style={{fontSize:18}}>{cs.title}</div>
+        <div className="hgrv">
+          <p className="hgde" style={{fontSize:11}}>{cs.desc}</p>
+          <div className="hgch">{cs.chips.map((c,i)=><span key={i} className="hgcp">{c}</span>)}</div>
+          <div className="hgft"><div className="hgct" style={{fontSize:11,padding:"8px 14px"}}>{cs.cta} <Arrow/></div><div className="hgtl">{cs.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+ 
+function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
+  const ref=useInView();
+  return(
+    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":LAND_H,borderRadius:22}} onClick={onClick}>
+      <div className="hgbg"><AutoCarousel images={cs.imgs} interval={2600}/></div>
+      <div className="hgsc"/>
+      <div className="hgpl">{cs.pill}</div>
+      <div className="hghi"><Arrow/></div>
+      <div className="hgcon">
+        <div className="hgtags">{cs.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
+        <div className="hgti" style={{fontSize:20}}>{cs.title}</div>
+        <div className="hgrv">
+          <p className="hgde" style={{fontSize:11.5}}>{cs.desc}</p>
           <div className="hgch">{cs.chips.map((c,i)=><span key={i} className="hgcp">{c}</span>)}</div>
           <div className="hgft">
-            <div className="hgct">{cs.cta} <Arrow/></div>
-            <div className="hgtl">{cs.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={20}/></div>)}</div>
+            <div className="hgct" style={{fontSize:11,padding:"8px 14px"}}>{cs.cta} <Arrow/></div>
+            <div className="hgtl">{cs.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>
           </div>
+          {showPRD&&<div style={{marginTop:8,borderRadius:8,overflow:"hidden",height:80,border:"1px solid rgba(255,255,255,.15)"}}>
+            <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="B2B PRD"/>
+          </div>}
         </div>
+      </div>
+    </div>
+  );
+}
+ 
+function CaseCard({cs,onClick}){
+  // Route to the right card shape based on case id
+  if(cs.id==="parentapp") return <VideoCard cs={cs} onClick={onClick}/>;
+  if(cs.id==="casa"||cs.id==="lms") return <PhoneCard cs={cs} onClick={onClick}/>;
+  if(cs.id==="dashboards"||cs.id==="b2b") return <LandCard cs={cs} onClick={onClick} showPRD={cs.id==="b2b"}/>;
+  return null;
+}
+ 
+function CaseGrid({cases,onClickCase}){
+  const dash=cases.find(c=>c.id==="dashboards");
+  const casa=cases.find(c=>c.id==="casa");
+  const parent=cases.find(c=>c.id==="parentapp");
+  const lms=cases.find(c=>c.id==="lms");
+  const b2b=cases.find(c=>c.id==="b2b");
+  const G=GRID_GAP;
+  const col1X=0;
+  const col2X=CW_LAND_W+G;
+  const col3X=col2X+CW_PHONE_W+G;
+  const dashTop=0;
+  const lmsTop=40;
+  const parentTop=80;
+  const casaTop=dashTop+CW_LAND_H+G;
+  const parentBottom=parentTop+CW_PHONE_H;
+  const casaRight=col1X+CW_PHONE_W;
+  const b2bLeft=casaRight+G;
+  const b2bTop=parentBottom+G;
+  const lmsH=CW_PHONE_H+CW_LAND_H/2;
+  const containerH=Math.max(casaTop+CW_PHONE_H, lmsTop+lmsH, b2bTop+CW_LAND_H);
+  const containerW=col3X+CW_PHONE_W;
+  return(
+    <div style={{position:"relative",width:containerW,height:containerH,maxWidth:"100%",marginLeft:"auto",marginRight:"auto"}}>
+      <div style={{position:"absolute",top:dashTop,left:col1X,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16}}>
+        <LandCard cs={dash} onClick={()=>onClickCase(dash.id)} fillHeight/>
+      </div>
+      {/* Swapped: this slot (shorter, col1) now shows LMS instead of CASA */}
+      <div style={{position:"absolute",top:casaTop,left:col1X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16}}>
+        <PhoneCard cs={lms} onClick={()=>onClickCase(lms.id)} fillHeight/>
+      </div>
+      <div style={{position:"absolute",top:parentTop,left:col2X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16}}>
+        <VideoCard cs={parent} onClick={()=>onClickCase(parent.id)} fillHeight/>
+      </div>
+      {/* Swapped: this slot (taller, extended, col3) now shows CASA instead of LMS — CASA's long screenshots fit the extra height better */}
+      <div style={{position:"absolute",top:lmsTop,left:col3X,width:CW_PHONE_W,height:lmsH,overflow:"hidden",borderRadius:16}}>
+        <PhoneCard cs={casa} onClick={()=>onClickCase(casa.id)} fillHeight/>
+      </div>
+      <div style={{position:"absolute",top:b2bTop,left:b2bLeft,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16}}>
+        <LandCard cs={b2b} onClick={()=>onClickCase(b2b.id)} showPRD fillHeight/>
       </div>
     </div>
   );
@@ -406,23 +529,52 @@ const MORE=[
   {title:"Readers' Hub · GenAI · Exam Prep",tags:["Engagement & VAS"],desc:"End-to-end ownership across three VAS integrations — Readers' Hub (BookR library), GenAI Course (upGrad), Exam Prep Studio (Acadza). ~20% lift in service adoption and engagement. SOP created for upGrad integration.",imgs:[SS.readersHub,SS.upgradCard,SS.acadza],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.5)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"}},
   {title:"Room Allotment Engine",tags:["Operations & Internal Tools"],desc:"Policy-driven allocation replacing manual room assignment — affinity-based auto-allocation using student demographic and interest data, through a unified Occupancy Heat Map interface. PRD and prototype complete.",imgs:[SS.roomAlloc],tools:["ChatGPT","Figma","v0"],prdUrl:"https://vaanig-spring-boa-26a.notion.site/2d900c0515c4801a89bfc34709afbe58",prdEmbedUrl:"https://vaanig-spring-boa-26a.notion.site/ebd//2d900c0515c4801a89bfc34709afbe58",sc:{"--sc":"rgba(56,42,12,.93)","--sm":"rgba(56,42,12,.5)","--sch":"rgba(56,42,12,.97)","--smh":"rgba(56,42,12,.82)"}},
 ];
-function MoreCard({card}){
+ 
+function MoreCard({card,fillHeight=false}){
   const ref=useInView();
+  const[hov,setHov]=useState(false);
+  const isRoom=!!card.prdUrl;
+  // Phone cards for consumer + readers, wide card for room allotment
+  const isPhone=!isRoom;
   return(
-    <div ref={ref} className="hgc iv" style={{...card.sc,aspectRatio:"3/4",borderRadius:18,cursor:"default"}}>
-      <div className="hgbg"><AutoCarousel images={card.imgs} interval={2800}/></div>
+    <div ref={ref} className="hgc iv" style={{...card.sc,width:"100%",height:"100%",borderRadius:18,cursor:"default"}}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
+      <div className="hgbg">
+        {isRoom?(
+          // Room allotment: alternate between image and PRD embed, pause on hover
+          hov
+            ? <img src={card.imgs[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
+            : <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
+        ):(
+          <AutoCarousel images={card.imgs} interval={2800}/>
+        )}
+      </div>
       <div className="hgsc"/>
       <div className="hgcon">
         <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
-        <div className="hgti" style={{fontSize:20}}>{card.title}</div>
+        <div className="hgti" style={{fontSize:isPhone?18:20}}>{card.title}</div>
         <div className="hgrv" style={{maxHeight:"none",opacity:1,marginTop:10}}>
-          <p className="hgde" style={{fontSize:12}}>{card.desc}</p>
-          <div className="hgft">
-            <div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={20}/></div>)}</div>
-            {card.prdUrl&&<a href={card.prdUrl} target="_blank" rel="noreferrer" className="hgct" style={{padding:"7px 14px",fontSize:11}} onClick={e=>e.stopPropagation()}><LogoSVG tool="Notion" size={16}/>PRD</a>}
-          </div>
+          <p className="hgde" style={{fontSize:11.5}}>{card.desc}</p>
+          <div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>
         </div>
       </div>
+    </div>
+  );
+}
+ 
+function MoreGrid(){
+  const phone=MORE.filter(c=>!c.prdUrl);
+  const room=MORE.find(c=>c.prdUrl);
+  const MORE_H=420;
+  return(
+    <div style={{
+      display:"grid",
+      gridTemplateColumns:`${PHONE_W}px ${PHONE_W}px 1fr`,
+      gridTemplateRows:`${MORE_H}px`,
+      gap:GRID_GAP,width:"100%",
+    }}>
+      {phone.map((card,i)=><MoreCard key={i} card={card} fillHeight/>)}
+      <MoreCard card={room} fillHeight/>
     </div>
   );
 }
@@ -1006,13 +1158,12 @@ export default function Portfolio(){
       <section id="work" style={{padding:"84px 64px"}}>
         <div className="ov">Product Work</div>
         <h2 className="st">Shipped with <em>intent</em></h2>
-        <div className="csg">{CASES.map(cs=><CaseCard key={cs.id} cs={cs} onClick={()=>setActiveCS(cs.id)}/>)}</div>
+        <div className="csg"><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
       <section style={{padding:"72px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
         <h2 className="st">Also <em>live</em></h2>
-        <div className="mg">{MORE.map((card,i)=><MoreCard key={i} card={card}/>)}</div>
-        <RoomAllocPRDCard/>
+        <div className="mg"><MoreGrid/></div>
         <WeddingCard/>
         <KitchenCard/>
       </section>
@@ -1023,7 +1174,7 @@ export default function Portfolio(){
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
       <section style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
-      <AboutWithQuote/>
+      <About/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
       {activeAnalysis&&<AnalysisModal item={activeAnalysis} onClose={()=>setActiveAnalysis(null)}/>}
