@@ -1174,7 +1174,7 @@ export default function Portfolio(){
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
       <section style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
-      <About/>
+      <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
       {activeAnalysis&&<AnalysisModal item={activeAnalysis} onClose={()=>setActiveAnalysis(null)}/>}
