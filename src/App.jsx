@@ -543,8 +543,8 @@ function MoreCard({card,fillHeight=false}){
         {isRoom?(
           // Room allotment: alternate between image and PRD embed, pause on hover
           hov
-            ? <img src={card.imgs[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
-            : <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
+            ? <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
+            : <img src={card.imgs[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
         ):(
           <AutoCarousel images={card.imgs} interval={2800}/>
         )}
@@ -792,12 +792,36 @@ function RoomAllocPRDCard(){
 function KitchenCard(){
   const ref=useInView();
   return(
-    <div ref={ref} className="kc iv">
-      <div className="kch"><div className="kct">Kitchen Consumption & Expenditure Stats Engine</div><div className="kcs">Ops & Data Work · Excel-based · Internal tool</div></div>
-      <div className="kcb">
-        <div className="ks"><div className="ksl">The Problem</div><div className="kst">Kitchen operations across 2 city kitchens were recording data but no one was using it. The data quality problem was upstream, not analytical.</div></div>
-        <div className="ks"><div className="ksl">What I Built</div><ul className="kli"><li>Material-wise consumption and purchase stats</li><li>Purchase vs. consumption variance analysis</li><li>Vegetable-wise contribution breakdown</li><li>Weekly consumption tracking</li></ul><p style={{fontSize:12,color:"var(--ink-mu)",marginTop:7,lineHeight:1.55,fontWeight:300}}>Alongside the engine, I surfaced the systemic issues behind the data quality problem itself — proposing a carryover stock tracking sheet, opening/closing balance framework, meal-wise data capture structure, and unit standardisation guidelines.</p></div>
-        <div className="ks"><div className="ksl">Why It's a PM Artefact</div><div className="kst">The product thinking wasn't in the Excel. It was in identifying that the data quality problem upstream was the real root cause, and that solving it required process changes, not just better analysis.</div></div>
+    <div ref={ref} className="iv" style={{marginTop:18,background:"var(--ink)",borderRadius:18,overflow:"hidden",border:"1px solid rgba(255,255,255,.06)"}}>
+      {/* Header */}
+      <div style={{padding:"28px 36px 22px",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
+        <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2.5,textTransform:"uppercase",color:"rgba(250,247,241,.4)",marginBottom:8,fontWeight:600}}>Ops & Data Work · Excel-based · Internal Tool</div>
+        <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3}}>Kitchen Consumption & Expenditure Stats Engine</div>
+      </div>
+      {/* Three cards */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:0}}>
+        {/* Card 1 — The Problem */}
+        <div style={{padding:"28px 30px 32px",borderRight:"1px solid rgba(255,255,255,.08)"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"rgba(250,247,241,.35)",marginBottom:14,fontWeight:600}}>The Problem</div>
+          <p style={{fontSize:13,color:"rgba(250,247,241,.72)",lineHeight:1.78,fontWeight:300}}>Kitchen operations across 2 city kitchens were recording data but no one was using it. The data quality problem was upstream, not analytical.</p>
+        </div>
+        {/* Card 2 — What I Built (wider to equalise height) */}
+        <div style={{padding:"28px 32px 32px",borderRight:"1px solid rgba(255,255,255,.08)"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"rgba(250,247,241,.35)",marginBottom:14,fontWeight:600}}>What I Built</div>
+          <ul style={{listStyle:"none",padding:0,margin:"0 0 14px"}}>
+            {["Material-wise consumption and purchase stats","Purchase vs. consumption variance analysis","Vegetable-wise contribution breakdown","Weekly consumption tracking"].map((item,i)=>(
+              <li key={i} style={{fontSize:12.5,color:"rgba(250,247,241,.68)",lineHeight:1.65,marginBottom:6,paddingLeft:14,position:"relative",fontWeight:300}}>
+                <span style={{position:"absolute",left:0,color:"var(--plum)",fontSize:14,top:-1}}>·</span>{item}
+              </li>
+            ))}
+          </ul>
+          <p style={{fontSize:12,color:"rgba(250,247,241,.45)",lineHeight:1.6,fontWeight:300}}>Alongside the engine, I surfaced the systemic issues behind the data quality problem — proposing a carryover stock tracking sheet, opening/closing balance framework, meal-wise data capture structure, and unit standardisation guidelines.</p>
+        </div>
+        {/* Card 3 — Why It's a PM Artefact (accent treatment) */}
+        <div style={{padding:"28px 30px 32px",background:"rgba(155,45,94,.12)",borderLeft:"3px solid var(--plum)"}}>
+          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",marginBottom:14,fontWeight:600}}>Why It's a PM Artefact</div>
+          <p style={{fontSize:13,color:"rgba(250,247,241,.78)",lineHeight:1.78,fontWeight:300}}>The product thinking wasn't in the Excel. It was in identifying that the data quality problem upstream was the real root cause, and that solving it required process changes, not just better analysis.</p>
+        </div>
       </div>
     </div>
   );
@@ -1158,7 +1182,7 @@ export default function Portfolio(){
       <section id="work" style={{padding:"84px 64px"}}>
         <div className="ov">Product Work</div>
         <h2 className="st">Shipped with <em>intent</em></h2>
-        <div className="csg"><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
+        <div style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
       <section style={{padding:"72px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
