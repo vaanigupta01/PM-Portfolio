@@ -192,17 +192,17 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .hgbg{position:absolute;inset:0;z-index:0;overflow:hidden;}.hgbg img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .7s cubic-bezier(.2,.8,.2,1);}.hgc:hover .hgbg img{transform:scale(1.08);}
 .hgsc{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,var(--sc,.9)0%,var(--sm,.55)38%,rgba(20,15,12,.08)64%,transparent 78%);transition:background .45s ease;}
 .hgc:hover .hgsc{background:linear-gradient(to top,var(--sch,.97)0%,var(--smh,.82)52%,rgba(20,15,12,.32)76%,rgba(20,15,12,.05)100%);}
-.hgpl{position:absolute;top:16px;left:16px;z-index:3;background:rgba(255,255,255,.14);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.22);color:white;padding:6px 14px;border-radius:30px;font-family:var(--l);font-size:11px;font-weight:500;}.hgpl strong{color:#FFD98E;font-weight:700;}
+.hgpl{position:absolute;top:16px;left:16px;z-index:3;background:rgba(0,0,0,.55);backdrop-filter:blur(14px) saturate(1.4);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.95);padding:6px 16px;border-radius:30px;font-family:var(--l);font-size:11px;font-weight:500;letter-spacing:.3px;box-shadow:0 2px 12px rgba(0,0,0,.3);}.hgpl strong{color:#FFD98E;font-weight:700;}
 .hgpv{position:absolute;top:16px;right:16px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.2);}
 .hghi{position:absolute;bottom:18px;right:20px;z-index:3;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;transition:opacity .3s;}.hgc:hover .hghi{opacity:0;}
 .hgcon{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:22px 24px;}
 .hgtags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
-.hgtag{font-family:var(--l);font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);color:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.2);}
+.hgtag{font-family:var(--l);font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;padding:4px 11px;border-radius:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(14px) saturate(1.6);color:rgba(255,255,255,.98);border:1px solid rgba(255,255,255,.12);box-shadow:0 1px 8px rgba(0,0,0,.35);}
 .hgti{font-family:var(--h);font-size:26px;font-weight:600;color:white;line-height:1.12;letter-spacing:-.4px;text-shadow:0 2px 16px rgba(0,0,0,.3);}.feat .hgti{font-size:30px;}
 .hgrv{max-height:0;opacity:0;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.8,.2,1),opacity .3s ease,margin-top .45s ease;margin-top:0;}.hgc:hover .hgrv{max-height:260px;opacity:1;margin-top:12px;}
 .hgde{font-size:12.5px;color:rgba(255,255,255,.82);line-height:1.65;font-weight:300;margin-bottom:12px;}.feat .hgde{font-size:13.5px;max-width:640px;}
 .hgch{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
-.hgcp{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);padding:5px 11px;border-radius:16px;font-size:10.5px;font-family:var(--l);}
+.hgcp{display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.92);padding:5px 13px;border-radius:16px;font-size:10.5px;font-family:var(--l);font-weight:500;box-shadow:0 1px 6px rgba(0,0,0,.25);}
 .hgft{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .hgct{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--ink);padding:10px 18px;border-radius:30px;font-family:var(--l);font-size:12px;font-weight:600;}.hgct svg{transition:transform .25s;}.hgc:hover .hgct svg{animation:aN .8s ease-in-out infinite;}
 .hgtl{display:flex;gap:5px;}.hgto{width:22px;height:22px;border-radius:6px;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);}
@@ -398,10 +398,12 @@ function VideoCard({cs,onClick,fillHeight=false}){
     <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg" style={{background:"#000"}}>
         <video autoPlay muted loop playsInline
-          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(28px) brightness(.55)",transform:"scale(1.15)"}}>
+          onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.6)}
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(20px)",transform:"scale(1.15)"}}>
           <source src={vidSrc} type="video/mp4"/>
         </video>
         <video autoPlay muted loop playsInline
+          onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.6)}
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}>
           <source src={vidSrc} type="video/mp4"/>
         </video>
@@ -537,7 +539,7 @@ function MoreCard({card,fillHeight=false}){
   // Phone cards for consumer + readers, wide card for room allotment
   const isPhone=!isRoom;
   return(
-    <div ref={ref} className="hgc iv" style={{...card.sc,width:"100%",height:"100%",borderRadius:18,cursor:"default"}}
+    <div ref={ref} className="hgc iv" style={{...card.sc,width:"100%",height:"100%",aspectRatio:"unset",borderRadius:18,cursor:"default"}}
       onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
       <div className="hgbg" style={{background:"#1a1410"}}>
         {isRoom?(
@@ -790,13 +792,11 @@ function KitchenCard(){
   const ref=useInView();
   return(
     <div ref={ref} className="wc iv">
-      <div className="wch">
-        <div>
-          <div className="wct">Kitchen Consumption & Expenditure Stats Engine</div>
-          <p style={{fontSize:13,color:"var(--ink-mu)",fontWeight:300,marginTop:4,maxWidth:480,lineHeight:1.7}}>Ops & Data Work · Excel-based · Internal Tool</p>
-        </div>
+      <div style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px"}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,display:"inline-block",marginBottom:8,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)"}}>Ops & Data Work · Excel-based · Internal Tool</div>
+        <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3}}>Kitchen Consumption & Expenditure Stats Engine</div>
       </div>
-      <div className="wcb">
+      <div style={{padding:"24px 32px 28px",background:"var(--paper)"}}>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:14}}>
           <div style={{background:"var(--cream)",border:"1px solid var(--rule)",borderRadius:12,padding:"22px 22px"}}>
             <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--ink-mu)",fontWeight:600,marginBottom:12}}>The Problem</div>
@@ -813,7 +813,7 @@ function KitchenCard(){
             </ul>
             <p style={{fontSize:11.5,color:"var(--ink-mu)",lineHeight:1.6,fontWeight:300}}>Alongside the engine, I surfaced the systemic issues behind the data quality problem — proposing a carryover stock tracking sheet, opening/closing balance framework, meal-wise data capture structure, and unit standardisation guidelines.</p>
           </div>
-          <div style={{background:"var(--plum-d)",border:"1px solid var(--plum-b)",borderLeft:"3px solid var(--plum)",borderRadius:12,padding:"22px 22px"}}>
+          <div style={{background:"rgba(155,45,94,.06)",border:"1px solid var(--plum-b)",borderLeft:"3px solid var(--plum)",borderRadius:"0 12px 12px 0",padding:"22px 22px"}}>
             <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",fontWeight:600,marginBottom:12}}>Why It's a PM Artefact</div>
             <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>The product thinking wasn't in the Excel. It was in identifying that the data quality problem upstream was the real root cause, and that solving it required process changes, not just better analysis.</p>
           </div>
