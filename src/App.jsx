@@ -393,18 +393,18 @@ const CW_PHONE_H=500;
  
 function VideoCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
-  const vidId="1Qznde8tS6Yhmpa9F8zz8CLTp61vQbCtS";
+  const vidSrc="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
   return(
     <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
-     <div className="hgbg">
-        <iframe
-          src={`https://drive.google.com/file/d/${vidId}/preview?autoplay=1&mute=0`}
-          style={{width:"100%",height:"100%",border:"none"}}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-          title="Parent App Walkthrough"
-          loading="lazy"
-        />
+      <div className="hgbg" style={{background:"#000"}}>
+        <video autoPlay muted loop playsInline
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(28px) brightness(.55)",transform:"scale(1.15)"}}>
+          <source src={vidSrc} type="video/mp4"/>
+        </video>
+        <video autoPlay muted loop playsInline
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}>
+          <source src={vidSrc} type="video/mp4"/>
+        </video>
       </div>
       <div className="hgsc"/>
       <div className="hgpl">{cs.pill}</div>
@@ -539,12 +539,9 @@ function MoreCard({card,fillHeight=false}){
   return(
     <div ref={ref} className="hgc iv" style={{...card.sc,width:"100%",height:"100%",borderRadius:18,cursor:"default"}}
       onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
-      <div className="hgbg">
+      <div className="hgbg" style={{background:"#1a1410"}}>
         {isRoom?(
-          // Room allotment: alternate between image and PRD embed, pause on hover
-          hov
-            ? <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
-            : <img src={card.imgs[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/>
+          <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
         ):(
           <AutoCarousel images={card.imgs} interval={2800}/>
         )}
@@ -792,35 +789,34 @@ function RoomAllocPRDCard(){
 function KitchenCard(){
   const ref=useInView();
   return(
-    <div ref={ref} className="iv" style={{marginTop:18,background:"var(--ink)",borderRadius:18,overflow:"hidden",border:"1px solid rgba(255,255,255,.06)"}}>
-      {/* Header */}
-      <div style={{padding:"28px 36px 22px",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
-        <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2.5,textTransform:"uppercase",color:"rgba(250,247,241,.4)",marginBottom:8,fontWeight:600}}>Ops & Data Work · Excel-based · Internal Tool</div>
-        <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3}}>Kitchen Consumption & Expenditure Stats Engine</div>
+    <div ref={ref} className="wc iv">
+      <div className="wch">
+        <div>
+          <div className="wct">Kitchen Consumption & Expenditure Stats Engine</div>
+          <p style={{fontSize:13,color:"var(--ink-mu)",fontWeight:300,marginTop:4,maxWidth:480,lineHeight:1.7}}>Ops & Data Work · Excel-based · Internal Tool</p>
+        </div>
       </div>
-      {/* Three cards */}
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:0}}>
-        {/* Card 1 — The Problem */}
-        <div style={{padding:"28px 30px 32px",borderRight:"1px solid rgba(255,255,255,.08)"}}>
-          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"rgba(250,247,241,.35)",marginBottom:14,fontWeight:600}}>The Problem</div>
-          <p style={{fontSize:13,color:"rgba(250,247,241,.72)",lineHeight:1.78,fontWeight:300}}>Kitchen operations across 2 city kitchens were recording data but no one was using it. The data quality problem was upstream, not analytical.</p>
-        </div>
-        {/* Card 2 — What I Built (wider to equalise height) */}
-        <div style={{padding:"28px 32px 32px",borderRight:"1px solid rgba(255,255,255,.08)"}}>
-          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"rgba(250,247,241,.35)",marginBottom:14,fontWeight:600}}>What I Built</div>
-          <ul style={{listStyle:"none",padding:0,margin:"0 0 14px"}}>
-            {["Material-wise consumption and purchase stats","Purchase vs. consumption variance analysis","Vegetable-wise contribution breakdown","Weekly consumption tracking"].map((item,i)=>(
-              <li key={i} style={{fontSize:12.5,color:"rgba(250,247,241,.68)",lineHeight:1.65,marginBottom:6,paddingLeft:14,position:"relative",fontWeight:300}}>
-                <span style={{position:"absolute",left:0,color:"var(--plum)",fontSize:14,top:-1}}>·</span>{item}
-              </li>
-            ))}
-          </ul>
-          <p style={{fontSize:12,color:"rgba(250,247,241,.45)",lineHeight:1.6,fontWeight:300}}>Alongside the engine, I surfaced the systemic issues behind the data quality problem — proposing a carryover stock tracking sheet, opening/closing balance framework, meal-wise data capture structure, and unit standardisation guidelines.</p>
-        </div>
-        {/* Card 3 — Why It's a PM Artefact (accent treatment) */}
-        <div style={{padding:"28px 30px 32px",background:"rgba(155,45,94,.12)",borderLeft:"3px solid var(--plum)"}}>
-          <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",marginBottom:14,fontWeight:600}}>Why It's a PM Artefact</div>
-          <p style={{fontSize:13,color:"rgba(250,247,241,.78)",lineHeight:1.78,fontWeight:300}}>The product thinking wasn't in the Excel. It was in identifying that the data quality problem upstream was the real root cause, and that solving it required process changes, not just better analysis.</p>
+      <div className="wcb">
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:14}}>
+          <div style={{background:"var(--cream)",border:"1px solid var(--rule)",borderRadius:12,padding:"22px 22px"}}>
+            <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--ink-mu)",fontWeight:600,marginBottom:12}}>The Problem</div>
+            <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>Kitchen operations across 2 city kitchens were recording data but no one was using it. The data quality problem was upstream, not analytical.</p>
+          </div>
+          <div style={{background:"var(--cream)",border:"1px solid var(--rule)",borderRadius:12,padding:"22px 24px"}}>
+            <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--ink-mu)",fontWeight:600,marginBottom:12}}>What I Built</div>
+            <ul style={{listStyle:"none",padding:0,margin:"0 0 12px"}}>
+              {["Material-wise consumption and purchase stats","Purchase vs. consumption variance analysis","Vegetable-wise contribution breakdown","Weekly consumption tracking"].map((item,i)=>(
+                <li key={i} style={{fontSize:12.5,color:"var(--ink-mid)",lineHeight:1.6,marginBottom:5,paddingLeft:14,position:"relative",fontWeight:300}}>
+                  <span style={{position:"absolute",left:0,color:"var(--plum)",fontSize:15,top:-1}}>·</span>{item}
+                </li>
+              ))}
+            </ul>
+            <p style={{fontSize:11.5,color:"var(--ink-mu)",lineHeight:1.6,fontWeight:300}}>Alongside the engine, I surfaced the systemic issues behind the data quality problem — proposing a carryover stock tracking sheet, opening/closing balance framework, meal-wise data capture structure, and unit standardisation guidelines.</p>
+          </div>
+          <div style={{background:"var(--plum-d)",border:"1px solid var(--plum-b)",borderLeft:"3px solid var(--plum)",borderRadius:12,padding:"22px 22px"}}>
+            <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",fontWeight:600,marginBottom:12}}>Why It's a PM Artefact</div>
+            <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>The product thinking wasn't in the Excel. It was in identifying that the data quality problem upstream was the real root cause, and that solving it required process changes, not just better analysis.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -893,7 +889,13 @@ function ParentModal(){return(<>
     <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
     <h2 className="moti">HooLiv Parent App + Outpass</h2>
     <p className="mosu">Live and serving 5,000+ tenants and their parents</p>
-    <div className="mose"><VideoEmbed url="https://drive.google.com/file/d/1Qznde8tS6Yhmpa9F8zz8CLTp61vQbCtS/view" height={280}/></div>
+    <div className="mose">
+      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}>
+        <video controls style={{width:"100%",display:"block",background:"#000"}}>
+          <source src="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4"/>
+        </video>
+      </div>
+    </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv houses 5,000+ students across India. Their parents had no digital touchpoint with the accommodation their child was living in — no visibility into payments, no way to receive or act on notices, no connection to the services available. And when a student needed to leave the property for a late outing, a home visit, or an emergency, the approval process was entirely manual — creating accountability gaps and leaving parents with no real peace of mind.</p><p>The problem wasn't just operational or UX friction. It was a trust deficit at scale.</p></div></div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path — a specific edge case defined mid-build after a city head flagged a real scenario my original approval flow hadn't accounted for.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
@@ -1042,6 +1044,8 @@ function AnalysisCard({item,onClick}){
       <div className="hgbg">
         {item.sheetUrl?(
           <iframe src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")} style={{width:"150%",height:"150%",border:"none",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}} title="Sheet" loading="lazy"/>
+        ):item.embedLink?(
+          <iframe src={item.embedLink} style={{width:"150%",height:"150%",border:"none",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}} title="Notion Preview" loading="lazy"/>
         ):(
           <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}><LogoSVG tool="Notion" size={56}/></div>
         )}
