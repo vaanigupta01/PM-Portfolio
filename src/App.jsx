@@ -78,23 +78,34 @@ const SS = {
 
 // ─── LOGOS ────────────────────────────────────────────────────────────────────
 function LogoSVG({tool,size=22}){
-  const s=size*.62;
-  const w=(svg,bg="#FFF")=><div title={tool} style={{width:size,height:size,borderRadius:size*.26,background:bg,border:"1px solid var(--rule)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden"}}>{svg}</div>;
-  switch(tool){
-    case"ChatGPT":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#10A37F"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-4 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.896zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.795.795 0 0 0-.785 0L9.409 9.23V6.897a.068.068 0 0 1 .028-.061l4.83-2.787a4.494 4.494 0 0 1 6.68 4.65zm-12.64 4.16l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.494 4.494 0 0 1 7.375-3.453l-.142.08-4.778 2.758a.795.795 0 0 0-.393.681zm1.097-2.365l2.595-1.498 2.6 1.498v2.997l-2.6 1.498-2.595-1.498z"/></svg>);
-    case"Claude":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#D97757"><path d="M17.304 3.541h-3.672l6.696 16.918H24Zm-10.608 0L0 20.459h3.744l1.37-3.553h7.005l1.369 3.553h3.744L10.536 3.541ZM6.282 13.973l2.298-6.024 2.297 6.024Z"/></svg>);
-    case"v0":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#000"><path d="M14.066 19.846 21.954 4.04h-3.43l-5.494 11.323L7.605 4.04H3.97l7.93 15.806h2.166ZM0 4.04h3.5l5.184 10.4L0 4.04Z"/></svg>);
-    case"Bolt":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#7C3AED"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>);
-    case"Replit":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#F26207"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 0 0-7 0z"/></svg>);
-    case"Figma":return w(<svg width={s} height={s} viewBox="0 0 38 57"><path fill="#1ABCFE" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0Z"/><path fill="#0ACF83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0Z"/><path fill="#FF7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19Z"/><path fill="#F24E1E" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5Z"/><path fill="#A259FF" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5Z"/></svg>);
-    case"Notion":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#000"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466l1.823 1.447ZM5.34 7.038v13.802c0 .747.373 1.027 1.214.98l14.523-.84c.841-.047.935-.56.935-1.167V6.151c0-.606-.234-.933-.748-.886l-15.177.886c-.56.047-.747.327-.747.887ZM18.857 7.75c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.58-7.19v6.957l1.448.327s0 .84-1.168.84l-3.219.187c-.093-.187 0-.653.327-.747l.84-.233V9.83L7.41 9.689c-.094-.42.14-1.026.793-1.073l3.453-.233 4.766 7.283v-6.443l-1.215-.14c-.093-.514.28-.887.747-.933Z"/></svg>);
-    case"Genspark":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#3B5BFE"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8" stroke="#fff" strokeWidth="2"/></svg>);
-    case"GoogleSheets":return w(<svg width={s} height={s} viewBox="0 0 24 24"><path fill="#0F9D58" d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2Z"/><path fill="#A0D8B9" d="M14.5 2 20 7.5h-4.5a1 1 0 0 1-1-1V2Z"/><path fill="#fff" d="M8 12h8v1.5H8zm0 3h8v1.5H8zm0-6h8v1.5H8z"/></svg>);
-    case"GoogleSlides":return w(<svg width={s} height={s} viewBox="0 0 24 24"><path fill="#F4B400" d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2Z"/><path fill="#FCE8B2" d="M14.5 2 20 7.5h-4.5a1 1 0 0 1-1-1V2Z"/><rect x="7.5" y="10" width="9" height="6" fill="#fff"/></svg>);
-    case"GoogleDrive":return w(<svg width={s} height={s} viewBox="0 0 87.3 78"><path fill="#0066DA" d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8H0a7.9 7.9 0 0 0 1.05 4z"/><path fill="#00AC47" d="M43.65 25 29.9 1.2a8.16 8.16 0 0 0-3.3 3.3L1.05 48.05A7.9 7.9 0 0 0 0 52h27.5z"/><path fill="#EA4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25a7.9 7.9 0 0 0 1.05-4H59.65l5.5 9.5z"/><path fill="#00832D" d="M43.65 25 57.4 1.2C56.05.43 54.5 0 52.9 0H34.4c-1.6 0-3.15.43-4.5 1.2z"/><path fill="#2684FC" d="M59.65 52H27.5L13.75 75.8c1.35.77 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.43 4.5-1.2z"/><path fill="#FFBA00" d="m73.4 26-13.75-23.8a8.16 8.16 0 0 0-3.3-3.3L43.65 25 59.8 52h27.45a7.9 7.9 0 0 0-1.05-4z"/></svg>);
-    case"LinkedIn":return w(<svg width={s} height={s} viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>);
-    default:return w(<span style={{fontSize:size*.45,fontWeight:700,color:"#888"}}>{tool?.[0]||"?"}</span>);
-  }
+  // Sources: lobehub unpkg CDN for AI tools, official CDNs for others
+  const BASE="https://unpkg.com/@lobehub/icons-static-svg@latest/icons/";
+  const logos={
+    "ChatGPT": BASE+"openai.svg",
+    "Claude":  BASE+"claude-color.svg",
+    "v0":      BASE+"v0.svg",
+    "Replit":  BASE+"replit-color.svg",
+    "Notion":  BASE+"notion.svg",
+    "Figma":   "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg",
+    "Bolt":    "https://bolt.new/favicon.ico",
+    "Genspark":"https://www.genspark.ai/favicon.ico",
+    "GoogleSheets":"https://www.gstatic.com/images/branding/product/1x/sheets_2020q4_48dp.png",
+    "GoogleSlides":"https://www.gstatic.com/images/branding/product/1x/slides_2020q4_48dp.png",
+    "GoogleDrive": "https://www.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png",
+    "LinkedIn":"https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg",
+    "Excel":   "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/excel_48x1.svg",
+  };
+  const src=logos[tool];
+  const bg=["Notion","v0","LinkedIn"].includes(tool)?"#FFF":"#FFF";
+  return(
+    <div title={tool} style={{width:size,height:size,borderRadius:size*.26,background:bg,border:"1px solid var(--rule)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden"}}>
+      {src
+        ? <img src={src} alt={tool} style={{width:size*.72,height:size*.72,objectFit:"contain",display:"block"}}
+            onError={e=>{e.target.style.display="none";e.target.parentElement.innerHTML=`<span style="font-size:${size*.45}px;font-weight:700;color:#888">${tool[0]||"?"}</span>`;}}/>
+        : <span style={{fontSize:size*.45,fontWeight:700,color:"#888"}}>{tool?.[0]||"?"}</span>
+      }
+    </div>
+  );
 }
 function LogoRow({tools,size=22,gap=7,style={}}){return <div style={{display:"flex",flexWrap:"wrap",gap,alignItems:"center",...style}}>{tools.map(t=><LogoSVG key={t} tool={t} size={size}/>)}</div>;}
 
@@ -206,7 +217,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .hgft{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .hgct{display:inline-flex;align-items:center;gap:7px;background:white;color:var(--ink);padding:10px 18px;border-radius:30px;font-family:var(--l);font-size:12px;font-weight:600;}.hgct svg{transition:transform .25s;}.hgc:hover .hgct svg{animation:aN .8s ease-in-out infinite;}
 .hgtl{display:flex;gap:5px;}.hgto{width:22px;height:22px;border-radius:6px;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.mg{display:block;}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .mo{position:fixed;inset:0;z-index:200;background:rgba(34,29,25,.6);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:28px 18px;overflow-y:auto;animation:fIn .2s ease;}
 .modal{background:var(--iv);border-radius:22px;width:100%;max-width:840px;position:relative;overflow:hidden;animation:sUp .28s ease;margin:auto;box-shadow:0 40px 90px rgba(0,0,0,.3);}
@@ -352,10 +363,10 @@ function SheetEmbed({url,label="Sheet",height=280}){
 function SlidesEmbed({url,label="Deck",height=280}){
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
-function VideoEmbed({url,height=300}){
+/*function VideoEmbed({url,height=300}){
   const id=url.match(/\/d\/([^/]+)/)?.[1];
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleDrive" size={16}/>Walkthrough Video</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={id?`https://drive.google.com/file/d/${id}/preview`:url} className="emf" style={{height}} title="Video" allow="autoplay" loading="lazy"/></div>);
-}
+}*/
 function ProtoEmbed({url,label="Prototype",height=300,tool="v0"}){
   return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
 }
@@ -399,10 +410,11 @@ function VideoCard({cs,onClick,fillHeight=false}){
       <div className="hgbg" style={{background:"#000"}}>
         <video autoPlay muted loop playsInline
           onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.6)}
-          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(20px)",transform:"scale(1.15)"}}>
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(23px) brightness(.80)",transform:"scale(1.15)"}}>
           <source src={vidSrc} type="video/mp4"/>
         </video>
-        <video autoPlay muted loop playsInline
+        <video poster="/images/parent-pay.jpg"
+          autoPlay muted loop playsInline
           onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.6)}
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}>
           <source src={vidSrc} type="video/mp4"/>
