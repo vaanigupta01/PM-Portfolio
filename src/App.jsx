@@ -125,7 +125,7 @@ function useParallax(){
   },[]);
   return y;
 }
-function ParallaxLayer({speed=0.1,children,style={}}){
+function ParallaxLayer({speed=0.2,children,style={}}){
   const y=useParallax();
   return <div style={{transform:`translate3d(0,${y*speed}px,0)`,willChange:"transform",...style}}>{children}</div>;
 }
@@ -179,9 +179,9 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .toast{position:fixed;bottom:36px;left:50%;background:var(--ink);color:var(--iv);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:300;animation:tIn .25s ease;box-shadow:0 12px 32px rgba(0,0,0,.2);}
 .hero{min-height:94vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;padding:108px 64px 56px;gap:64px;position:relative;overflow:hidden;}
 .blob{position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;}
-.blob1{width:460px;height:460px;background:radial-gradient(circle,rgba(155,45,94,.22)0%,transparent 70%);top:-120px;right:-60px;animation:bF1 16s ease-in-out infinite;}
-.blob2{width:380px;height:380px;background:radial-gradient(circle,rgba(42,92,74,.18)0%,transparent 70%);bottom:-100px;left:30px;animation:bF2 20s ease-in-out infinite;}
-.blob3{width:260px;height:260px;background:radial-gradient(circle,rgba(196,90,50,.16)0%,transparent 70%);top:40%;left:42%;animation:bF1 24s ease-in-out infinite;animation-delay:-9s;}
+.blob1{width:620px;height:620px;background:radial-gradient(circle,rgba(155,45,94,.42)0%,transparent 68%);top:-160px;right:-80px;animation:bF1 16s ease-in-out infinite;}
+.blob2{width:520px;height:520px;background:radial-gradient(circle,rgba(42,92,74,.36)0%,transparent 68%);bottom:-140px;left:20px;animation:bF2 20s ease-in-out infinite;}
+.blob3{width:360px;height:360px;background:radial-gradient(circle,rgba(196,90,50,.32)0%,transparent 68%);top:40%;left:42%;animation:bF1 24s ease-in-out infinite;animation-delay:-9s;}
 .hey{font-family:var(--l);font-size:11.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--plum);margin-bottom:14px;display:flex;align-items:center;gap:9px;font-weight:600;}.hey::before{content:'';display:block;width:24px;height:1.5px;background:var(--plum);}
 .hh{font-family:var(--h);font-size:clamp(34px,4vw,54px);font-weight:600;line-height:1.08;color:var(--ink);margin-bottom:18px;letter-spacing:-1px;}.hh em{font-style:italic;color:var(--plum);font-weight:500;}
 .hs{font-size:15px;line-height:1.8;color:var(--ink-mid);margin-bottom:28px;font-weight:300;max-width:480px;}
@@ -380,11 +380,11 @@ const SC={
   b2b:{"--sc":"rgba(70,32,18,.93)","--sm":"rgba(70,32,18,.5)","--sch":"rgba(70,32,18,.97)","--smh":"rgba(70,32,18,.82)"},
 };
 const CASES=[
-  {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"Explore the Data Layer",chips:["5 dashboards","C-Suite & Heads","Replit build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
-  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app screens","35 CRM screens","Zero-to-Product"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
-  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"See the Trust System",hasVideo:true,chips:["Walkthrough video","Trust Layer Design","Outpass logic"]},
-  {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Org-wide launch","150+ employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
-  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI view","Discovery-to-Spec","4-Member team"],imgs:[SS.b2b1,SS.b2b2]},
+  {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"Explore the Data Layer",chips:["5 Dashboards","C-Suite & Heads","Replit Build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
+  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
+  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Explore the Experience",hasVideo:true,chips:["Walkthrough Video","Trust Layer Design","Outpass Logic"]},
+  {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Company-wide Rollout","150+ Employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
+  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI View","Interview-to-Spec","4-Member Team"],imgs:[SS.b2b1,SS.b2b2]},
 ];
 
 // Phone-screen dimensions used for portrait cards
@@ -1011,10 +1011,25 @@ function AnalysisModal({item,onClose}){
     <div className="mo" onClick={onClose}>
       <div className="modal" onClick={e=>e.stopPropagation()}>
         <button className="moc" onClick={onClose}>×</button>
-        <div className="mohe" style={{flexDirection:"column",alignItems:"center",justifyContent:"center",gap:10,background:"linear-gradient(135deg,#0D0D18,#181828)"}}>
-          <span style={{fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.15)",color:"var(--plum)",border:"1px solid var(--plum-b)",fontWeight:700}}>{item.type}</span>
-          <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",textAlign:"center",letterSpacing:-.3,maxWidth:480,lineHeight:1.25}}>{item.company} — {item.title}</div>
-          {item.sheetUrl&&<LinkCTA label="View RCA Spreadsheet" url={item.sheetUrl} tool="GoogleSheets"/>}
+        {/* Header — embed preview fills the full placeholder area */}
+        <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0D0D18,#181828)"}}>
+          {item.sheetUrl?(
+            <iframe
+              src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")}
+              style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}}
+              title="Sheet Preview" loading="lazy"/>
+          ):item.embedLink?(
+            <iframe
+              src={item.embedLink}
+              style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}}
+              title="Notion Preview" loading="lazy"/>
+          ):(
+            <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <LogoSVG tool="Notion" size={64}/>
+            </div>
+          )}
+          {/* Type pill overlay */}
+          <div style={{position:"absolute",top:14,left:14,fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.85)",color:"white",border:"1px solid rgba(155,45,94,.6)",fontWeight:700,backdropFilter:"blur(8px)"}}>{item.type}</div>
         </div>
         <div className="mob">
           <div className="moov">{item.type}</div>
@@ -1040,7 +1055,6 @@ function AnalysisModal({item,onClose}){
             {c.supporting&&<div style={{marginBottom:12}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{c.supporting.map((s,i)=><li key={i}>{s}</li>)}</ul></div>}
             {c.guardrails&&<div style={{padding:"12px 16px",background:"rgba(184,134,46,.06)",borderRadius:10,border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{c.guardrails.map((g,i)=><li key={i}>{g}</li>)}</ul></div>}
           </div>}
-          {item.sheetUrl&&<div className="mose"><h3 className="mosh">RCA Spreadsheet</h3><SheetEmbed url={item.sheetUrl} label="Full RCA Workbook" height={300}/></div>}
           {item.id==="multiplayer"&&<div className="mose"><h3 className="mosh">Full Case Study</h3><NotionEmbed url={item.link} embedUrl={item.embedLink} title="Improving Player Retention in a Multiplayer Game — Growth PM Case"/></div>}
           {item.id==="whatsapp"&&<div className="mose"><h3 className="mosh">Full PRD</h3><NotionEmbed url={item.link} embedUrl={item.embedLink} title="Improving WhatsApp Business App for Shopify Merchants — PRD"/></div>}
           {item.linkedinPost&&<div className="molk"><LinkCTA label="LinkedIn Post" url={item.linkedinPost} tool="LinkedIn"/></div>}
@@ -1065,6 +1079,17 @@ function AnalysisCard({item,onClick}){
       </div>
       <div className="hgsc"/>
       <div className="hgpl" style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:1.5,textTransform:"uppercase"}}>{item.type}</div>
+      {/* Sheet / Notion open CTA — top right corner of card */}
+      {(item.sheetUrl||item.link)&&(
+        
+          href={item.sheetUrl||item.link}
+          target="_blank" rel="noreferrer"
+          onClick={e=>e.stopPropagation()}
+          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"rgba(0,0,0,.55)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.9)",padding:"5px 12px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:600,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase"}}>
+          {item.sheetUrl?"Open Sheet":"Open PRD"}
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      )}
       <div className="hgcon">
         <div className="hgtags"><span className="hgtag">{item.company}</span></div>
         <div className="hgti" style={{fontSize:20,lineHeight:1.2}}>{item.title}</div>
