@@ -463,7 +463,12 @@ function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
   const ref=useInView();
   return(
     <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":LAND_H,borderRadius:22}} onClick={onClick}>
-      <div className="hgbg"><AutoCarousel images={cs.imgs} interval={2600}/></div>
+      <div className="hgbg">
+        {showPRD
+          ? <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="B2B PRD"/>
+          : <AutoCarousel images={cs.imgs} interval={2600}/>
+        }
+      </div>
       <div className="hgsc"/>
       <div className="hgpl">{cs.pill}</div>
       <div className="hghi"><Arrow/></div>
@@ -477,9 +482,6 @@ function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
             <div className="hgct" style={{fontSize:11,padding:"8px 14px"}}>{cs.cta} <Arrow/></div>
             <div className="hgtl">{cs.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>
           </div>
-          {showPRD&&<div style={{marginTop:8,borderRadius:8,overflow:"hidden",height:80,border:"1px solid rgba(255,255,255,.15)"}}>
-            <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="B2B PRD"/>
-          </div>}
         </div>
       </div>
     </div>
@@ -562,6 +564,16 @@ function MoreCard({card,fillHeight=false}){
         )}
       </div>
       <div className="hgsc"/>
+      {isRoom&&(
+        <a
+          href={card.prdUrl}
+          target="_blank" rel="noreferrer"
+          onClick={e=>e.stopPropagation()}
+          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"rgba(0,0,0,.55)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.9)",padding:"5px 12px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:600,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase"}}>
+          Open PRD
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      )}
       <div className="hgcon">
         <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
         <div className="hgti" style={{fontSize:isPhone?18:20}}>{card.title}</div>
@@ -1001,7 +1013,7 @@ const ANALYSES=[
    link:"https://vaanig-spring-boa-26a.notion.site/Improving-WhatsApp-Business-App-for-Shopify-1b300c0515c48089b74ac11e8fdaedc3",
    embedLink:"https://vaanig-spring-boa-26a.notion.site/ebd//1b300c0515c48089b74ac11e8fdaedc3",
    sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.45)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"},
-   content:{scenario:"Shopify merchants rely on WhatsApp Business as a primary sales channel, but fragmented workflows — manual product syncing, no order tracking integration, limited automation, COD fraud — are creating lost sales and operational overhead.",user:"Sukanya Mehta, 28, Mumbai — solo SME jewelry brand owner (Shingle Creations) using WhatsApp Business + Shopify + Instagram.",features:[{priority:"P1",name:"Smart WhatsApp-Shopify Integration Hub",desc:"Auto-sync product listings, import orders, integrate chats into Shopify CRM"},{priority:"P1",name:"AI-Powered Cart Recovery & Upselling",desc:"Personalised WhatsApp cart reminders, smart upsells/cross-sells"},{priority:"P1",name:"WhatsApp-Based Instant Checkout & Payment Links",desc:"Complete purchases via UPI, Razorpay, Stripe within WhatsApp"},{priority:"P1",name:"COD Verification & Smart RTO Prevention",desc:"Automated confirmation, OTP verification, prepaid nudge"},{priority:"P2",name:"Automated Order Tracking & Proactive Support"},{priority:"P2",name:"Smart WhatsApp CRM"},{priority:"P2",name:"AI-Based Product Discovery & WhatsApp Storefront"},{priority:"P3",name:"WhatsApp Multi-Agent Support for Teams"},{priority:"P3",name:"Marketing Insights & Performance Dashboard"},{priority:"P3",name:"WhatsApp Business API Lite for Small Merchants"}],wireframes:"Wireframes built for: Instant Checkout, Automated Order Tracking, Marketing Insights Dashboard, API Lite interface.",solutions:"Prioritised P1 features address the highest-impact pain points: cart recovery, seamless checkout, COD fraud reduction, real-time order tracking.",metrics:true,primaryMetric:"Abandoned Cart Recovery Rate",supporting:["COD Fraud/RTO% reduction","WhatsApp-to-purchase conversion rate","Merchant adoption rate"],guardrails:["Order status inquiry volume (reduction signal)","Merchant satisfaction score","API Lite adoption vs full API"]}},
+   content:{scenario:"Shopify merchants rely on WhatsApp Business as a primary sales and customer engagement channel, but fragmented workflows — manual product syncing, no order tracking integration, limited automation, COD fraud — are creating lost sales and operational overhead.",user:"Sukanya Mehta, 28, Mumbai — solo SME jewelry brand owner (Shingle Creations) using WhatsApp Business + Shopify + Instagram.",features:[{priority:"P1",name:"Smart WhatsApp-Shopify Integration Hub",desc:"Auto-sync product listings, import orders, integrate chats into Shopify CRM"},{priority:"P1",name:"AI-Powered Cart Recovery & Upselling",desc:"Personalised WhatsApp cart reminders, smart upsells/cross-sells"},{priority:"P1",name:"WhatsApp-Based Instant Checkout & Payment Links",desc:"Complete purchases via UPI, Razorpay, Stripe within WhatsApp"},{priority:"P1",name:"COD Verification & Smart RTO Prevention",desc:"Automated confirmation, OTP verification, prepaid nudge"},{priority:"P2",name:"Automated Order Tracking & Proactive Support"},{priority:"P2",name:"Smart WhatsApp CRM"},{priority:"P2",name:"AI-Based Product Discovery & WhatsApp Storefront"},{priority:"P3",name:"WhatsApp Multi-Agent Support for Teams"},{priority:"P3",name:"Marketing Insights & Performance Dashboard"},{priority:"P3",name:"WhatsApp Business API Lite for Small Merchants"}],wireframes:"Wireframes built for: Instant Checkout, Automated Order Tracking, Marketing Insights Dashboard, API Lite interface.",solutions:"Prioritised P1 features address the highest-impact pain points: cart recovery, seamless checkout, COD fraud reduction, real-time order tracking.",metrics:true,primaryMetric:"Abandoned Cart Recovery Rate",supporting:["COD Fraud/RTO% reduction","WhatsApp-to-purchase conversion rate","Merchant adoption rate"],guardrails:["Order status inquiry volume (reduction signal)","Merchant satisfaction score","API Lite adoption vs full API"]}},
 ];
 
 function AnalysisModal({item,onClose}){
@@ -1081,7 +1093,7 @@ function AnalysisCard({item,onClick}){
       <div className="hgpl" style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:1.5,textTransform:"uppercase"}}>{item.type}</div>
       {/* Sheet / Notion open CTA — top right corner of card */}
       {(item.sheetUrl||item.link)&&(
-        
+        <a
           href={item.sheetUrl||item.link}
           target="_blank" rel="noreferrer"
           onClick={e=>e.stopPropagation()}
