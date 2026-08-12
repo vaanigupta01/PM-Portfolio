@@ -170,8 +170,8 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes aN{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
 @keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
-.hero-grain{position:absolute;inset:-50%;width:200%;height:200%;opacity:.028;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
-.hero-mesh{position:absolute;inset:-20%;width:140%;height:140%;pointer-events:none;z-index:0;opacity:.07;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(155,45,94,1) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(42,92,74,1) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 55% 20%,rgba(196,90,50,1) 0%,transparent 50%);animation:meshDrift 22s ease-in-out infinite;}
+.hero-grain{position:absolute;inset:-50%;width:200%;height:200%;opacity:.09;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
+.hero-mesh{position:absolute;inset:-20%;width:140%;height:140%;pointer-events:none;z-index:0;opacity:.28;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(155,45,94,1) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(42,92,74,1) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 55% 20%,rgba(196,90,50,1) 0%,transparent 50%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -1033,18 +1033,27 @@ function AnalysisModal({item,onClose}){
           {item.sheetUrl?(
             <iframe
               src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")}
-              style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}}
+              style={{width:"100%",height:"100%",border:"none"}}
               title="Sheet Preview" loading="lazy"/>
           ):item.embedLink?(
             <iframe
               src={item.embedLink}
-              style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}}
+              style={{width:"100%",height:"100%",border:"none"]}}
               title="Notion Preview" loading="lazy"/>
           ):(
             <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
               <LogoSVG tool="Notion" size={64}/>
             </div>
           )}
+          {(item.sheetUrl||item.link)&&(
+        <a
+          href={item.sheetUrl||item.link}
+          target="_blank" rel="noreferrer"
+          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",backdropFilter:"blur(10px)",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
+          {item.sheetUrl?"Open Sheet":"Open PRD"}
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      )}
           {/* Type pill overlay */}
           {/*<div style={{position:"absolute",top:14,left:14,fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.85)",color:"white",border:"1px solid rgba(155,45,94,.6)",fontWeight:700,backdropFilter:"blur(8px)"}}>{item.type}</div>*/}
         </div>
