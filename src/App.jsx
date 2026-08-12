@@ -1038,7 +1038,7 @@ function AnalysisModal({item,onClose}){
           ):item.embedLink?(
             <iframe
               src={item.embedLink}
-              style={{width:"100%",height:"100%",border:"none"]}}
+              style={{width:"100%",height:"100%",border:"none"}}
               title="Notion Preview" loading="lazy"/>
           ):(
             <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
