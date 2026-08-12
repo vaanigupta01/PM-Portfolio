@@ -169,6 +169,9 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes tIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes aN{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
+@keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
+.hero-grain{position:absolute;inset:-50%;width:200%;height:200%;opacity:.028;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+.hero-mesh{position:absolute;inset:-20%;width:140%;height:140%;pointer-events:none;z-index:0;opacity:.07;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(155,45,94,1) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(42,92,74,1) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 55% 20%,rgba(196,90,50,1) 0%,transparent 50%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -300,6 +303,8 @@ function Nav(){
 function Hero(){
   return(
     <div className="hero">
+      <div className="hero-mesh"/>
+      <div className="hero-grain"/>
       <ParallaxLayer speed={0.12} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
       <ParallaxLayer speed={-0.08} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
       <ParallaxLayer speed={0.06} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
@@ -569,7 +574,7 @@ function MoreCard({card,fillHeight=false}){
           href={card.prdUrl}
           target="_blank" rel="noreferrer"
           onClick={e=>e.stopPropagation()}
-          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"rgba(0,0,0,.55)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.9)",padding:"5px 12px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:600,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase"}}>
+          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
           Open PRD
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
@@ -1041,10 +1046,13 @@ function AnalysisModal({item,onClose}){
             </div>
           )}
           {/* Type pill overlay */}
-          <div style={{position:"absolute",top:14,left:14,fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.85)",color:"white",border:"1px solid rgba(155,45,94,.6)",fontWeight:700,backdropFilter:"blur(8px)"}}>{item.type}</div>
+          {/*<div style={{position:"absolute",top:14,left:14,fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.85)",color:"white",border:"1px solid rgba(155,45,94,.6)",fontWeight:700,backdropFilter:"blur(8px)"}}>{item.type}</div>*/}
         </div>
         <div className="mob">
-          <div className="moov">{item.type}</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <div className="moov" style={{marginBottom:0}}>{item.type}</div>
+            {item.linkedinPost&&<a href={item.linkedinPost} target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,fontSize:11,fontFamily:"var(--l)",color:"var(--plum)",textDecoration:"none",fontWeight:600,letterSpacing:.5,textTransform:"uppercase"}}><LogoSVG tool="LinkedIn" size={16}/>LinkedIn Post</a>}
+          </div>
           <h2 className="moti">{item.company}</h2>
           <p className="mosu">{item.title}</p>
           <div className="mose"><h3 className="mosh">Scenario</h3><div className="mot"><p>{c.scenario}</p></div></div>
@@ -1067,9 +1075,6 @@ function AnalysisModal({item,onClose}){
             {c.supporting&&<div style={{marginBottom:12}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{c.supporting.map((s,i)=><li key={i}>{s}</li>)}</ul></div>}
             {c.guardrails&&<div style={{padding:"12px 16px",background:"rgba(184,134,46,.06)",borderRadius:10,border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{c.guardrails.map((g,i)=><li key={i}>{g}</li>)}</ul></div>}
           </div>}
-          {item.id==="multiplayer"&&<div className="mose"><h3 className="mosh">Full Case Study</h3><NotionEmbed url={item.link} embedUrl={item.embedLink} title="Improving Player Retention in a Multiplayer Game — Growth PM Case"/></div>}
-          {item.id==="whatsapp"&&<div className="mose"><h3 className="mosh">Full PRD</h3><NotionEmbed url={item.link} embedUrl={item.embedLink} title="Improving WhatsApp Business App for Shopify Merchants — PRD"/></div>}
-          {item.linkedinPost&&<div className="molk"><LinkCTA label="LinkedIn Post" url={item.linkedinPost} tool="LinkedIn"/></div>}
         </div>
       </div>
     </div>
@@ -1097,7 +1102,7 @@ function AnalysisCard({item,onClick}){
           href={item.sheetUrl||item.link}
           target="_blank" rel="noreferrer"
           onClick={e=>e.stopPropagation()}
-          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"rgba(0,0,0,.55)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.9)",padding:"5px 12px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:600,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase"}}>
+          style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",backdropFilter:"blur(10px)",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
           {item.sheetUrl?"Open Sheet":"Open PRD"}
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
