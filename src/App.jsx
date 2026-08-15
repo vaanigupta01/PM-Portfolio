@@ -169,9 +169,10 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes tIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes aN{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
-@keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
-.hero-grain{position:absolute;inset:-50%;width:200%;height:200%;opacity:.09;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
-.hero-mesh{position:absolute;inset:-20%;width:140%;height:140%;pointer-events:none;z-index:0;opacity:.28;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(155,45,94,1) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 70%,rgba(42,92,74,1) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 55% 20%,rgba(196,90,50,1) 0%,transparent 50%);animation:meshDrift 22s ease-in-out infinite;}
+@keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.08)}33%{transform:translate(-40px,28px) scale(1.14)}66%{transform:translate(28px,-20px) scale(1.05)}}
+@keyframes grainShift{0%{background-position:0 0}25%{background-position:40px -20px}50%{background-position:-20px 40px}75%{background-position:30px 30px}100%{background-position:0 0}}
+.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.18) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.15) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.13) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
+.hero-grain{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;mix-blend-mode:multiply;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px;animation:grainShift 8s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -180,7 +181,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .na{font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;color:var(--ink-mu);text-decoration:none;cursor:pointer;transition:color .2s;}.na:hover{color:var(--plum);}
 .nc{background:var(--ink);color:var(--iv);padding:9px 20px;border-radius:30px;font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;text-decoration:none;transition:all .2s;}.nc:hover{background:var(--plum);}
 .toast{position:fixed;bottom:36px;left:50%;background:var(--ink);color:var(--iv);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:300;animation:tIn .25s ease;box-shadow:0 12px 32px rgba(0,0,0,.2);}
-.hero{min-height:94vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;padding:108px 64px 56px;gap:64px;position:relative;overflow:hidden;}
+.hero{min-height:94vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;padding:108px 64px 56px;gap:64px;position:relative;overflow:hidden;background:transparent;}
 .blob{position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;}
 .blob1{width:620px;height:620px;background:radial-gradient(circle,rgba(155,45,94,.42)0%,transparent 68%);top:-160px;right:-80px;animation:bF1 16s ease-in-out infinite;}
 .blob2{width:520px;height:520px;background:radial-gradient(circle,rgba(42,92,74,.36)0%,transparent 68%);bottom:-140px;left:20px;animation:bF2 20s ease-in-out infinite;}
@@ -305,10 +306,10 @@ function Hero(){
     <div className="hero">
       <div className="hero-mesh"/>
       <div className="hero-grain"/>
-      <ParallaxLayer speed={0.12} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
-      <ParallaxLayer speed={-0.08} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
-      <ParallaxLayer speed={0.06} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
-      <ParallaxLayer speed={0.04} style={{position:"relative",zIndex:1}}>
+      <ParallaxLayer speed={0.38} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
+      <ParallaxLayer speed={-0.22} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
+      <ParallaxLayer speed={0.18} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
+      <ParallaxLayer speed={0.04} style={{position:"relative",zIndex:3}}>
         <div style={{animation:"fadeUp .6s ease .04s both"}}><div className="hey">Business & Product Manager</div></div>
         <h1 className="hh" style={{animation:"fadeUp .6s ease .1s both"}}>Brewing product systems with an <em>obsessive quality bar</em> — from discovery to users</h1>
         <p className="hs" style={{animation:"fadeUp .6s ease .16s both"}}>10+ products shipped across consumer apps, internal CRMs, operations tooling and analytics platforms in PropTech and community tech — combining structured discovery, cross-functional execution, and a relentless insistence on getting it right to drive engagement, efficiency, and real outcomes.</p>
@@ -318,7 +319,7 @@ function Hero(){
           ))}
         </div>
       </ParallaxLayer>
-      <ParallaxLayer speed={0.02} style={{position:"relative",zIndex:1}}>
+      <ParallaxLayer speed={0.02} style={{position:"relative",zIndex:3}}>
         <div className="ph" style={{animation:"fadeUp .6s ease .14s both"}}>
           <div className="ph-fr">
             <div className="ph-bl"/>
