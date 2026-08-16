@@ -170,6 +170,8 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes aN{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
 @keyframes phBlRot{0%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}25%{border-radius:44% 56% 38% 62%/48% 52% 48% 52%}50%{border-radius:38% 62% 60% 40%/52% 44% 56% 48%}75%{border-radius:52% 48% 44% 56%/38% 60% 40% 62%}100%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}}
+@keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
+.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -301,6 +303,7 @@ function Nav(){
 function Hero(){
   return(
     <div className="hero">
+      <div className="hero-mesh"/>
       <ParallaxLayer speed={0.38} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
       <ParallaxLayer speed={-0.22} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
       <ParallaxLayer speed={0.18} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
