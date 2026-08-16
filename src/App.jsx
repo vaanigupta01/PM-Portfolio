@@ -169,10 +169,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes tIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes aN{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes fIn{from{opacity:0}to{opacity:1}}
-@keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.08)}33%{transform:translate(-40px,28px) scale(1.14)}66%{transform:translate(28px,-20px) scale(1.05)}}
-@keyframes grainShift{0%{background-position:0 0}25%{background-position:40px -20px}50%{background-position:-20px 40px}75%{background-position:30px 30px}100%{background-position:0 0}}
-.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.38) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.32) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.28) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
-.hero-grain{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;mix-blend-mode:overlay;opacity:.22;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px;animation:grainShift 8s ease-in-out infinite;}
+@keyframes phBlRot{0%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}25%{border-radius:44% 56% 38% 62%/48% 52% 48% 52%}50%{border-radius:38% 62% 60% 40%/52% 44% 56% 48%}75%{border-radius:52% 48% 44% 56%/38% 60% 40% 62%}100%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -193,7 +190,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .hmt{background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;transition:border-color .2s,transform .2s;}.hmt:hover{border-color:var(--plum-b);transform:translateY(-2px);}
 .hmn{font-family:var(--h);font-size:30px;font-weight:600;color:var(--plum);line-height:1;margin-bottom:3px;}.hml{font-size:11px;color:var(--ink-mu);font-family:var(--l);letter-spacing:.3px;}
 .ph{position:relative;}.ph-fr{position:relative;width:100%;max-width:400px;margin:0 auto;}
-.ph-bl{position:absolute;inset:-18px;background:linear-gradient(135deg,rgba(155,45,94,.1),rgba(42,92,74,.07));border-radius:60% 40% 53% 47%/54% 47% 53% 46%;animation:gF 7s ease-in-out infinite;}
+.ph-bl{position:absolute;inset:-18px;background:linear-gradient(135deg,rgba(155,45,94,.14),rgba(42,92,74,.1));border-radius:60% 40% 53% 47%/54% 47% 53% 46%;animation:gF 7s ease-in-out infinite,phBlRot 18s linear infinite;}
 .ph-in{position:relative;z-index:1;border-radius:18px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 26px 52px rgba(34,29,25,.16);border:1px solid var(--rule);}
 .ph-in img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
 .ph-q{position:absolute;bottom:-18px;left:-28px;z-index:2;background:var(--ink);border:1px solid rgba(255,255,255,.08);padding:16px 20px;border-radius:14px;max-width:248px;box-shadow:0 18px 40px rgba(34,29,25,.25);animation:gF 9s ease-in-out infinite;animation-delay:-4s;}
@@ -304,8 +301,6 @@ function Nav(){
 function Hero(){
   return(
     <div className="hero">
-      <div className="hero-mesh"/>
-      <div className="hero-grain"/>
       <ParallaxLayer speed={0.38} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
       <ParallaxLayer speed={-0.22} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
       <ParallaxLayer speed={0.18} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
