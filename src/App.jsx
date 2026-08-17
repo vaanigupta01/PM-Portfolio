@@ -171,7 +171,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes fIn{from{opacity:0}to{opacity:1}}
 @keyframes phBlRot{0%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}25%{border-radius:44% 56% 38% 62%/48% 52% 48% 52%}50%{border-radius:38% 62% 60% 40%/52% 44% 56% 48%}75%{border-radius:52% 48% 44% 56%/38% 60% 40% 62%}100%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}}
 @keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
-.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
+.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.23) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.19) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.16) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -938,25 +938,53 @@ function ParentModal(){return(<>
 </>);}
 
 function LMSModal(){return(<>
-  <div className="mohe" style={{background:"linear-gradient(135deg,#050E0C,#091A14)"}}>
-    <MockRow imgs={[[SS.lmsDash,78],[SS.lmsHistory,78],[SS.lmsRecord,78],[SS.lmsManage,78]]} h={185}/>
+  {/* HEADER — prototype instead of images */}
+  <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#050E0C,#091A14)"}}>
+    <div style={{position:"absolute",inset:0,transform:"scale(0.9)",transformOrigin:"top center",width:"112%",height:"112%",marginLeft:"-6%"}}>
+      <iframe src="https://v0-leave-management-prototype-sand.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="LMS Prototype" loading="lazy"/>
+    </div>
+    <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>LMS Prototype</div>
+    <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
     <div className="moov">Operations & Internal Tools · 0→1</div>
     <h2 className="moti">Leave Management System</h2>
     <p className="mosu">~100% adoption · 150+ employees · First org-wide product launch</p>
+
+    {/* The Problem */}
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>Leave applications happened over WhatsApp. No approval workflow, no record system, no analytics. I identified this as a solvable ops gap — scoped the solution, defined the requirements, and proposed building a proper system.</p><p>Before writing a single requirement, I collaborated with the COO to understand the HR policies that would govern the new system — and where those policies could be made more practical. One example: medical or death certificate uploads were originally required for sick and bereavement leave regardless of duration. I pushed for a more human-centered rule — certificates required only if the leave exceeded 3 days. That kind of policy-to-product translation was baked into the PRD from the start.</p></div></div>
+
+    {/* PRD right after Problem */}
+    <div className="mose"><h3 className="mosh">PRD</h3>
+      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD"/>
+    </div>
+
+    {/* What I Built */}
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <p style={{fontSize:13,color:"var(--ink-mu)",marginBottom:10,fontWeight:300}}>Full-stack LMS across in-ops mobile app and web-based Employee Self-Service Portal, built on Replit:</p>
       <ul className="moli"><li>Multi-type leave calculations and tracking</li><li>Leave application and record management</li><li>Manager approval queues</li><li>Compensatory off mechanics</li><li>Team leave overview</li><li>Attendance regularisation</li><li>Admin analytics panel</li></ul>
     </div>
+
+    {/* The Quality Story */}
     <div className="mose"><h3 className="mosh">The Quality Story</h3><div className="qual"><p>The web portal was built in a delivery-first culture, without a formal PRD, using AI tools directly. When I tested it, the issues were extensive — calculation errors, incorrect logic across leave types, poor UI/UX decisions, API inconsistencies that replicated across the mobile app, and one leave type designed entirely wrong from the ground up.</p><p style={{marginTop:10}}>I caught and documented all of it. On the incorrectly designed leave type, I held firm — shipping wrong calculation logic from day one was not a trade-off worth making. That leave type was pulled from launch scope and queued for correction in the next phase.</p></div></div>
-    <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 150+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work on the org WhatsApp group after the call.</p></div></div>
-    <div className="mose"><h3 className="mosh">PRD & Prototype</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD"/>
-      <div style={{marginTop:10}}><ProtoEmbed url="https://v0-leave-management-prototype-sand.vercel.app/" label="LMS Prototype" tool="v0" height={300}/></div>
+
+    {/* Screenshots after Quality Story — all 4 in one row, baseline aligned */}
+    <div className="mose">
+      <div style={{display:"flex",gap:8,alignItems:"flex-end"}}>
+        {[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord].map((s,i)=>(
+          <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",boxShadow:"0 2px 8px rgba(34,29,25,.08)"}}>
+            <img src={s} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+          </div>
+        ))}
+      </div>
     </div>
+
+    {/* The Launch */}
+    <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 150+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
+
+    {/* Impact */}
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~100% adoption</strong> with no prior system in place — the only leave management infrastructure the company has.</p></div></div>
+
     <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Replit","Notion"]} size={26}/></div>
   </div>
 </>);}
