@@ -171,7 +171,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes fIn{from{opacity:0}to{opacity:1}}
 @keyframes phBlRot{0%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}25%{border-radius:44% 56% 38% 62%/48% 52% 48% 52%}50%{border-radius:38% 62% 60% 40%/52% 44% 56% 48%}75%{border-radius:52% 48% 44% 56%/38% 60% 40% 62%}100%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}}
 @keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
-.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.23) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.19) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.16) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
+.hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
@@ -886,25 +886,118 @@ function DashModal(){return(<>
   </div>
 </>);}
 
+function PhoneCarouselFrame({images,interval=2800}){
+  const[idx,setIdx]=useState(0);
+  const frameRef=useRef(null);
+  useEffect(()=>{
+    const t=setInterval(()=>{
+      setIdx(i=>(i+1)%images.length);
+      if(frameRef.current) frameRef.current.scrollTop=0;
+    },interval);
+    return()=>clearInterval(t);
+  },[images.length,interval]);
+  return(
+    <div style={{width:160,height:320,borderRadius:24,overflow:"hidden",border:"2px solid var(--rule)",boxShadow:"0 8px 24px rgba(34,29,25,.12)",flexShrink:0,position:"relative",background:"#fff"}}>
+      <div ref={frameRef} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none"}}>
+        <img src={images[idx]} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+      </div>
+      {/* Slow auto-scroll within the frame */}
+      <AutoScrollImg src={images[idx]} frameRef={frameRef}/>
+    </div>
+  );
+}
+
+function AutoScrollImg({src,frameRef}){
+  useEffect(()=>{
+    const el=frameRef.current;
+    if(!el) return;
+    el.scrollTop=0;
+    const duration=2400;
+    const step=()=>{
+      if(!el) return;
+      const maxScroll=el.scrollHeight-el.clientHeight;
+      if(el.scrollTop<maxScroll){
+        el.scrollTop+=0.6;
+        raf=requestAnimationFrame(step);
+      }
+    };
+    let raf=requestAnimationFrame(step);
+    return()=>cancelAnimationFrame(raf);
+  },[src]);
+  return null;
+}
+
+function AutoScrollFrame({src}){
+  const ref=useRef(null);
+  useEffect(()=>{
+    const el=ref.current;
+    if(!el) return;
+    el.scrollTop=0;
+    let raf;
+    const step=()=>{
+      if(!el) return;
+      const max=el.scrollHeight-el.clientHeight;
+      if(el.scrollTop<max){el.scrollTop+=0.5;raf=requestAnimationFrame(step);}
+    };
+    const delay=setTimeout(()=>{raf=requestAnimationFrame(step);},600);
+    return()=>{clearTimeout(delay);cancelAnimationFrame(raf);};
+  },[src]);
+  return(
+    <div ref={ref} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none"}}>
+      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+    </div>
+  );
+}
+
+function LandCarousel({images,interval=3000}){
+  const[idx,setIdx]=useState(0);
+  useEffect(()=>{
+    const t=setInterval(()=>setIdx(i=>(i+1)%images.length),interval);
+    return()=>clearInterval(t);
+  },[images.length,interval]);
+  return(
+    <div style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:220}}>
+      {images.map((src,i)=>(
+        <img key={i} src={src} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",opacity:i===idx?1:0,transition:"opacity .7s ease",display:"block"}}/>
+      ))}
+      <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4,zIndex:2}}>
+        {images.map((_,i)=><div key={i} style={{width:i===idx?14:5,height:5,borderRadius:3,background:i===idx?"white":"rgba(255,255,255,.45)",transition:"width .3s"}}/>)}
+      </div>
+    </div>
+  );
+}
+
 function CASAModal(){return(<>
-  <div className="mohe" style={{background:"linear-gradient(135deg,#071814,#0A2420)"}}>
-    <MockRow imgs={[[SS.casaFirstScreen,72],[SS.casaOnboard,72],[SS.casaEvents,72]]} h={180}/>
-    <div style={{flex:1,height:180,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)"}}><Img src={SS.casaCrm1} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/></div>
+  {/* HEADER — PRD embed */}
+  <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#071814,#0A2420)"}}>
+    <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" style={{width:"100%",height:"100%",border:"none"}} title="CASA PRD" loading="lazy"/>
+    <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>CASA Community App — PRD</div>
+    <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
     <div className="moov">Consumer App + CRM · External Client · Boston</div>
     <h2 className="moti">CASA App + CRM</h2>
     <p className="mosu">~50 screens across members-only app and operations CRM · Full product ownership</p>
-    <div className="mose"><h3 className="mosh">The Context</h3><div className="mot"><p>CASA — Community as a Service for All — is a Boston-based membership organisation helping graduate students navigate off-campus life: housing, roommate matching, pre-arrival logistics, community connection, and local perks throughout the academic year.</p><p>A first version of the app had been built previously. The client wasn't satisfied — they wanted significant changes and in some areas, a fresh start. The brief I received contained the CASA team's product vision, an app review deck with their direction and critique, a tech outline, and a comprehensive set of product assets and references. No formal requirements document existed for what they now needed. So I wrote it.</p></div></div>
+
+    <div className="mose"><h3 className="mosh">The Context</h3><div className="mot"><p>CASA — Community as a Service for All — is a Boston-based membership organisation helping graduate students navigate off-campus life: housing, roommate matching, pre-arrival logistics, community connection, and local perks throughout the academic year.</p><p>A first version of the app had been built previously. The client wasn't satisfied — they wanted significant changes and in some areas, a fresh start. The brief I received contained the CASA team's product vision, an app review deck with their direction and critique, a full tech outline, and a comprehensive set of product assets and references. No formal requirements document existed for what they now needed. I wrote it.</p></div></div>
+
     <div className="mose"><h3 className="mosh">What I Built</h3><div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
-      <div className="moss t3" style={{marginTop:12}}>{[SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
-      <div className="moss t2" style={{marginTop:8}}>{[SS.casaCrm2,SS.casaCrm3].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
+
+    {/* 6 portrait app screenshots — phone viewbox carousel with auto-scroll */}
+    <div style={{display:"flex",gap:12,marginTop:16,justifyContent:"center",flexWrap:"wrap"}}>
+      {[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((src,i)=>(
+        <div key={i} style={{width:140,height:300,borderRadius:20,overflow:"hidden",border:"2px solid var(--rule)",boxShadow:"0 6px 18px rgba(34,29,25,.1)",flexShrink:0,background:"#fff"}}>
+          <AutoScrollFrame src={src}/>
+        </div>
+      ))}
     </div>
-    <div className="mose"><h3 className="mosh">PRD & Prototype</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" title="CASA Community App — PRD"/>
-      <div style={{marginTop:10}}><ProtoEmbed url="https://claude.ai/public/artifacts/48c8ecd9-1844-4605-83f2-8cf04f5c1c33" label="App Prototype" tool="Claude"/></div>
     </div>
+
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Every product decision — how each journey should flow, where to simplify, what to defer — was mine to make. I enforced implementation of UI fixes sprint-wise within days of the initial release rather than delaying launch, ensuring the client received a clean experience from day one.</p><p>I conducted pre-release acceptance testing on both the app and the CRM — raising UI/UX issues, backend inconsistencies, and gaps that had emerged during development. For an external client product, the quality bar was non-negotiable.</p></div></div>
+
+    {/* 4 landscape CRM screenshots — auto-sliding carousel */}
+    <div className="mose"><LandCarousel images={[SS.casaCrm1,SS.casaCrm2,SS.casaCrm3,SS.casaCrm4]}/></div>
+
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~50 screens across app and CRM, live and serving CASA members in Boston</strong> — the complete operational and community infrastructure for a graduate student membership organisation, delivered end-to-end.</p></div></div>
     <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["Claude","Replit","Notion"]} size={26}/></div>
   </div>
@@ -956,7 +1049,7 @@ function LMSModal(){return(<>
 
     {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD"/>
+      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" height={420}/>
     </div>
 
     {/* What I Built */}
@@ -968,9 +1061,9 @@ function LMSModal(){return(<>
     {/* The Quality Story */}
     <div className="mose"><h3 className="mosh">The Quality Story</h3><div className="qual"><p>The web portal was built in a delivery-first culture, without a formal PRD, using AI tools directly. When I tested it, the issues were extensive — calculation errors, incorrect logic across leave types, poor UI/UX decisions, API inconsistencies that replicated across the mobile app, and one leave type designed entirely wrong from the ground up.</p><p style={{marginTop:10}}>I caught and documented all of it. On the incorrectly designed leave type, I held firm — shipping wrong calculation logic from day one was not a trade-off worth making. That leave type was pulled from launch scope and queued for correction in the next phase.</p></div></div>
 
-    {/* Screenshots after Quality Story — all 4 in one row, baseline aligned */}
+    {/* Screenshots after Quality Story — all 4 in one row, middle aligned */}
     <div className="mose">
-      <div style={{display:"flex",gap:8,alignItems:"flex-end"}}>
+            <div style={{display:"flex",gap:8,alignItems:"center",height:320}}>
         {[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord].map((s,i)=>(
           <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",boxShadow:"0 2px 8px rgba(34,29,25,.08)"}}>
             <img src={s} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
