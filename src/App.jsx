@@ -886,60 +886,21 @@ function DashModal(){return(<>
   </div>
 </>);}
 
-function PhoneCarouselFrame({images,interval=2800}){
-  const[idx,setIdx]=useState(0);
-  const frameRef=useRef(null);
-  useEffect(()=>{
-    const t=setInterval(()=>{
-      setIdx(i=>(i+1)%images.length);
-      if(frameRef.current) frameRef.current.scrollTop=0;
-    },interval);
-    return()=>clearInterval(t);
-  },[images.length,interval]);
-  return(
-    <div style={{width:160,height:320,borderRadius:24,overflow:"hidden",border:"2px solid var(--rule)",boxShadow:"0 8px 24px rgba(34,29,25,.12)",flexShrink:0,position:"relative",background:"#fff"}}>
-      <div ref={frameRef} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none"}}>
-        <img src={images[idx]} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
-      </div>
-      {/* Slow auto-scroll within the frame */}
-      <AutoScrollImg src={images[idx]} frameRef={frameRef}/>
-    </div>
-  );
-}
-
-function AutoScrollImg({src,frameRef}){
-  useEffect(()=>{
-    const el=frameRef.current;
-    if(!el) return;
-    el.scrollTop=0;
-    const duration=2400;
-    const step=()=>{
-      if(!el) return;
-      const maxScroll=el.scrollHeight-el.clientHeight;
-      if(el.scrollTop<maxScroll){
-        el.scrollTop+=0.6;
-        raf=requestAnimationFrame(step);
-      }
-    };
-    let raf=requestAnimationFrame(step);
-    return()=>cancelAnimationFrame(raf);
-  },[src]);
-  return null;
-}
-
+// ─── CASA Modal ───
 function AutoScrollFrame({src}){
   const ref=useRef(null);
   useEffect(()=>{
     const el=ref.current;
-    if(!el) return;
+    if(!el)return;
     el.scrollTop=0;
     let raf;
-    const step=()=>{
-      if(!el) return;
-      const max=el.scrollHeight-el.clientHeight;
-      if(el.scrollTop<max){el.scrollTop+=0.5;raf=requestAnimationFrame(step);}
-    };
-    const delay=setTimeout(()=>{raf=requestAnimationFrame(step);},600);
+    const delay=setTimeout(()=>{
+      const step=()=>{
+        if(!el)return;
+        if(el.scrollTop<el.scrollHeight-el.clientHeight){el.scrollTop+=0.5;raf=requestAnimationFrame(step);}
+      };
+      raf=requestAnimationFrame(step);
+    },600);
     return()=>{clearTimeout(delay);cancelAnimationFrame(raf);};
   },[src]);
   return(
@@ -984,9 +945,9 @@ function CASAModal(){return(<>
     <div className="mose"><h3 className="mosh">What I Built</h3><div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
 
     {/* 6 portrait app screenshots — phone viewbox carousel with auto-scroll */}
-    <div style={{display:"flex",gap:12,marginTop:16,justifyContent:"center",flexWrap:"wrap"}}>
+    <div style={{display:"flex",gap:10,marginTop:16,justifyContent:"flex-start",overflowX:"auto",paddingBottom:4}}>
       {[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((src,i)=>(
-        <div key={i} style={{width:140,height:300,borderRadius:20,overflow:"hidden",border:"2px solid var(--rule)",boxShadow:"0 6px 18px rgba(34,29,25,.1)",flexShrink:0,background:"#fff"}}>
+        <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
           <AutoScrollFrame src={src}/>
         </div>
       ))}
@@ -1049,7 +1010,7 @@ function LMSModal(){return(<>
 
     {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" height={420}/>
+      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" height={360}/>
     </div>
 
     {/* What I Built */}
@@ -1063,9 +1024,9 @@ function LMSModal(){return(<>
 
     {/* Screenshots after Quality Story — all 4 in one row, middle aligned */}
     <div className="mose">
-            <div style={{display:"flex",gap:8,alignItems:"center",height:320}}>
+            <div style={{display:"flex",gap:8,alignItems:"center"}}>
         {[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord].map((s,i)=>(
-          <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",boxShadow:"0 2px 8px rgba(34,29,25,.08)"}}>
+          <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)"}}>
             <img src={s} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
           </div>
         ))}
