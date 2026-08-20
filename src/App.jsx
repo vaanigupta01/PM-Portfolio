@@ -1078,9 +1078,13 @@ function LMSModal(){return(<>
 
     {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
-    <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
-      <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="Leave Management System — PRD" loading="lazy"/>
-    </div>
+      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
+        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d"
+          style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}}
+          title="Leave Management System — PRD"
+          loading="lazy"/>
+      </div>
+    </div>  {/* ← THIS ONE WAS MISSING */}
 
     {/* What I Built */}
     <div className="mose"><h3 className="mosh">What I Built</h3>
