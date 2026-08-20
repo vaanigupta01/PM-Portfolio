@@ -887,49 +887,88 @@ function DashModal(){return(<>
 </>);}
 
 // ─── CASA Modal ───
-function AutoScrollFrame({src}){
+function AutoScrollFrame({src,imgSrc}){
   const ref=useRef(null);
+  const hovRef=useRef(false);
+  const rafRef=useRef(null);
+  const dirRef=useRef(1); // 1=down, -1=up
+
   useEffect(()=>{
     const el=ref.current;
     if(!el)return;
     el.scrollTop=0;
-    let raf;
-    const delay=setTimeout(()=>{
-      const step=()=>{
-        if(!el)return;
-        if(el.scrollTop<el.scrollHeight-el.clientHeight){el.scrollTop+=0.5;raf=requestAnimationFrame(step);}
-      };
-      raf=requestAnimationFrame(step);
-    },600);
-    return()=>{clearTimeout(delay);cancelAnimationFrame(raf);};
+    dirRef.current=1;
+
+    const step=()=>{
+      if(!el||hovRef.current){rafRef.current=requestAnimationFrame(step);return;}
+      const max=el.scrollHeight-el.clientHeight;
+      if(max<=0){rafRef.current=requestAnimationFrame(step);return;}
+      el.scrollTop+=0.5*dirRef.current;
+      if(el.scrollTop>=max){dirRef.current=-1;}
+      else if(el.scrollTop<=0){dirRef.current=1;}
+      rafRef.current=requestAnimationFrame(step);
+    };
+
+    const delay=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},800);
+    return()=>{clearTimeout(delay);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[src]);
+
   return(
-    <div ref={ref} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none"}}>
+    <div
+      ref={ref}
+      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}
+      onClick={()=>window.open(src,"_blank")}
+    >
       <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
     </div>
   );
 }
 
-function LandCarousel({images,interval=3000}){
+function LandCarousel({images}){
   const[idx,setIdx]=useState(0);
+  const dirRef=useRef(1); // 1=forward, -1=backward
+  const hovRef=useRef(false);
+
   useEffect(()=>{
-    const t=setInterval(()=>setIdx(i=>(i+1)%images.length),interval);
+    const t=setInterval(()=>{
+      if(hovRef.current)return;
+      setIdx(i=>{
+        const next=i+dirRef.current;
+        if(next>=images.length){dirRef.current=-1;return i-1;}
+        if(next<0){dirRef.current=1;return i+1;}
+        return next;
+      });
+    },3000);
     return()=>clearInterval(t);
-  },[images.length,interval]);
+  },[images.length]);
+
   return(
-    <div style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:220}}>
+    <div
+      style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}
+    >
       {images.map((src,i)=>(
-        <img key={i} src={src} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",opacity:i===idx?1:0,transition:"opacity .7s ease",display:"block"}}/>
+        <div key={i} style={{display:i===idx?"block":"none"}}>
+          <img
+            src={src} alt=""
+            style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}}
+            onClick={()=>window.open(src,"_blank")}
+          />
+        </div>
       ))}
       <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4,zIndex:2}}>
-        {images.map((_,i)=><div key={i} style={{width:i===idx?14:5,height:5,borderRadius:3,background:i===idx?"white":"rgba(255,255,255,.45)",transition:"width .3s"}}/>)}
+        {images.map((_,i)=>(
+          <div key={i} style={{width:i===idx?14:5,height:5,borderRadius:3,background:i===idx?"rgba(0,0,0,.6)":"rgba(0,0,0,.2)",transition:"width .3s"}}/>
+        ))}
       </div>
     </div>
   );
 }
 
 function CASAModal(){return(<>
-  {/* HEADER — PRD embed */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#071814,#0A2420)"}}>
     <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" style={{width:"100%",height:"100%",border:"none"}} title="CASA PRD" loading="lazy"/>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>CASA Community App — PRD</div>
@@ -939,26 +978,22 @@ function CASAModal(){return(<>
     <div className="moov">Consumer App + CRM · External Client · Boston</div>
     <h2 className="moti">CASA App + CRM</h2>
     <p className="mosu">~50 screens across members-only app and operations CRM · Full product ownership</p>
-
     <div className="mose"><h3 className="mosh">The Context</h3><div className="mot"><p>CASA — Community as a Service for All — is a Boston-based membership organisation helping graduate students navigate off-campus life: housing, roommate matching, pre-arrival logistics, community connection, and local perks throughout the academic year.</p><p>A first version of the app had been built previously. The client wasn't satisfied — they wanted significant changes and in some areas, a fresh start. The brief I received contained the CASA team's product vision, an app review deck with their direction and critique, a full tech outline, and a comprehensive set of product assets and references. No formal requirements document existed for what they now needed. I wrote it.</p></div></div>
-
-    <div className="mose"><h3 className="mosh">What I Built</h3><div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
-
-    {/* 6 portrait app screenshots — phone viewbox carousel with auto-scroll */}
-    <div style={{display:"flex",gap:10,marginTop:16,justifyContent:"flex-start",overflowX:"auto",paddingBottom:4}}>
-      {[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((src,i)=>(
-        <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
-          <AutoScrollFrame src={src}/>
-        </div>
-      ))}
+    <div className="mose"><h3 className="mosh">What I Built</h3>
+      <div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
+      {/* 6 portrait app screenshots — auto-sliding carousel with bounce scroll */}
+      <div style={{display:"flex",gap:10,marginTop:16,overflowX:"visible"}}>
+        {[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((src,i)=>(
+          <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
+            <AutoScrollFrame src={src}/>
+          </div>
+        ))}
+      </div>
     </div>
-    </div>
-
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Every product decision — how each journey should flow, where to simplify, what to defer — was mine to make. I enforced implementation of UI fixes sprint-wise within days of the initial release rather than delaying launch, ensuring the client received a clean experience from day one.</p><p>I conducted pre-release acceptance testing on both the app and the CRM — raising UI/UX issues, backend inconsistencies, and gaps that had emerged during development. For an external client product, the quality bar was non-negotiable.</p></div></div>
-
-    {/* 4 landscape CRM screenshots — auto-sliding carousel */}
-    <div className="mose"><LandCarousel images={[SS.casaCrm1,SS.casaCrm2,SS.casaCrm3,SS.casaCrm4]}/></div>
-
+    <div className="mose"><h3 className="mosh">CRM Screenshots</h3>
+      <LandCarousel images={[SS.casaCrm1,SS.casaCrm2,SS.casaCrm3,SS.casaCrm4]}/>
+    </div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~50 screens across app and CRM, live and serving CASA members in Boston</strong> — the complete operational and community infrastructure for a graduate student membership organisation, delivered end-to-end.</p></div></div>
     <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["Claude","Replit","Notion"]} size={26}/></div>
   </div>
@@ -984,7 +1019,12 @@ function ParentModal(){return(<>
       <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path — a specific edge case defined mid-build after a city head flagged a real scenario my original approval flow hadn't accounted for.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
       <div className="moss t3" style={{marginTop:14}}>{[SS.parentHome2,SS.parentPay,SS.outpassDetail].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
     </div>
-    <div className="mose"><h3 className="mosh">PRD</h3><NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" title="Parent Access Module — UX-Led Product Specification"/></div>
+    <div className="mose"><h3 className="mosh">PRD</h3>
+      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380}}>
+        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"100%",border:"none",display:"block"}} title="Leave Management System — PRD" loading="lazy"/>
+      </div>
+      <a href="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
+    </div>
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>The outpass mechanism was the most complex piece — a multi-state flow spanning tenant, parent, warden, and system, with notification logic, fallback paths, and real-world edge cases that only surfaced through close collaboration with ops stakeholders during the build.</p><p>Pre-release acceptance testing is where the real work happened. Development had moved fast, and a significant number of UI/UX issues, incomplete states, and design details had accumulated during the build — dev's oversight on several elements landed squarely on me during testing. I documented and raised every one, getting everything addressed before release. The standard wasn't "does it work." It was "would a parent trust this."</p></div></div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>Live and serving <strong>5,000+ tenants and their parents</strong> — digitising a previously fragmented, manual trust layer between HooLiv, students, and their families into a single, unified in-app experience.</p></div></div>
     <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={26}/></div>
