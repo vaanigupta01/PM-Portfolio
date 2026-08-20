@@ -887,40 +887,39 @@ function DashModal(){return(<>
 </>);}
 
 // ─── CASA Modal ───
-function AutoScrollFrame({src,imgSrc}){
+function AutoScrollFrame({src}){
   const ref=useRef(null);
   const hovRef=useRef(false);
   const rafRef=useRef(null);
-  const dirRef=useRef(1); // 1=down, -1=up
+  const dirRef=useRef(1);
 
   useEffect(()=>{
     const el=ref.current;
     if(!el)return;
     el.scrollTop=0;
     dirRef.current=1;
+    if(rafRef.current)cancelAnimationFrame(rafRef.current);
 
     const step=()=>{
-      if(!el||hovRef.current){rafRef.current=requestAnimationFrame(step);return;}
-      const max=el.scrollHeight-el.clientHeight;
-      if(max<=0){rafRef.current=requestAnimationFrame(step);return;}
-      el.scrollTop+=0.5*dirRef.current;
-      if(el.scrollTop>=max){dirRef.current=-1;}
-      else if(el.scrollTop<=0){dirRef.current=1;}
+      if(el&&!hovRef.current){
+        const max=el.scrollHeight-el.clientHeight;
+        if(max>0){
+          el.scrollTop+=0.5*dirRef.current;
+          if(el.scrollTop>=max-1) dirRef.current=-1;
+          else if(el.scrollTop<=0) dirRef.current=1;
+        }
+      }
       rafRef.current=requestAnimationFrame(step);
     };
-
-    const delay=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},800);
-    return()=>{clearTimeout(delay);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+    const t=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},800);
+    return()=>{clearTimeout(t);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[src]);
 
   return(
-    <div
-      ref={ref}
-      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
-      onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}
-      onClick={()=>window.open(src,"_blank")}
-    >
+    <div ref={ref} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
+      onMouseEnter={()=>{hovRef.current=true;}}
+      onMouseLeave={()=>{hovRef.current=false;}}
+      onClick={()=>window.open(src,"_blank")}>
       <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
     </div>
   );
@@ -928,40 +927,75 @@ function AutoScrollFrame({src,imgSrc}){
 
 function LandCarousel({images}){
   const[idx,setIdx]=useState(0);
-  const dirRef=useRef(1); // 1=forward, -1=backward
+  const dirRef=useRef(1);
   const hovRef=useRef(false);
+  const idxRef=useRef(0);
+
+  useEffect(()=>{
+    idxRef.current=idx;
+  },[idx]);
 
   useEffect(()=>{
     const t=setInterval(()=>{
       if(hovRef.current)return;
-      setIdx(i=>{
-        const next=i+dirRef.current;
-        if(next>=images.length){dirRef.current=-1;return i-1;}
-        if(next<0){dirRef.current=1;return i+1;}
-        return next;
-      });
+      const cur=idxRef.current;
+      const next=cur+dirRef.current;
+      if(next>=images.length-1){dirRef.current=-1;setIdx(images.length-1);}
+      else if(next<=0){dirRef.current=1;setIdx(0);}
+      else{setIdx(next);}
     },3000);
     return()=>clearInterval(t);
   },[images.length]);
 
   return(
-    <div
-      style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}
+    <div style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}
       onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}
-    >
+      onMouseLeave={()=>hovRef.current=false}>
       {images.map((src,i)=>(
-        <div key={i} style={{display:i===idx?"block":"none"}}>
-          <img
-            src={src} alt=""
-            style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}}
-            onClick={()=>window.open(src,"_blank")}
-          />
-        </div>
+        <img key={i} src={src} alt=""
+          style={{display:"block",width:"100%",height:"auto",position:i===0?"relative":"absolute",top:0,left:0,opacity:i===idx?1:0,transition:"opacity .6s ease",pointerEvents:i===idx?"auto":"none",cursor:"pointer"}}
+          onClick={()=>window.open(src,"_blank")}/>
       ))}
       <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4,zIndex:2}}>
         {images.map((_,i)=>(
           <div key={i} style={{width:i===idx?14:5,height:5,borderRadius:3,background:i===idx?"rgba(0,0,0,.6)":"rgba(0,0,0,.2)",transition:"width .3s"}}/>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PortraitCarousel({images}){
+  const[idx,setIdx]=useState(0);
+  const dirRef=useRef(1);
+  const hovRef=useRef(false);
+  const idxRef=useRef(0);
+  useEffect(()=>{idxRef.current=idx;},[idx]);
+  useEffect(()=>{
+    const t=setInterval(()=>{
+      if(hovRef.current)return;
+      const cur=idxRef.current;
+      const next=cur+dirRef.current;
+      if(next>=images.length-1){dirRef.current=-1;setIdx(images.length-1);}
+      else if(next<=0){dirRef.current=1;setIdx(0);}
+      else setIdx(next);
+    },3000);
+    return()=>clearInterval(t);
+  },[images.length]);
+  return(
+    <div style={{marginTop:16,display:"flex",flexDirection:"column",alignItems:"center",gap:10}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}>
+      <div style={{width:180,height:360,borderRadius:20,overflow:"hidden",border:"2px solid var(--rule)",background:"#fff",position:"relative"}}>
+        {images.map((src,i)=>(
+          <div key={i} style={{position:"absolute",inset:0,opacity:i===idx?1:0,transition:"opacity .6s ease",pointerEvents:i===idx?"auto":"none"}}>
+            <AutoScrollFrame src={src}/>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"flex",gap:6}}>
+        {images.map((_,i)=>(
+          <div key={i} onClick={()=>setIdx(i)} style={{width:i===idx?18:6,height:6,borderRadius:3,background:i===idx?"var(--plum)":"var(--rule)",transition:"width .3s",cursor:"pointer"}}/>
         ))}
       </div>
     </div>
@@ -982,13 +1016,7 @@ function CASAModal(){return(<>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
       {/* 6 portrait app screenshots — auto-sliding carousel with bounce scroll */}
-      <div style={{display:"flex",gap:10,marginTop:16,overflowX:"visible"}}>
-        {[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog].map((src,i)=>(
-          <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
-            <AutoScrollFrame src={src}/>
-          </div>
-        ))}
-      </div>
+      <PortraitCarousel images={[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]}/>
     </div>
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Every product decision — how each journey should flow, where to simplify, what to defer — was mine to make. I enforced implementation of UI fixes sprint-wise within days of the initial release rather than delaying launch, ensuring the client received a clean experience from day one.</p><p>I conducted pre-release acceptance testing on both the app and the CRM — raising UI/UX issues, backend inconsistencies, and gaps that had emerged during development. For an external client product, the quality bar was non-negotiable.</p></div></div>
     <div className="mose"><h3 className="mosh">CRM Screenshots</h3>
@@ -1050,7 +1078,8 @@ function LMSModal(){return(<>
 
     {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" height={360}/>
+    <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
+      <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="Leave Management System — PRD" loading="lazy"/>
     </div>
 
     {/* What I Built */}
