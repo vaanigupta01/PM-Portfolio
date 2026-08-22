@@ -965,39 +965,42 @@ function LandCarousel({images}){
   );
 }
 
-function PortraitCarousel({images}){
-  const[idx,setIdx]=useState(0);
-  const dirRef=useRef(1);
+function HorizScrollCarousel({images}){
+  const rowRef=useRef(null);
   const hovRef=useRef(false);
-  const idxRef=useRef(0);
-  useEffect(()=>{idxRef.current=idx;},[idx]);
+  const dirRef=useRef(1);
+  const rafRef=useRef(null);
+
   useEffect(()=>{
-    const t=setInterval(()=>{
-      if(hovRef.current)return;
-      const cur=idxRef.current;
-      const next=cur+dirRef.current;
-      if(next>=images.length-1){dirRef.current=-1;setIdx(images.length-1);}
-      else if(next<=0){dirRef.current=1;setIdx(0);}
-      else setIdx(next);
-    },3000);
-    return()=>clearInterval(t);
-  },[images.length]);
+    const el=rowRef.current;
+    if(!el)return;
+    const step=()=>{
+      if(el&&!hovRef.current){
+        const max=el.scrollWidth-el.clientWidth;
+        if(max>0){
+          el.scrollLeft+=0.6*dirRef.current;
+          if(el.scrollLeft>=max-1) dirRef.current=-1;
+          else if(el.scrollLeft<=0) dirRef.current=1;
+        }
+      }
+      rafRef.current=requestAnimationFrame(step);
+    };
+    rafRef.current=requestAnimationFrame(step);
+    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+  },[]);
+
   return(
-    <div style={{marginTop:16,display:"flex",flexDirection:"column",alignItems:"center",gap:10}}
+    <div
+      ref={rowRef}
+      style={{display:"flex",gap:10,marginTop:16,overflowX:"hidden",scrollbarWidth:"none"}}
       onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}>
-      <div style={{width:180,height:360,borderRadius:20,overflow:"hidden",border:"2px solid var(--rule)",background:"#fff",position:"relative"}}>
-        {images.map((src,i)=>(
-          <div key={i} style={{position:"absolute",inset:0,opacity:i===idx?1:0,transition:"opacity .6s ease",pointerEvents:i===idx?"auto":"none"}}>
-            <AutoScrollFrame src={src}/>
-          </div>
-        ))}
-      </div>
-      <div style={{display:"flex",gap:6}}>
-        {images.map((_,i)=>(
-          <div key={i} onClick={()=>setIdx(i)} style={{width:i===idx?18:6,height:6,borderRadius:3,background:i===idx?"var(--plum)":"var(--rule)",transition:"width .3s",cursor:"pointer"}}/>
-        ))}
-      </div>
+      onMouseLeave={()=>hovRef.current=false}
+    >
+      {images.map((src,i)=>(
+        <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
+          <AutoScrollFrame src={src}/>
+        </div>
+      ))}
     </div>
   );
 }
@@ -1016,7 +1019,7 @@ function CASAModal(){return(<>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
       {/* 6 portrait app screenshots — auto-sliding carousel with bounce scroll */}
-      <PortraitCarousel images={[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]}/>
+    <HorizScrollCarousel images={[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]}/>
     </div>
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Every product decision — how each journey should flow, where to simplify, what to defer — was mine to make. I enforced implementation of UI fixes sprint-wise within days of the initial release rather than delaying launch, ensuring the client received a clean experience from day one.</p><p>I conducted pre-release acceptance testing on both the app and the CRM — raising UI/UX issues, backend inconsistencies, and gaps that had emerged during development. For an external client product, the quality bar was non-negotiable.</p></div></div>
     <div className="mose"><h3 className="mosh">CRM Screenshots</h3>
@@ -1078,11 +1081,9 @@ function LMSModal(){return(<>
 
     {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
-      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
-        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d"
-          style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}}
-          title="Leave Management System — PRD"
-          loading="lazy"/>
+      <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
+        <div className="eml"><LogoSVG tool="Notion" size={16}/>Leave Management System — PRD</div>
+        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="Leave Management System — PRD" loading="lazy"/>
       </div>
     </div>  {/* ← THIS ONE WAS MISSING */}
 
@@ -1117,24 +1118,61 @@ function LMSModal(){return(<>
 </>);}
 
 function B2BModal(){return(<>
-  <div className="mohe" style={{background:"linear-gradient(135deg,#0E0606,#1C0A0A)"}}>
-    <MockRow imgs={[[SS.b2b1,"47%"],[SS.b2b2,"45%"]]} h={190}/>
+  {/* HEADER — B2B Customer Record prototype at 80% zoom */}
+  <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0E0606,#1C0A0A)"}}>
+    <div style={{position:"absolute",inset:0,width:"125%",height:"125%",marginLeft:"-12.5%",transform:"scale(0.8)",transformOrigin:"top center"}}>
+      <iframe src="https://v0-b2-b-customer-record.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="B2B Customer Record" loading="lazy"/>
+    </div>
+    <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>B2B Customer Record</div>
+    <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div className="moov">Operations & Internal Tools · Discovery-Led</div>
+    <div className="moov">Revenue Operations · Discovery-Led</div>
     <h2 className="moti">B2B Customer Invoices Module</h2>
     <p className="mosu">~10 min saved per invoice · Accounts team of 4 · SOP delivered</p>
+
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>I started with a user interview with the Accounts Head. What I found was a recurring, high-frequency billing process entirely held together by Tally, email, and informal follow-ups — with no transparency, no standardisation, and no structure.</p><p>Region heads raised invoice requests informally. Accounts created invoices manually in Tally and tracked status through a combination of memory and chasing. A business stakeholder interview confirmed the opacity extended upward too — city heads had no invoice visibility, and finance had no B2B billing analytics at all. This was a process that had clearly never been looked at through a product lens.</p></div></div>
+
+    {/* PRD right after Problem */}
+    <div className="mose"><h3 className="mosh">PRD</h3>
+      <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
+        <div className="eml"><LogoSVG tool="Notion" size={16}/>Invoice Creation & Email Dispatch for B2B Customers — PRD</div>
+        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="B2B PRD" loading="lazy"/>
+      </div>
+      <a href="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
+    </div>
+
     <div className="mose"><h3 className="mosh">The Opportunity</h3><div className="mot"><p>Integrating B2B invoice creation and dispatch into the CRM would centralise both revenue streams under one system of record — enabling analytics, automation, and future extensions (GST pipeline, reminders, reporting) on top of a unified data layer.</p></div></div>
+
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <ul className="moli"><li><strong>Integrated invoice creation, preview, email dispatch, and tracking</strong> inside the CRM — no Tally dependency.</li><li><strong>Standardised invoice request procedure for region heads</strong> — no more informal back-and-forth.</li><li><strong>Self-serve invoice status visibility for city heads</strong> — no escalation needed.</li><li><strong>Real-time B2B billing analytics for finance and leadership</strong> — a first.</li><li><strong>Comprehensive SOP</strong> — org-wide, covering accounts team workflows and ops staff responsible for city-wise B2B customer invoices.</li></ul>
     </div>
-    <div className="mose"><h3 className="mosh">PRD & Prototypes</h3>
-      <NotionEmbed url="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" embedUrl="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" title="Invoice Creation & Email Dispatch for B2B Customers — PRD"/>
-      <div style={{marginTop:10}}><ProtoEmbed url="https://v0-invoice-module-requirements.vercel.app/" label="Invoice Module — Live KPI View" height={260} tool="v0"/></div>
-      <div style={{marginTop:8}}><ProtoEmbed url="https://v0-b2-b-customer-record.vercel.app/" label="B2B Customer Record" height={240} tool="v0"/></div>
+
+    {/* Invoice Module prototype at 90% zoom after What I Built */}
+    <div className="mose">
+      <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:280}}>
+        <div style={{position:"absolute",inset:0,width:"112%",height:"112%",marginLeft:"-6%",transform:"scale(0.9)",transformOrigin:"top center"}}>
+          <iframe src="https://v0-invoice-module-requirements.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Invoice Module" loading="lazy"/>
+        </div>
+        <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>Invoice Module — Live KPI View</div>
+        <a href="https://v0-invoice-module-requirements.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
+      </div>
     </div>
+
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>A region head during the walkthrough and user testing complimented the product for being intuitive — exactly the signal you want from the user you built it for. Iterations are ongoing: recently collaborated with the CFO and Accounts Head to add a Credit Note feature, expanding the module's billing capabilities.</p></div></div>
+
+    {/* Two real product SSs side by side after How I Led the Build */}
+    <div className="mose">
+      <div style={{display:"flex",gap:8}}>
+        <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",cursor:"pointer"}} onClick={()=>window.open(SS.b2b1,"_blank")}>
+          <img src={SS.b2b1} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+        </div>
+        <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",cursor:"pointer"}} onClick={()=>window.open(SS.b2b2,"_blank")}>
+          <img src={SS.b2b2} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+        </div>
+      </div>
+    </div>
+
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~10 minutes saved per invoice</strong> for a team of 4. Standardised procedure for region heads. Real-time B2B billing analytics for finance and leadership — none of which existed before.</p></div></div>
     <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Bolt","Notion","Claude"]} size={26}/></div>
   </div>
