@@ -899,14 +899,13 @@ function AutoScrollFrame({src}){
     el.scrollTop=0;
     dirRef.current=1;
     if(rafRef.current)cancelAnimationFrame(rafRef.current);
-
     const step=()=>{
       if(el&&!hovRef.current){
         const max=el.scrollHeight-el.clientHeight;
         if(max>0){
           el.scrollTop+=0.5*dirRef.current;
-          if(el.scrollTop>=max-1) dirRef.current=-1;
-          else if(el.scrollTop<=0) dirRef.current=1;
+          if(el.scrollTop>=max-1)dirRef.current=-1;
+          else if(el.scrollTop<=0)dirRef.current=1;
         }
       }
       rafRef.current=requestAnimationFrame(step);
@@ -917,8 +916,8 @@ function AutoScrollFrame({src}){
 
   return(
     <div ref={ref} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
-      onMouseEnter={()=>{hovRef.current=true;}}
-      onMouseLeave={()=>{hovRef.current=false;}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}
       onClick={()=>window.open(src,"_blank")}>
       <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
     </div>
@@ -965,7 +964,7 @@ function LandCarousel({images}){
   );
 }
 
-function HorizScrollCarousel({images}){
+function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null}){
   const rowRef=useRef(null);
   const hovRef=useRef(false);
   const dirRef=useRef(1);
@@ -979,8 +978,8 @@ function HorizScrollCarousel({images}){
         const max=el.scrollWidth-el.clientWidth;
         if(max>0){
           el.scrollLeft+=0.6*dirRef.current;
-          if(el.scrollLeft>=max-1) dirRef.current=-1;
-          else if(el.scrollLeft<=0) dirRef.current=1;
+          if(el.scrollLeft>=max-1)dirRef.current=-1;
+          else if(el.scrollLeft<=0)dirRef.current=1;
         }
       }
       rafRef.current=requestAnimationFrame(step);
@@ -989,6 +988,10 @@ function HorizScrollCarousel({images}){
     return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[]);
 
+  // Support both old single `images` prop (CASA) and new before/video/after pattern (Parent)
+  const preImages=before.length>0?before:images;
+  const postImages=after;
+
   return(
     <div
       ref={rowRef}
@@ -996,8 +999,22 @@ function HorizScrollCarousel({images}){
       onMouseEnter={()=>hovRef.current=true}
       onMouseLeave={()=>hovRef.current=false}
     >
-      {images.map((src,i)=>(
-        <div key={i} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
+      {preImages.map((src,i)=>(
+        <div key={`pre-${i}`} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
+          <AutoScrollFrame src={src}/>
+        </div>
+      ))}
+      {videoSrc&&(
+        <div style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#000",position:"relative"}}>
+          <video autoPlay muted loop playsInline
+            style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}
+            ref={el=>{if(el)el.playbackRate=1.15;}}>
+            <source src={videoSrc} type="video/mp4"/>
+          </video>
+        </div>
+      )}
+      {postImages.map((src,i)=>(
+        <div key={`post-${i}`} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
           <AutoScrollFrame src={src}/>
         </div>
       ))}
@@ -1030,37 +1047,35 @@ function CASAModal(){return(<>
   </div>
 </>);}
 
-function ParentModal(){return(<>
-  <div className="mohe" style={{background:"linear-gradient(135deg,#080820,#101038)"}}>
-    <MockRow imgs={[[SS.parentHome,78],[SS.outpassTenant,78],[SS.parentPay,78],[SS.outpassDetail,78]]} h={185}/>
-  </div>
-  <div className="mob">
-    <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
-    <h2 className="moti">HooLiv Parent App + Outpass</h2>
-    <p className="mosu">Live and serving 5,000+ tenants and their parents</p>
-    <div className="mose">
-      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}>
-        <video controls style={{width:"100%",display:"block",background:"#000"}}>
-          <source src="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4"/>
-        </video>
+function ParentModal(){
+  const vidSrc="/videos/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
+  return(<>
+    {/* HEADER — PRD embed */}
+    <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
+      <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" style={{width:"100%",height:"100%",border:"none"}} title="Parent App PRD" loading="lazy"/>
+      <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — PRD</div>
+      <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
+    </div>
+    <div className="mob">
+      <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
+      <h2 className="moti">HooLiv Parent App + Outpass</h2>
+      <p className="mosu">Live and serving 5,000+ tenants and their parents</p>
+      <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv houses 5,000+ students across India. Their parents had no digital touchpoint with the accommodation their child was living in — no visibility into payments, no way to receive or act on notices, no connection to the services available. And when a student needed to leave the property for a late outing, a home visit, or an emergency, the approval process was entirely manual — creating accountability gaps and leaving parents with no real peace of mind.</p><p>The problem wasn't just operational or UX friction. It was a trust deficit at scale.</p></div></div>
+      <div className="mose"><h3 className="mosh">What I Built</h3>
+        <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
+        {/* Video + SSs horizontal slider — video first, then all app/outpass SSs */}
+        <HorizScrollCarousel
+          before={[SS.outpassTenant,SS.outpassDetail]}
+          videoSrc={vidSrc}
+          after={[SS.parentPay,SS.parentHome,SS.parentHome2]}
+        />
       </div>
+      <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>The outpass mechanism was the most complex piece — a multi-state flow spanning tenant, parent, warden, and system, with notification logic, fallback paths, and real-world edge cases that only surfaced through close collaboration with ops stakeholders during the build.</p><p>Pre-release acceptance testing is where the real work happened. Development had moved fast, and a significant number of UI/UX issues, incomplete states, and design details had accumulated during the build. I documented and raised every one, getting everything addressed before release. The standard wasn't "does it work." It was "would a parent trust this."</p></div></div>
+      <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>Live and serving <strong>5,000+ tenants and their parents</strong> — digitising a previously fragmented, manual trust layer between HooLiv, students, and their families into a single, unified in-app experience.</p></div></div>
+      <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={26}/></div>
     </div>
-    <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv houses 5,000+ students across India. Their parents had no digital touchpoint with the accommodation their child was living in — no visibility into payments, no way to receive or act on notices, no connection to the services available. And when a student needed to leave the property for a late outing, a home visit, or an emergency, the approval process was entirely manual — creating accountability gaps and leaving parents with no real peace of mind.</p><p>The problem wasn't just operational or UX friction. It was a trust deficit at scale.</p></div></div>
-    <div className="mose"><h3 className="mosh">What I Built</h3>
-      <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path — a specific edge case defined mid-build after a city head flagged a real scenario my original approval flow hadn't accounted for.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
-      <div className="moss t3" style={{marginTop:14}}>{[SS.parentHome2,SS.parentPay,SS.outpassDetail].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
-    </div>
-    <div className="mose"><h3 className="mosh">PRD</h3>
-      <div style={{borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380}}>
-        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"100%",border:"none",display:"block"}} title="Leave Management System — PRD" loading="lazy"/>
-      </div>
-      <a href="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
-    </div>
-    <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>The outpass mechanism was the most complex piece — a multi-state flow spanning tenant, parent, warden, and system, with notification logic, fallback paths, and real-world edge cases that only surfaced through close collaboration with ops stakeholders during the build.</p><p>Pre-release acceptance testing is where the real work happened. Development had moved fast, and a significant number of UI/UX issues, incomplete states, and design details had accumulated during the build — dev's oversight on several elements landed squarely on me during testing. I documented and raised every one, getting everything addressed before release. The standard wasn't "does it work." It was "would a parent trust this."</p></div></div>
-    <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>Live and serving <strong>5,000+ tenants and their parents</strong> — digitising a previously fragmented, manual trust layer between HooLiv, students, and their families into a single, unified in-app experience.</p></div></div>
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={26}/></div>
-  </div>
-</>);}
+  </>);
+}
 
 function LMSModal(){return(<>
   {/* HEADER — prototype instead of images */}
@@ -1154,7 +1169,7 @@ function B2BModal(){return(<>
         <div style={{position:"absolute",inset:0,width:"112%",height:"112%",marginLeft:"-6%",transform:"scale(0.9)",transformOrigin:"top center"}}>
           <iframe src="https://v0-invoice-module-requirements.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Invoice Module" loading="lazy"/>
         </div>
-        <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>Invoice Module — Live KPI View</div>
+        <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>New Invoice — Add, Preview, Send</div>
         <a href="https://v0-invoice-module-requirements.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
       </div>
     </div>
