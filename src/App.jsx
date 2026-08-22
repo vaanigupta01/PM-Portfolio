@@ -856,37 +856,117 @@ function KitchenCard(){
 function Img({src,alt="",style={}}){return <img src={src} alt={alt} style={{display:"block",...style}} onError={e=>{e.target.style.opacity=".3";}}/>;}
 function MockRow({imgs,h=180}){return <div style={{display:"flex",gap:8,height:h,justifyContent:"center",alignItems:"center",padding:"0 8px"}}>{imgs.map(([src,w],i)=><div key={i} style={{width:w,height:"100%",flexShrink:0,borderRadius:8,overflow:"hidden",border:"1px solid rgba(34,29,25,.1)",boxShadow:"0 4px 14px rgba(34,29,25,.1)"}}><Img src={src} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/></div>)}</div>;}
 
-function DashModal(){return(<>
-  <div className="mohe" style={{background:"linear-gradient(135deg,#0A1A18,#0D2020)"}}><MockRow imgs={[[SS.collDash1,"32%"],[SS.collDash3,"28%"],[SS.unitEco1,"28%"]]} h={185}/></div>
-  <div className="mob">
-    <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
-    <h2 className="moti">Analytics Dashboards Suite</h2>
-    <p className="mosu">Collections · Occupancy MIS · Occupancy Heat Map · Occupancy Management · Unit Economics</p>
-    <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv operates across thousands of tenants, B2B partners, and multi-layered financial flows spanning 9 cities and 50 properties — but leadership was navigating all of it without a single analytics layer.</p><p>A CRM existed with data tables, but the previous collections MIS within it went largely unused. Analytics, graphs, and actionable insights were completely missing. Occupancy was being checked at an individual city and property level, manually. Unit economics had never been pulled together in one place.</p><p>Founders and region and city heads were making pricing, capacity, and collections decisions without structured data to back them. The gap wasn't a data gap — it was a visibility and synthesis gap.</p></div></div>
-    <div className="mose"><h3 className="mosh">My Discovery Process</h3><div className="mot"><p>I structured discovery independently for each dashboard — running stakeholder interviews with the founding team (CEO, CDAIO, CSO, COO) and region and city heads, understanding what decisions each role needed to make and what data would support those decisions. I translated these into dense, structured requirements tables mapping every metric to its calculation logic, data source, visualisation type, and granularity level.</p><p>I then led stakeholder review sessions for every dashboard — presenting the full interactive prototype, walking each stakeholder through every chart and filter, fielding queries, capturing feedback, and aligning on what success looked like before engineering wrote a single line of code. These weren't just sign-offs. They were where assumption mismatches surfaced, operational concepts got refined, and the real decision-making logic got embedded into what I was building.</p></div></div>
-    <div className="mose"><h3 className="mosh">What I Built</h3>
-      {[{name:"Collections Dashboard",tag:"Live — Phase 1 & 2",desc:"Real-time dues overview — total outstanding, invoiced, collected vs pending, commitment schedules, city-wise breakdown, status distribution, B2B dues by client. Used daily by founders, ops heads, finance, and accounts across 9 cities and 50 properties.",proto:"https://v0-ticket-management-dashboard-seven.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit"},
-        {name:"Occupancy MIS Dashboard",tag:"Strategic layer",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
-        {name:"Occupancy Heat Map Dashboard",tag:"Granular monitoring",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
-        {name:"Occupancy Management Dashboard",tag:"Day-to-day ops",desc:"Live check-in/checkout tracking, retention signals, daily accountability metrics for on-ground ops teams.",proto:"https://v0-occupancy-management-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1752378348"},
-        {name:"Unit Economics Dashboard",tag:"Building on Replit",desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking. The foundation of operational and profitability intelligence in the coliving business.",proto:null,sheet:null},
-      ].map((b,i)=>(
-        <div key={i} style={{marginBottom:12,padding:"14px 18px",background:"var(--cream)",borderRadius:12,border:"1px solid var(--rule)"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,gap:10}}><strong style={{fontFamily:"var(--h)",fontSize:14,color:"var(--ink)"}}>{b.name}</strong><span style={{fontFamily:"var(--l)",fontSize:9.5,color:"var(--ink-mu)",background:"var(--paper)",padding:"3px 9px",borderRadius:18,whiteSpace:"nowrap",border:"1px solid var(--rule)"}}>{b.tag}</span></div>
-          <p style={{fontSize:12.5,color:"var(--ink-mu)",lineHeight:1.65,fontWeight:300,marginBottom:b.proto?10:0}}>{b.desc}</p>
-          {b.proto&&<div className="molk"><LinkCTA label="Prototype" url={b.proto} tool="v0"/><LinkCTA label="Requirements" url={b.sheet} tool="GoogleSheets"/></div>}
+function CarouselVideo({src,cardW=160,cardH=340}){
+  const ref=useRef(null);
+  const[hov,setHov]=useState(false);
+  const[playing,setPlaying]=useState(true);
+
+  useEffect(()=>{
+    if(ref.current){
+      ref.current.playbackRate=1.15;
+      ref.current.play().catch(()=>{});
+    }
+  },[]);
+
+  const togglePlay=e=>{
+    e.stopPropagation();
+    if(ref.current){
+      if(ref.current.paused){ref.current.play();setPlaying(true);}
+      else{ref.current.pause();setPlaying(false);}
+    }
+  };
+
+  const goFullscreen=e=>{
+    e.stopPropagation();
+    if(ref.current){
+      if(ref.current.requestFullscreen)ref.current.requestFullscreen();
+      else if(ref.current.webkitRequestFullscreen)ref.current.webkitRequestFullscreen();
+    }
+  };
+
+  return(
+    <div
+      style={{width:cardW,height:cardH,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#000",position:"relative",cursor:"pointer"}}
+      onMouseEnter={()=>setHov(true)}
+      onMouseLeave={()=>setHov(false)}>
+      <video ref={ref} autoPlay muted loop playsInline
+        style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}>
+        <source src={src} type="video/mp4"/>
+      </video>
+      {/* Controls — visible on hover only */}
+      {hov&&(
+        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.25)",display:"flex",alignItems:"flex-end",justifyContent:"space-between",padding:"10px 12px",zIndex:2}}>
+          <button onClick={togglePlay} style={{background:"rgba(255,255,255,.9)",border:"none",borderRadius:"50%",width:32,height:32,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0}}>
+            {playing
+              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="#222"><rect x="5" y="4" width="4" height="16"/><rect x="15" y="4" width="4" height="16"/></svg>
+              : <svg width="12" height="12" viewBox="0 0 24 24" fill="#222"><path d="M8 5v14l11-7z"/></svg>
+            }
+          </button>
+          <button onClick={goFullscreen} style={{background:"rgba(255,255,255,.9)",border:"none",borderRadius:"50%",width:32,height:32,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0}}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" strokeWidth="2.5">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=160,cardH=340,landscape=false}){
+  const rowRef=useRef(null);
+  const hovRef=useRef(false);
+  const dirRef=useRef(1);
+  const rafRef=useRef(null);
+
+  useEffect(()=>{
+    const el=rowRef.current;
+    if(!el)return;
+    const step=()=>{
+      if(el&&!hovRef.current){
+        const max=el.scrollWidth-el.clientWidth;
+        if(max>0){
+          el.scrollLeft+=0.6*dirRef.current;
+          if(el.scrollLeft>=max-1)dirRef.current=-1;
+          else if(el.scrollLeft<=0)dirRef.current=1;
+        }
+      }
+      rafRef.current=requestAnimationFrame(step);
+    };
+    rafRef.current=requestAnimationFrame(step);
+    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+  },[]);
+
+  const preImages=before.length>0?before:images;
+  const postImages=after;
+  const cardStyle={width:cardW,height:cardH,borderRadius:landscape?10:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"};
+
+  return(
+    <div ref={rowRef}
+      style={{display:"flex",gap:10,marginTop:16,overflowX:"hidden",scrollbarWidth:"none"}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}>
+      {preImages.map((src,i)=>(
+        <div key={`pre-${i}`} style={cardStyle}>
+          {landscape
+            ? <img src={src} alt="" style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
+            : <AutoScrollFrame src={src}/>
+          }
         </div>
       ))}
-      <div className="moss t2" style={{marginTop:12}}>{[SS.collDash2,SS.collDash4].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
-      <div className="moss t3" style={{marginTop:8}}>{[SS.unitEco1,SS.unitEco2,SS.unitEco3].map((s,i)=><div key={i} className="ssw"><Img src={s} style={{width:"100%",height:"auto"}}/></div>)}</div>
+      {videoSrc&&<CarouselVideo src={videoSrc} cardW={cardW} cardH={cardH}/>}
+      {postImages.map((src,i)=>(
+        <div key={`post-${i}`} style={cardStyle}>
+          {landscape
+            ? <img src={src} alt="" style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
+            : <AutoScrollFrame src={src}/>
+          }
+        </div>
+      ))}
     </div>
-    <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Throughout every build, I serve as the connective tissue between data, design, and the engineering team — translating requirements into implementation logic, making real-time product decisions as edge cases emerge, and maintaining the intent of what each chart is actually supposed to tell its reader. Some days that means three interesting conversations before lunch.</p><p>I conduct pre-release acceptance testing on every dashboard before it goes live, catching data mapping errors, calculation discrepancies, filter logic issues, and UI inconsistencies. Every dashboard going live goes through the same rigorous pass.</p></div></div>
-    <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>The Collections Dashboard — across both phases — is live with real data, used daily across HooLiv's leadership and ops structure. The Unit Economics Dashboard will, for the first time, give HooLiv's founders a real answer to the question that underpins every expansion decision in the coliving business: <strong>are we actually making money per bed?</strong></p></div></div>
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Claude","Replit","Excel"]} size={26}/></div>
-  </div>
-</>);}
+  );
+}
 
-// ─── CASA Modal ───
 function AutoScrollFrame({src}){
   const ref=useRef(null);
   const hovRef=useRef(false);
@@ -899,18 +979,19 @@ function AutoScrollFrame({src}){
     el.scrollTop=0;
     dirRef.current=1;
     if(rafRef.current)cancelAnimationFrame(rafRef.current);
+
     const step=()=>{
       if(el&&!hovRef.current){
         const max=el.scrollHeight-el.clientHeight;
-        if(max>0){
+        if(max>2){
           el.scrollTop+=0.5*dirRef.current;
-          if(el.scrollTop>=max-1)dirRef.current=-1;
-          else if(el.scrollTop<=0)dirRef.current=1;
+          if(dirRef.current===1&&el.scrollTop>=max-2)dirRef.current=-1;
+          if(dirRef.current===-1&&el.scrollTop<=2)dirRef.current=1;
         }
       }
       rafRef.current=requestAnimationFrame(step);
     };
-    const t=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},800);
+    const t=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},1000);
     return()=>{clearTimeout(t);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[src]);
 
@@ -923,6 +1004,48 @@ function AutoScrollFrame({src}){
     </div>
   );
 }
+
+function DashModal(){return(<>
+  {/* HEADER — Occupancy Heatmap at 67% zoom */}
+  <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0A1A18,#0D2020)"}}>
+    <div style={{position:"absolute",inset:0,width:"150%",height:"150%",marginLeft:"-25%",transform:"scale(0.67)",transformOrigin:"top center"}}>
+      <iframe src="https://v0-occupancy-heatmap-dashboard.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Occupancy Heatmap Dashboard" loading="lazy"/>
+    </div>
+    <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>Occupancy Heat Map Dashboard</div>
+    <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
+  </div>
+  <div className="mob">
+    <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
+    <h2 className="moti">Analytics Dashboards Suite</h2>
+    <p className="mosu">Collections · Occupancy MIS · Occupancy Heat Map · Occupancy Management · Unit Economics</p>
+    <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv operates across thousands of tenants, B2B partners, and multi-layered financial flows spanning 9 cities and 50 properties — but leadership was navigating all of it without a single analytics layer.</p><p>A CRM existed with data tables, but the previous collections MIS within it went largely unused. Analytics, graphs, and actionable insights were completely missing. Occupancy was being checked at an individual city or property level, manually. Unit economics had never been pulled together in one place.</p><p>Founders and region and city heads were making pricing, capacity, and collections decisions without structured data to back them. The gap wasn't a data gap — it was a visibility and synthesis gap.</p></div></div>
+    <div className="mose"><h3 className="mosh">My Discovery Process</h3><div className="mot"><p>I structured discovery independently for each dashboard — running stakeholder interviews with the founding team (CEO, CDAIO, CSO, COO) and region and city heads, understanding what decisions each role needed to make and what data would support those decisions. I translated these into dense, structured requirements tables mapping every metric to its calculation logic, data source, visualisation type, and granularity level.</p><p>I then led stakeholder review sessions for every dashboard — presenting the full interactive prototype, walking each stakeholder through every chart and filter, fielding queries, capturing feedback, and aligning on what success looked like before engineering wrote a single line of code. These weren't just sign-offs. They were where assumption mismatches surfaced, operational concepts got refined, and the real decision-making logic got embedded into what I was building.</p></div></div>
+
+    {/* Dashboard screenshots carousel — after Discovery Process */}
+    <div className="mose">
+      <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={200} cardW={320} landscape/>
+    </div>
+
+    <div className="mose"><h3 className="mosh">What I Built</h3>
+      {[{name:"Collections Dashboard",tag:"Live — Phase 1 & 2",desc:"Real-time dues overview — total outstanding, invoiced, collected vs pending, commitment schedules, city-wise breakdown, status distribution, B2B dues by client. Used daily by founders, ops heads, finance, and accounts across 9 cities and 50 properties.",proto:"https://v0-ticket-management-dashboard-seven.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit"},
+        {name:"Occupancy MIS Dashboard",tag:"Engineering Underway",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
+        {name:"Occupancy Heat Map Dashboard",tag:"Engineering Underway",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
+        {name:"Occupancy Management Dashboard",tag:"Engineering Underway",desc:"Live check-in/checkout tracking, retention signals, daily accountability metrics for on-ground ops teams.",proto:"https://v0-occupancy-management-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1752378348"},
+        {name:"Unit Economics Dashboard",tag:"Building on Replit",desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
+      ].map((b,i)=>(
+        <div key={i} style={{marginBottom:12,padding:"14px 18px",background:"var(--cream)",borderRadius:12,border:"1px solid var(--rule)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,gap:10}}><strong style={{fontFamily:"var(--h)",fontSize:14,color:"var(--ink)"}}>{b.name}</strong><span style={{fontFamily:"var(--l)",fontSize:9.5,color:"var(--ink-mu)",background:"var(--paper)",padding:"3px 9px",borderRadius:18,whiteSpace:"nowrap",border:"1px solid var(--rule)"}}>{b.tag}</span></div>
+          <p style={{fontSize:12.5,color:"var(--ink-mu)",lineHeight:1.65,fontWeight:300,marginBottom:b.proto?10:0}}>{b.desc}</p>
+          {b.proto&&<div className="molk"><LinkCTA label="Prototype" url={b.proto} tool="v0"/><LinkCTA label="Requirements" url={b.sheet} tool="GoogleSheets"/></div>}
+        </div>
+      ))}
+    </div>
+
+    <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Throughout every build, I serve as the connective tissue between data, design, and the engineering team — translating requirements into implementation logic, making real-time product decisions as edge cases emerge, and maintaining the intent of what each chart is actually supposed to tell its reader.</p><p>I conduct pre-release acceptance testing on every dashboard before it goes live, catching data mapping errors, calculation discrepancies, filter logic issues, and UI inconsistencies. Every dashboard going live goes through the same rigorous pass.</p></div></div>
+    <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>The Collections Dashboard — across both phases — is live with real data, used daily across HooLiv's leadership and ops structure. The Unit Economics Dashboard will, for the first time, give HooLiv's founders a real answer to the question that underpins every expansion decision in the coliving business: <strong>are we actually making money per bed?</strong></p></div></div>
+    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Claude","Replit","Excel"]} size={26}/></div>
+  </div>
+</>);}
 
 function LandCarousel({images}){
   const[idx,setIdx]=useState(0);
@@ -964,64 +1087,6 @@ function LandCarousel({images}){
   );
 }
 
-function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null}){
-  const rowRef=useRef(null);
-  const hovRef=useRef(false);
-  const dirRef=useRef(1);
-  const rafRef=useRef(null);
-
-  useEffect(()=>{
-    const el=rowRef.current;
-    if(!el)return;
-    const step=()=>{
-      if(el&&!hovRef.current){
-        const max=el.scrollWidth-el.clientWidth;
-        if(max>0){
-          el.scrollLeft+=0.6*dirRef.current;
-          if(el.scrollLeft>=max-1)dirRef.current=-1;
-          else if(el.scrollLeft<=0)dirRef.current=1;
-        }
-      }
-      rafRef.current=requestAnimationFrame(step);
-    };
-    rafRef.current=requestAnimationFrame(step);
-    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
-  },[]);
-
-  // Support both old single `images` prop (CASA) and new before/video/after pattern (Parent)
-  const preImages=before.length>0?before:images;
-  const postImages=after;
-
-  return(
-    <div
-      ref={rowRef}
-      style={{display:"flex",gap:10,marginTop:16,overflowX:"hidden",scrollbarWidth:"none"}}
-      onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}
-    >
-      {preImages.map((src,i)=>(
-        <div key={`pre-${i}`} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
-          <AutoScrollFrame src={src}/>
-        </div>
-      ))}
-      {videoSrc&&(
-        <div style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#000",position:"relative"}}>
-          <video autoPlay muted loop playsInline
-            style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}
-            ref={el=>{if(el)el.playbackRate=1.15;}}>
-            <source src={videoSrc} type="video/mp4"/>
-          </video>
-        </div>
-      )}
-      {postImages.map((src,i)=>(
-        <div key={`post-${i}`} style={{width:160,height:340,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"}}>
-          <AutoScrollFrame src={src}/>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function CASAModal(){return(<>
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#071814,#0A2420)"}}>
     <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" style={{width:"100%",height:"100%",border:"none"}} title="CASA PRD" loading="lazy"/>
@@ -1053,7 +1118,7 @@ function ParentModal(){
     {/* HEADER — PRD embed */}
     <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
       <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" style={{width:"100%",height:"100%",border:"none"}} title="Parent App PRD" loading="lazy"/>
-      <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — PRD</div>
+      <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — Specs</div>
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
