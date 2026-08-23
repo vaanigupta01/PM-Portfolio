@@ -290,6 +290,26 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .hgrv{max-height:none!important;opacity:1!important;margin-top:12px!important;}
 }
 @media(max-width:640px){nav{padding:12px 18px;}.hero{padding:72px 18px 40px;}.mg,.wca{grid-template-columns:1fr;}.mob{padding:24px 20px 32px;}.moc{right:18px;}}
+
+// ─── Responsiveness by scaling on mobile ────
+@media(max-width:1024px){
+  body{
+    zoom:0.7;
+  }
+}
+@media(max-width:640px){
+  body{
+    zoom:0.45;
+  }
+}
+
+// Fallback for Firefox since it doesn't support zoom
+@media(max-width:1024px){
+  body{zoom:0.7;transform-origin:top left;}
+  @supports not (zoom:1){
+    body{transform:scale(0.7);transform-origin:top left;width:calc(100% / 0.7);}
+  }
+}
 `}</style>;
 
 // ─── NAV + HERO ───────────────────────────────────────────────────────────────
@@ -958,7 +978,7 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
       {postImages.map((src,i)=>(
         <div key={`post-${i}`} style={cardStyle}>
           {landscape
-            ? <img src={src} alt="" style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
+            ? <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
             : <AutoScrollFrame src={src}/>
           }
         </div>
@@ -972,31 +992,45 @@ function AutoScrollFrame({src}){
   const hovRef=useRef(false);
   const rafRef=useRef(null);
   const dirRef=useRef(1);
+  const startedRef=useRef(false);
 
   useEffect(()=>{
     const el=ref.current;
     if(!el)return;
     el.scrollTop=0;
     dirRef.current=1;
+    startedRef.current=false;
     if(rafRef.current)cancelAnimationFrame(rafRef.current);
 
     const step=()=>{
-      if(el&&!hovRef.current){
+      if(el){
         const max=el.scrollHeight-el.clientHeight;
-        if(max>2){
-          el.scrollTop+=0.5*dirRef.current;
-          if(dirRef.current===1&&el.scrollTop>=max-2)dirRef.current=-1;
-          if(dirRef.current===-1&&el.scrollTop<=2)dirRef.current=1;
+        if(max>10){
+          // Content loaded and scrollable
+          if(!startedRef.current){
+            // First frame with real content — reset to top and start
+            el.scrollTop=0;
+            startedRef.current=true;
+          }
+          if(!hovRef.current){
+            el.scrollTop+=0.5*dirRef.current;
+            if(dirRef.current===1&&el.scrollTop>=max-1){
+              dirRef.current=-1;
+            } else if(dirRef.current===-1&&el.scrollTop<=1){
+              dirRef.current=1;
+            }
+          }
         }
       }
       rafRef.current=requestAnimationFrame(step);
     };
-    const t=setTimeout(()=>{rafRef.current=requestAnimationFrame(step);},1000);
-    return()=>{clearTimeout(t);if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+    rafRef.current=requestAnimationFrame(step);
+    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[src]);
 
   return(
-    <div ref={ref} style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
+    <div ref={ref}
+      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
       onMouseEnter={()=>hovRef.current=true}
       onMouseLeave={()=>hovRef.current=false}
       onClick={()=>window.open(src,"_blank")}>
@@ -1023,7 +1057,7 @@ function DashModal(){return(<>
 
     {/* Dashboard screenshots carousel — after Discovery Process */}
     <div className="mose">
-      <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={200} cardW={320} landscape/>
+       <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={240} cardW={400} landscape/>
     </div>
 
     <div className="mose"><h3 className="mosh">What I Built</h3>
@@ -1113,7 +1147,7 @@ function CASAModal(){return(<>
 </>);}
 
 function ParentModal(){
-  const vidSrc="/videos/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
+  const vidSrc="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
   return(<>
     {/* HEADER — PRD embed */}
     <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
