@@ -74,6 +74,7 @@ const SS = {
   smartprep:"/images/smartprep.jpg",
   compGridHooliv:"/images/comp-grid-hooliv.jpg", compGridWedding:"/images/comp-grid-wedding.jpg",
   roomAlloc:"/images/room-alloc.jpg",
+  bookR:"/images/BookR Landing.jpg", vasList:"/images/VAS List.jpg",
 };
 
 // ─── LOGOS ────────────────────────────────────────────────────────────────────
@@ -173,7 +174,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
 .hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;min-width:max-content;width:100%;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .nl{font-family:var(--h);font-size:21px;font-weight:600;color:var(--ink);}.nl span{color:var(--plum);font-style:italic;}
 .nlinks{display:flex;gap:30px;align-items:center;}
@@ -290,39 +291,62 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .hgrv{max-height:none!important;opacity:1!important;margin-top:12px!important;}
 }
 @media(max-width:640px){nav{padding:12px 18px;}.hero{padding:72px 18px 40px;}.mg,.wca{grid-template-columns:1fr;}.mob{padding:24px 20px 32px;}.moc{right:18px;}}
+@media(hover:hover){
+  .hgc:hover .more-card-desc{-webkit-line-clamp:unset!important;display:block!important;}
+}
 
-// ─── Responsiveness by scaling on mobile ────
+// ─── Responsiveness by scaling on mobile, Hero BG Spanning, Nav Padding, Fallback for Firefox since it doesn't support zoom ────
 @media(max-width:1024px){
-  body{
-    zoom:0.7;
-  }
+  body>*:not(#hero-section){zoom:0.7;}
+  #hero-section .hh{font-size:clamp(28px,6vw,54px)!important;}
+  #hero-section .hs{font-size:15px!important;}
+  nav{font-size:14px!important;padding:12px 20px!important;gap:12px;}
+  .nlinks{gap:16px;}
+  .hgti{font-size:clamp(18px,3vw,26px)!important;}
+  .mot,.moli li,.mosu{font-size:15px!important;}
+  .hero{min-width:100vw;padding-right:40px;overflow:visible;}
+  .blob1,.blob2,.blob3{filter:blur(48px);}
 }
 @media(max-width:640px){
-  body{
-    zoom:0.45;
-  }
+  body>*:not(#hero-section){zoom:0.45;}
+  #hero-section .hh{font-size:clamp(32px,7vw,54px)!important;}
+  #hero-section .hs{font-size:18px!important;}
+  .mot,.moli li,.mosu{font-size:16px!important;}
 }
-
-// Fallback for Firefox since it doesn't support zoom
-@media(max-width:1024px){
-  body{zoom:0.7;transform-origin:top left;}
-  @supports not (zoom:1){
-    body{transform:scale(0.7);transform-origin:top left;width:calc(100% / 0.7);}
+@supports not (zoom:1){
+  @media(max-width:1024px){
+    body>*:not(#hero-section){zoom:unset;transform:scale(0.7);transform-origin:top left;width:calc(100% / 0.7);}
+  }
+  @media(max-width:640px){
+    body>*:not(#hero-section){transform:scale(0.45);width:calc(100% / 0.45);}
   }
 }
 `}</style>;
 
 // ─── NAV + HERO ───────────────────────────────────────────────────────────────
 function Toast({msg}){if(!msg)return null;return <div className="toast">{msg}</div>;}
+function DesktopBanner(){
+  const[show,setShow]=useState(true);
+  if(!show)return null;
+  return(
+    <style>{`@media(min-width:1024px){.desk-banner{display:none!important;}}`}</style>&&
+    <div className="desk-banner" style={{position:"fixed",bottom:0,left:0,right:0,zIndex:500,background:"var(--ink)",color:"rgba(250,247,241,.85)",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,borderTop:"1px solid rgba(255,255,255,.08)"}}>
+      <p style={{fontFamily:"var(--b)",fontSize:13,fontWeight:300,margin:0,lineHeight:1.5}}>
+        Big work deserves a big screen. <span style={{color:"rgba(250,247,241,.5)"}}>Best experienced on desktop.</span>
+      </p>
+      <button onClick={()=>setShow(false)} style={{background:"none",border:"1px solid rgba(255,255,255,.2)",color:"rgba(250,247,241,.6)",borderRadius:20,padding:"4px 14px",fontSize:12,fontFamily:"var(--l)",cursor:"pointer",flexShrink:0,letterSpacing:.5}}>Got it</button>
+    </div>
+  );
+}
 function Nav(){
   const[sc,setSc]=useState(false);
   useEffect(()=>{const f=()=>setSc(window.scrollY>40);window.addEventListener("scroll",f);return()=>window.removeEventListener("scroll",f);},[]);
   const go=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
-  return(<nav className={sc?"sc":""}><div className="nl">Vaani <span>Gupta</span></div><div className="nlinks"><span className="na" onClick={()=>go("work")}>Work</span><span className="na" onClick={()=>go("thinking")}>PM Thinking</span><span className="na" onClick={()=>go("about")}>About</span><a className="nc" href="#" onClick={e=>e.preventDefault()}>View Résumé</a></div></nav>);
+  return(<nav className={sc?"sc":""}><div className="nl">Vaani <span>Gupta</span></div><div className="nlinks"><span className="na" onClick={()=>go("work")}>Work</span><span className="na" onClick={()=>go("thinking")}>PM Thinking</span><span className="na" onClick={()=>go("about")}>About</span><a className="nc" href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer">View Résumé</a></div></nav>);
 }
 function Hero(){
   return(
-    <div className="hero">
+    <div className="hero" id="hero-section">
       <div className="hero-mesh"/>
       <ParallaxLayer speed={0.38} style={{position:"absolute",top:0,right:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob1"/></ParallaxLayer>
       <ParallaxLayer speed={-0.22} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
@@ -405,10 +429,10 @@ const SC={
 };
 const CASES=[
   {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"Explore the Data Layer",chips:["5 Dashboards","C-Suite & Heads","Replit Build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
-  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA App + CRM",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
-  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App + Outpass",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Explore the Experience",hasVideo:true,chips:["Walkthrough Video","Trust Layer Design","Outpass Logic"]},
-  {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Company-wide Rollout","150+ Employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
-  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI View","Interview-to-Spec","4-Member Team"],imgs:[SS.b2b1,SS.b2b2]},
+  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA Suite",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
+  {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App & Outpass System",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Explore the Experience",hasVideo:true,chips:["Walkthrough Video","Trust Layer Design","Outpass Logic"]},
+  {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Company-wide Rollout","200+ Employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
+  {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI View","Interview-to-Spec","5-Member Team"],imgs:[SS.b2b1,SS.b2b2]},
 ];
 
 // Phone-screen dimensions used for portrait cards
@@ -566,8 +590,8 @@ function CaseGrid({cases,onClickCase}){
 
 // ─── MORE WORK ─────────────────────────────────────────────────────────────────
 const MORE=[
-  {title:"Consumer App Redesign",tags:["Engagement & VAS"],desc:"Identified the need for a visual overhaul and led redesign direction alongside the designer — giving the HooLiv consumer app the fresh, contemporary look it needed.",imgs:[SS.smartprep,SS.vasServices],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(40,30,50,.93)","--sm":"rgba(40,30,50,.5)","--sch":"rgba(40,30,50,.97)","--smh":"rgba(40,30,50,.82)"}},
-  {title:"Readers' Hub · upGrad GenAI · Exam Prep",tags:["Engagement & VAS"],desc:"End-to-end ownership across three VAS integrations — partner onboarding, full product scope, and GTM rollout. ~20% lift in service adoption and engagement.",imgs:[SS.readersHub,SS.upgradCard,SS.acadza],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.5)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"}},
+  {title:"Consumer App Redesign",tags:["Engagement & VAS"],desc:"Identified the need for a visual overhaul and led redesign direction alongside the designer — giving the HooLiv consumer app the fresh, contemporary look it needed.",imgs:[SS.smartprep,SS.vasList,SS.vasServices],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(40,30,50,.93)","--sm":"rgba(40,30,50,.5)","--sch":"rgba(40,30,50,.97)","--smh":"rgba(40,30,50,.82)"}},
+  {title:"Readers' Hub · upGrad GenAI · Exam Prep",tags:["Engagement & VAS"],desc:"End-to-end ownership across three VAS integrations — partner onboarding, full product scope, and GTM rollout. ~20% lift in service adoption and engagement.",imgs:[SS.bookR,SS.readersHub,SS.upgradCard,SS.acadza],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.5)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"}},
   {title:"Room Allotment Engine",tags:["Allocation Systems"],desc:"Policy-driven allocation replacing manual room assignment — affinity-based auto-allocation using student demographic and interest data, through a unified Occupancy Heat Map interface. PRD and prototype complete.",imgs:[SS.roomAlloc],tools:["ChatGPT","Figma","v0"],prdUrl:"https://vaanig-spring-boa-26a.notion.site/2d900c0515c4801a89bfc34709afbe58",prdEmbedUrl:"https://vaanig-spring-boa-26a.notion.site/ebd//2d900c0515c4801a89bfc34709afbe58",sc:{"--sc":"rgba(56,42,12,.93)","--sm":"rgba(56,42,12,.5)","--sch":"rgba(56,42,12,.97)","--smh":"rgba(56,42,12,.82)"}},
 ];
  
@@ -602,7 +626,7 @@ function MoreCard({card,fillHeight=false}){
         <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
         <div className="hgti" style={{fontSize:isPhone?18:20}}>{card.title}</div>
         <div className="hgrv" style={{maxHeight:"none",opacity:1,marginTop:10}}>
-          <p className="hgde" style={{fontSize:11.5}}>{card.desc}</p>
+          <p className="hgde more-card-desc" style={{fontSize:11.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",transition:"all .3s"}}>{card.desc}</p>
           <div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>
         </div>
       </div>
@@ -992,41 +1016,30 @@ function AutoScrollFrame({src}){
   const hovRef=useRef(false);
   const rafRef=useRef(null);
   const dirRef=useRef(1);
-  const startedRef=useRef(false);
 
-  useEffect(()=>{
+  const startLoop=()=>{
     const el=ref.current;
     if(!el)return;
+    if(rafRef.current)cancelAnimationFrame(rafRef.current);
     el.scrollTop=0;
     dirRef.current=1;
-    startedRef.current=false;
-    if(rafRef.current)cancelAnimationFrame(rafRef.current);
-
     const step=()=>{
       if(el){
         const max=el.scrollHeight-el.clientHeight;
-        if(max>10){
-          // Content loaded and scrollable
-          if(!startedRef.current){
-            // First frame with real content — reset to top and start
-            el.scrollTop=0;
-            startedRef.current=true;
-          }
-          if(!hovRef.current){
-            el.scrollTop+=0.5*dirRef.current;
-            if(dirRef.current===1&&el.scrollTop>=max-1){
-              dirRef.current=-1;
-            } else if(dirRef.current===-1&&el.scrollTop<=1){
-              dirRef.current=1;
-            }
-          }
+        if(max>2&&!hovRef.current){
+          el.scrollTop+=0.5*dirRef.current;
+          if(dirRef.current===1&&el.scrollTop>=max-1)dirRef.current=-1;
+          else if(dirRef.current===-1&&el.scrollTop<=1)dirRef.current=1;
         }
       }
       rafRef.current=requestAnimationFrame(step);
     };
     rafRef.current=requestAnimationFrame(step);
+  };
+
+  useEffect(()=>{
     return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
-  },[src]);
+  },[]);
 
   return(
     <div ref={ref}
@@ -1034,7 +1047,8 @@ function AutoScrollFrame({src}){
       onMouseEnter={()=>hovRef.current=true}
       onMouseLeave={()=>hovRef.current=false}
       onClick={()=>window.open(src,"_blank")}>
-      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}
+        onLoad={startLoop}/>
     </div>
   );
 }
@@ -1049,15 +1063,25 @@ function DashModal(){return(<>
     <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
-    <h2 className="moti">Analytics Dashboards Suite</h2>
-    <p className="mosu">Collections · Occupancy MIS · Occupancy Heat Map · Occupancy Management · Unit Economics</p>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+      <div>
+        <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
+        <h2 className="moti" style={{marginBottom:5}}>Analytics Dashboards Suite</h2>
+        <p className="mosu" style={{marginBottom:0}}>Collections · Occupancy · Unit Economics</p>
+      </div>
+      <div style={{textAlign:"right",flexShrink:0}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+        <LogoRow tools={["ChatGPT","v0","Claude","Replit","Excel"]} size={24}/>
+      </div>
+    </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv operates across thousands of tenants, B2B partners, and multi-layered financial flows spanning 9 cities and 50 properties — but leadership was navigating all of it without a single analytics layer.</p><p>A CRM existed with data tables, but the previous collections MIS within it went largely unused. Analytics, graphs, and actionable insights were completely missing. Occupancy was being checked at an individual city or property level, manually. Unit economics had never been pulled together in one place.</p><p>Founders and region and city heads were making pricing, capacity, and collections decisions without structured data to back them. The gap wasn't a data gap — it was a visibility and synthesis gap.</p></div></div>
     <div className="mose"><h3 className="mosh">My Discovery Process</h3><div className="mot"><p>I structured discovery independently for each dashboard — running stakeholder interviews with the founding team (CEO, CDAIO, CSO, COO) and region and city heads, understanding what decisions each role needed to make and what data would support those decisions. I translated these into dense, structured requirements tables mapping every metric to its calculation logic, data source, visualisation type, and granularity level.</p><p>I then led stakeholder review sessions for every dashboard — presenting the full interactive prototype, walking each stakeholder through every chart and filter, fielding queries, capturing feedback, and aligning on what success looked like before engineering wrote a single line of code. These weren't just sign-offs. They were where assumption mismatches surfaced, operational concepts got refined, and the real decision-making logic got embedded into what I was building.</p></div></div>
 
     {/* Dashboard screenshots carousel — after Discovery Process */}
     <div className="mose">
-       <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={240} cardW={400} landscape/>
+      <div style={{borderRadius:10,overflow:"hidden",height:240}}>
+        <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={240} cardW={400} landscape/>
+      </div>
     </div>
 
     <div className="mose"><h3 className="mosh">What I Built</h3>
@@ -1065,7 +1089,7 @@ function DashModal(){return(<>
         {name:"Occupancy MIS Dashboard",tag:"Engineering Underway",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
         {name:"Occupancy Heat Map Dashboard",tag:"Engineering Underway",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
         {name:"Occupancy Management Dashboard",tag:"Engineering Underway",desc:"Live check-in/checkout tracking, retention signals, daily accountability metrics for on-ground ops teams.",proto:"https://v0-occupancy-management-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1752378348"},
-        {name:"Unit Economics Dashboard",tag:"Building on Replit",desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
+        {name:"Unit Economics Dashboard",tag:<span style={{display:"inline-flex",alignItems:"center",gap:5}}>Building on <img src="https://replit-brand.replit.app/api/static/replit_brand_kit/logos/replit-primary.svg" alt="Replit" style={{height:14,width:"auto",display:"inline-block",verticalAlign:"middle"}}/></span>,desc:
       ].map((b,i)=>(
         <div key={i} style={{marginBottom:12,padding:"14px 18px",background:"var(--cream)",borderRadius:12,border:"1px solid var(--rule)"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,gap:10}}><strong style={{fontFamily:"var(--h)",fontSize:14,color:"var(--ink)"}}>{b.name}</strong><span style={{fontFamily:"var(--l)",fontSize:9.5,color:"var(--ink-mu)",background:"var(--paper)",padding:"3px 9px",borderRadius:18,whiteSpace:"nowrap",border:"1px solid var(--rule)"}}>{b.tag}</span></div>
@@ -1077,7 +1101,6 @@ function DashModal(){return(<>
 
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Throughout every build, I serve as the connective tissue between data, design, and the engineering team — translating requirements into implementation logic, making real-time product decisions as edge cases emerge, and maintaining the intent of what each chart is actually supposed to tell its reader.</p><p>I conduct pre-release acceptance testing on every dashboard before it goes live, catching data mapping errors, calculation discrepancies, filter logic issues, and UI inconsistencies. Every dashboard going live goes through the same rigorous pass.</p></div></div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>The Collections Dashboard — across both phases — is live with real data, used daily across HooLiv's leadership and ops structure. The Unit Economics Dashboard will, for the first time, give HooLiv's founders a real answer to the question that underpins every expansion decision in the coliving business: <strong>are we actually making money per bed?</strong></p></div></div>
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Claude","Replit","Excel"]} size={26}/></div>
   </div>
 </>);}
 
@@ -1128,9 +1151,17 @@ function CASAModal(){return(<>
     <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div className="moov">Consumer App + CRM · External Client · Boston</div>
-    <h2 className="moti">CASA App + CRM</h2>
-    <p className="mosu">~50 screens across members-only app and operations CRM · Full product ownership</p>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+      <div>
+        <div className="moov">Consumer App + CRM · External Client · Boston</div>
+        <h2 className="moti" style={{marginBottom:5}}>CASA Suite</h2>
+        <p className="mosu" style={{marginBottom:0}}>~50 screens · Full product ownership</p>
+      </div>
+      <div style={{textAlign:"right",flexShrink:0}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+        <LogoRow tools={["Claude","Replit","Notion"]} size={24}/>
+      </div>
+    </div>
     <div className="mose"><h3 className="mosh">The Context</h3><div className="mot"><p>CASA — Community as a Service for All — is a Boston-based membership organisation helping graduate students navigate off-campus life: housing, roommate matching, pre-arrival logistics, community connection, and local perks throughout the academic year.</p><p>A first version of the app had been built previously. The client wasn't satisfied — they wanted significant changes and in some areas, a fresh start. The brief I received contained the CASA team's product vision, an app review deck with their direction and critique, a full tech outline, and a comprehensive set of product assets and references. No formal requirements document existed for what they now needed. I wrote it.</p></div></div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <div className="mot"><p><em>Member App — 7–8 journeys, ~15 screens.</em> The in-market community layer for active CASA members — graduate students in or arriving in Boston. Covers exclusive local perks and partner discounts, CASA-hosted events (social, cultural, wellness, professional), resources and updates from the CASA team, and support navigation.</p><p><em>CRM — ~35 screens.</em> The operational source of truth for the CASA team — managing members, payments, membership status, events, offers, reminders, and communications across the full member lifecycle. The CRM went through multiple rigorous iterations as I documented issues, flagged backend inconsistencies, and pushed for systematic corrections.</p></div>
@@ -1142,7 +1173,6 @@ function CASAModal(){return(<>
       <LandCarousel images={[SS.casaCrm1,SS.casaCrm2,SS.casaCrm3,SS.casaCrm4]}/>
     </div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~50 screens across app and CRM, live and serving CASA members in Boston</strong> — the complete operational and community infrastructure for a graduate student membership organisation, delivered end-to-end.</p></div></div>
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["Claude","Replit","Notion"]} size={26}/></div>
   </div>
 </>);}
 
@@ -1156,9 +1186,17 @@ function ParentModal(){
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
-      <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
-      <h2 className="moti">HooLiv Parent App + Outpass</h2>
-      <p className="mosu">Live and serving 5,000+ tenants and their parents</p>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+      <div>
+        <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
+        <h2 className="moti" style={{marginBottom:5}}>HooLiv Parent App & Outpass System</h2>
+        <p className="mosu" style={{marginBottom:0}}>Live and serving 5,000+ tenants and their parents</p>
+      </div>
+      <div style={{textAlign:"right",flexShrink:0}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+        <LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={24}/>
+      </div>
+    </div>
       <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv houses 5,000+ students across India. Their parents had no digital touchpoint with the accommodation their child was living in — no visibility into payments, no way to receive or act on notices, no connection to the services available. And when a student needed to leave the property for a late outing, a home visit, or an emergency, the approval process was entirely manual — creating accountability gaps and leaving parents with no real peace of mind.</p><p>The problem wasn't just operational or UX friction. It was a trust deficit at scale.</p></div></div>
       <div className="mose"><h3 className="mosh">What I Built</h3>
         <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
@@ -1171,7 +1209,6 @@ function ParentModal(){
       </div>
       <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>The outpass mechanism was the most complex piece — a multi-state flow spanning tenant, parent, warden, and system, with notification logic, fallback paths, and real-world edge cases that only surfaced through close collaboration with ops stakeholders during the build.</p><p>Pre-release acceptance testing is where the real work happened. Development had moved fast, and a significant number of UI/UX issues, incomplete states, and design details had accumulated during the build. I documented and raised every one, getting everything addressed before release. The standard wasn't "does it work." It was "would a parent trust this."</p></div></div>
       <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>Live and serving <strong>5,000+ tenants and their parents</strong> — digitising a previously fragmented, manual trust layer between HooLiv, students, and their families into a single, unified in-app experience.</p></div></div>
-      <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={26}/></div>
     </div>
   </>);
 }
@@ -1186,10 +1223,17 @@ function LMSModal(){return(<>
     <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div className="moov">Operations & Internal Tools · 0→1</div>
-    <h2 className="moti">Leave Management System</h2>
-    <p className="mosu">~100% adoption · 150+ employees · First org-wide product launch</p>
-
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+      <div>
+        <div className="moov">Operations & Internal Tools · 0→1</div>
+        <h2 className="moti" style={{marginBottom:5}}>Leave Management System</h2>
+        <p className="mosu" style={{marginBottom:0}}>~100% adoption · 200+ employees · First org-wide launch</p>
+      </div>
+      <div style={{textAlign:"right",flexShrink:0}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+        <LogoRow tools={["ChatGPT","v0","Replit","Notion"]} size={24}/>
+      </div>
+    </div>
     {/* The Problem */}
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>Leave applications happened over WhatsApp. No approval workflow, no record system, no analytics. I identified this as a solvable ops gap — scoped the solution, defined the requirements, and proposed building a proper system.</p><p>Before writing a single requirement, I collaborated with the COO to understand the HR policies that would govern the new system — and where those policies could be made more practical. One example: medical or death certificate uploads were originally required for sick and bereavement leave regardless of duration. I pushed for a more human-centered rule — certificates required only if the leave exceeded 3 days. That kind of policy-to-product translation was baked into the PRD from the start.</p></div></div>
 
@@ -1222,12 +1266,10 @@ function LMSModal(){return(<>
     </div>
 
     {/* The Launch */}
-    <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 150+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
+    <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 200+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
 
     {/* Impact */}
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~100% adoption</strong> with no prior system in place — the only leave management infrastructure the company has.</p></div></div>
-
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Replit","Notion"]} size={26}/></div>
   </div>
 </>);}
 
@@ -1241,10 +1283,17 @@ function B2BModal(){return(<>
     <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div className="moov">Revenue Operations · Discovery-Led</div>
-    <h2 className="moti">B2B Customer Invoices Module</h2>
-    <p className="mosu">~10 min saved per invoice · Accounts team of 4 · SOP delivered</p>
-
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+      <div>
+        <div className="moov">Revenue Operations · Discovery-Led</div>
+        <h2 className="moti" style={{marginBottom:5}}>B2B Customer Invoices Module</h2>
+        <p className="mosu" style={{marginBottom:0}}>~10 min saved · Accounts team of 5 · SOP delivered</p>
+      </div>
+      <div style={{textAlign:"right",flexShrink:0}}>
+        <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+        <LogoRow tools={["ChatGPT","v0","Bolt","Notion","Claude"]} size={24}/>
+      </div>
+    </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>I started with a user interview with the Accounts Head. What I found was a recurring, high-frequency billing process entirely held together by Tally, email, and informal follow-ups — with no transparency, no standardisation, and no structure.</p><p>Region heads raised invoice requests informally. Accounts created invoices manually in Tally and tracked status through a combination of memory and chasing. A business stakeholder interview confirmed the opacity extended upward too — city heads had no invoice visibility, and finance had no B2B billing analytics at all. This was a process that had clearly never been looked at through a product lens.</p></div></div>
 
     {/* PRD right after Problem */}
@@ -1287,8 +1336,7 @@ function B2BModal(){return(<>
       </div>
     </div>
 
-    <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~10 minutes saved per invoice</strong> for a team of 4. Standardised procedure for region heads. Real-time B2B billing analytics for finance and leadership — none of which existed before.</p></div></div>
-    <div className="mose"><h3 className="mosh">Tech Stack</h3><LogoRow tools={["ChatGPT","v0","Bolt","Notion","Claude"]} size={26}/></div>
+    <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~10 minutes saved per invoice</strong> for a team of 5. Standardised procedure for region heads. Real-time B2B billing analytics for finance and leadership — none of which existed before.</p></div></div>
   </div>
 </>);}
 
@@ -1536,7 +1584,7 @@ function Footer({showToast}){
       <div className="ftl">
         <span className="fta" onClick={()=>copyEmail(showToast)}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>vaanigupta01@gmail.com</span>
         <a href="tel:+919663872509" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>+91 96638 72509</a>
-        <a href="#" onClick={e=>e.preventDefault()} className="fta">View Résumé</a>
+        <a href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer" className="fta">View Résumé</a>
         <a href="https://linkedin.com/in/vaani-gupta" target="_blank" rel="noreferrer" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>LinkedIn</a>
       </div>
     </footer>
@@ -1553,6 +1601,7 @@ export default function Portfolio(){
       <GlobalCSS/>
       <Toast msg={toastMsg}/>
       <Nav/>
+      <DesktopBanner/>
       <Hero/>
       <section id="work" style={{padding:"84px 64px"}}>
         <div className="ov">Product Work</div>
