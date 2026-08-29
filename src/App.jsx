@@ -291,8 +291,18 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .hgrv{max-height:none!important;opacity:1!important;margin-top:12px!important;}
 }
 @media(max-width:640px){nav{padding:12px 18px;}.hero{padding:72px 18px 40px;}.mg,.wca{grid-template-columns:1fr;}.mob{padding:24px 20px 32px;}.moc{right:18px;}}
-@media(hover:hover){
-  .hgc:hover .more-card-desc{-webkit-line-clamp:unset!important;display:block!important;}
+//apply zoom to specific sections, not body children:
+@media(max-width:1024px){
+  #work-section,#more-work-section,#thinking-section,#intel-section,#about-section,footer{zoom:0.7;}
+  nav{font-size:14px!important;padding:12px 20px!important;gap:12px;}
+  .nlinks{gap:16px;}
+}
+@media(max-width:640px){
+  #work-section,#more-work-section,#thinking-section,#intel-section,#about-section,footer{zoom:0.45;}
+}//
+@media(hover:hover) and (min-width:1025px){
+  .more-card-desc{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .hgc:hover .more-card-desc{-webkit-line-clamp:unset;display:block;}
 }
 
 // ─── Responsiveness by scaling on mobile, Hero BG Spanning, Nav Padding, Fallback for Firefox since it doesn't support zoom ────
@@ -329,13 +339,15 @@ function DesktopBanner(){
   const[show,setShow]=useState(true);
   if(!show)return null;
   return(
-    <style>{`@media(min-width:1024px){.desk-banner{display:none!important;}}`}</style>&&
-    <div className="desk-banner" style={{position:"fixed",bottom:0,left:0,right:0,zIndex:500,background:"var(--ink)",color:"rgba(250,247,241,.85)",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,borderTop:"1px solid rgba(255,255,255,.08)"}}>
-      <p style={{fontFamily:"var(--b)",fontSize:13,fontWeight:300,margin:0,lineHeight:1.5}}>
-        Big work deserves a big screen. <span style={{color:"rgba(250,247,241,.5)"}}>Best experienced on desktop.</span>
-      </p>
-      <button onClick={()=>setShow(false)} style={{background:"none",border:"1px solid rgba(255,255,255,.2)",color:"rgba(250,247,241,.6)",borderRadius:20,padding:"4px 14px",fontSize:12,fontFamily:"var(--l)",cursor:"pointer",flexShrink:0,letterSpacing:.5}}>Got it</button>
-    </div>
+    <>
+      <style>{`@media(min-width:1025px){.desk-banner{display:none!important;}}`}</style>
+      <div className="desk-banner" style={{position:"fixed",bottom:0,left:0,right:0,zIndex:500,background:"var(--ink)",color:"rgba(250,247,241,.85)",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,borderTop:"1px solid rgba(255,255,255,.08)"}}>
+        <p style={{fontFamily:"var(--b)",fontSize:13,fontWeight:300,margin:0,lineHeight:1.5}}>
+          Big work deserves a big screen. <span style={{color:"rgba(250,247,241,.5)"}}>Best experienced on desktop.</span>
+        </p>
+        <button onClick={()=>setShow(false)} style={{background:"none",border:"1px solid rgba(255,255,255,.2)",color:"rgba(250,247,241,.6)",borderRadius:20,padding:"4px 14px",fontSize:12,fontFamily:"var(--l)",cursor:"pointer",flexShrink:0,letterSpacing:.5}}>Got it</button>
+      </div>
+    </>
   );
 }
 function Nav(){
@@ -429,7 +441,7 @@ const SC={
 };
 const CASES=[
   {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"Explore the Data Layer",chips:["5 Dashboards","C-Suite & Heads","Replit Build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
-  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA Suite",desc:"Complete product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
+  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA Suite",desc:"Complete SaaS product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
   {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App & Outpass System",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Explore the Experience",hasVideo:true,chips:["Walkthrough Video","Trust Layer Design","Outpass Logic"]},
   {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Company-wide Rollout","200+ Employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
   {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI View","Interview-to-Spec","5-Member Team"],imgs:[SS.b2b1,SS.b2b2]},
@@ -623,11 +635,14 @@ function MoreCard({card,fillHeight=false}){
         </a>
       )}
       <div className="hgcon">
-        <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
+          {!isRoom&&<div style={{display:"flex",gap:4}}>{card.tools.map(t=><div key={t} className="hgto" style={{width:18,height:18}}><LogoSVG tool={t} size={16}/></div>)}</div>}
+        </div>
         <div className="hgti" style={{fontSize:isPhone?18:20}}>{card.title}</div>
         <div className="hgrv" style={{maxHeight:"none",opacity:1,marginTop:10}}>
-          <p className="hgde more-card-desc" style={{fontSize:11.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",transition:"all .3s"}}>{card.desc}</p>
-          <div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>
+          <p className="hgde more-card-desc" style={{fontSize:11.5,transition:"all .3s"}}>{card.desc}</p>
+          {isRoom&&<div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>}
         </div>
       </div>
     </div>
@@ -1063,7 +1078,7 @@ function DashModal(){return(<>
     <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
       <div>
         <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
         <h2 className="moti" style={{marginBottom:5}}>Analytics Dashboards Suite</h2>
@@ -1086,10 +1101,10 @@ function DashModal(){return(<>
 
     <div className="mose"><h3 className="mosh">What I Built</h3>
       {[{name:"Collections Dashboard",tag:"Live — Phase 1 & 2",desc:"Real-time dues overview — total outstanding, invoiced, collected vs pending, commitment schedules, city-wise breakdown, status distribution, B2B dues by client. Used daily by founders, ops heads, finance, and accounts across 9 cities and 50 properties.",proto:"https://v0-ticket-management-dashboard-seven.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit"},
-        {name:"Occupancy MIS Dashboard",tag:"Engineering Underway",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
-        {name:"Occupancy Heat Map Dashboard",tag:"Engineering Underway",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
+        {name:"Occupancy MIS Dashboard",tag:"Live — Phase 1",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
+        {name:"Occupancy Heat Map Dashboard",tag:"Live — Phase 1",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
         {name:"Occupancy Management Dashboard",tag:"Engineering Underway",desc:"Live check-in/checkout tracking, retention signals, daily accountability metrics for on-ground ops teams.",proto:"https://v0-occupancy-management-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1752378348"},
-        {name:"Unit Economics Dashboard",tag:<span style={{display:"inline-flex",alignItems:"center",gap:5}}>Building on <img src="https://replit-brand.replit.app/api/static/replit_brand_kit/logos/replit-primary.svg" alt="Replit" style={{height:14,width:"auto",display:"inline-block",verticalAlign:"middle"}}/></span>,desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
+        {name:"Unit Economics Dashboard",tag:<span style={{display:"inline-flex",alignItems:"center",gap:5}}>Building on <img src="https://replit-brand.replit.app/api/static/replit_brand_kit/logos/replit-primary.svg" alt="Replit" style={{height:11,width:"auto",display:"inline-block",verticalAlign:"middle"}}/></span>,desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
       ].map((b,i)=>(
         <div key={i} style={{marginBottom:12,padding:"14px 18px",background:"var(--cream)",borderRadius:12,border:"1px solid var(--rule)"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,gap:10}}><strong style={{fontFamily:"var(--h)",fontSize:14,color:"var(--ink)"}}>{b.name}</strong><span style={{fontFamily:"var(--l)",fontSize:9.5,color:"var(--ink-mu)",background:"var(--paper)",padding:"3px 9px",borderRadius:18,whiteSpace:"nowrap",border:"1px solid var(--rule)"}}>{b.tag}</span></div>
@@ -1151,7 +1166,7 @@ function CASAModal(){return(<>
     <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
       <div>
         <div className="moov">Consumer App + CRM · External Client · Boston</div>
         <h2 className="moti" style={{marginBottom:5}}>CASA Suite</h2>
@@ -1186,7 +1201,7 @@ function ParentModal(){
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
       <div>
         <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
         <h2 className="moti" style={{marginBottom:5}}>HooLiv Parent App & Outpass System</h2>
@@ -1223,7 +1238,7 @@ function LMSModal(){return(<>
     <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
       <div>
         <div className="moov">Operations & Internal Tools · 0→1</div>
         <h2 className="moti" style={{marginBottom:5}}>Leave Management System</h2>
@@ -1283,7 +1298,7 @@ function B2BModal(){return(<>
     <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
       <div>
         <div className="moov">Revenue Operations · Discovery-Led</div>
         <h2 className="moti" style={{marginBottom:5}}>B2B Customer Invoices Module</h2>
