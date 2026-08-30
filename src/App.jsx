@@ -230,7 +230,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .mob{padding:36px 48px 48px;}
 .moov{font-family:var(--l);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--plum);margin-bottom:8px;font-weight:600;}
 .moti{font-family:var(--h);font-size:32px;font-weight:600;color:var(--ink);line-height:1.1;margin-bottom:5px;letter-spacing:-.4px;}
-.mosu{font-size:13.5px;color:var(--ink-mu);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--rule);}
+.mosu{font-size:13.5px;color:var(--ink-mu);margin-bottom:0;padding-bottom:0;border-bottom:none;}
 .mose{margin-bottom:28px;}
 .mosh{font-family:var(--h);font-size:18px;font-weight:600;color:var(--ink);margin-bottom:11px;display:flex;align-items:center;gap:9px;}.mosh::before{content:'';display:block;width:3px;height:16px;background:var(--plum);border-radius:2px;flex-shrink:0;}
 .mot{font-size:14px;color:var(--ink-mid);line-height:1.8;font-weight:300;}.mot p{margin-bottom:12px;}.mot p:last-child{margin-bottom:0;}.mot strong{color:var(--ink);font-weight:600;}.mot em{color:var(--plum);font-style:italic;}
@@ -282,6 +282,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;justify-content:space-between;align-items:center;}
 .ftn{font-family:var(--h);font-size:24px;font-weight:600;color:white;margin-bottom:3px;}.fts{font-size:13px;color:rgba(250,247,241,.55);font-weight:300;}
 .ftl{display:flex;gap:16px;align-items:center;}.fta{font-size:12.5px;color:rgba(250,247,241,.7);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px;cursor:pointer;}.fta:hover{color:var(--coral);}
+
 @media(max-width:1024px){
   .hero,.abg{grid-template-columns:1fr;padding:92px 32px 48px;gap:36px;}
   nav{padding:14px 28px;}.csg,.ag{grid-template-columns:1fr;}.feat{grid-column:1;aspect-ratio:4/5;}
@@ -290,19 +291,28 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   footer{flex-direction:column;gap:18px;text-align:center;}
   .hgrv{max-height:none!important;opacity:1!important;margin-top:12px!important;}
 }
+
 @media(max-width:640px){nav{padding:12px 18px;}.hero{padding:72px 18px 40px;}.mg,.wca{grid-template-columns:1fr;}.mob{padding:24px 20px 32px;}.moc{right:18px;}}
-//apply zoom to specific sections, not body children:
-@media(max-width:1024px){
-  #work-section,#more-work-section,#thinking-section,#intel-section,#about-section,footer{zoom:0.7;}
-  nav{font-size:14px!important;padding:12px 20px!important;gap:12px;}
-  .nlinks{gap:16px;}
-}
-@media(max-width:640px){
-  #work-section,#more-work-section,#thinking-section,#intel-section,#about-section,footer{zoom:0.45;}
-}//
-@media(hover:hover) and (min-width:1025px){
+
+@media(min-width:1025px){
   .more-card-desc{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
   .hgc:hover .more-card-desc{-webkit-line-clamp:unset;display:block;}
+}
+
+//apply zoom to specific sections, not body children:
+@media(max-width:1024px){
+  #work,#more-work,#thinking,#intel,#about,footer{zoom:0.7;}
+}
+@media(max-width:640px){
+  #work,#more-work,#thinking,#intel,#about,footer{zoom:0.45;}
+}
+
+.nav-hamburger{display:none;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
+@media(max-width:768px){
+  .nav-hamburger{display:flex;align-items:center;justify-content:center;}
+  .nlinks{position:fixed;top:60px;left:0;right:0;background:var(--iv);flex-direction:column;align-items:flex-start;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);}
+  .nlinks.open{max-height:300px;padding:12px 20px 20px;}
+  .nlinks .na,.nlinks .nc{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
 }
 
 // ─── Responsiveness by scaling on mobile, Hero BG Spanning, Nav Padding, Fallback for Firefox since it doesn't support zoom ────
@@ -352,9 +362,25 @@ function DesktopBanner(){
 }
 function Nav(){
   const[sc,setSc]=useState(false);
+  const[menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{const f=()=>setSc(window.scrollY>40);window.addEventListener("scroll",f);return()=>window.removeEventListener("scroll",f);},[]);
-  const go=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
-  return(<nav className={sc?"sc":""}><div className="nl">Vaani <span>Gupta</span></div><div className="nlinks"><span className="na" onClick={()=>go("work")}>Work</span><span className="na" onClick={()=>go("thinking")}>PM Thinking</span><span className="na" onClick={()=>go("about")}>About</span><a className="nc" href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer">View Résumé</a></div></nav>);
+  const go=id=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
+  return(
+    <nav className={sc?"sc":""}>
+      <div className="nl">Vaani <span>Gupta</span></div>
+      <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <a className="nc" href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer">View Résumé</a>
+        <button className="nav-hamburger" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+      <div className={`nlinks${menuOpen?" open":""}`}>
+        <span className="na" onClick={()=>go("work")}>Work</span>
+        <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
+        <span className="na" onClick={()=>go("about")}>About</span>
+      </div>
+    </nav>
+  );
 }
 function Hero(){
   return(
@@ -441,7 +467,7 @@ const SC={
 };
 const CASES=[
   {id:"dashboards",feat:true,pill:<>Live · <strong>9 cities</strong></>,tags:["Analytics & Intelligence","Strategic Discovery"],title:"Analytics Dashboards Suite",desc:"Built pan-India analytics visibility from scratch — where leadership had data but no synthesis, no graphs, no insight layer.",tools:["ChatGPT","v0","Claude","Replit"],cta:"Explore the Data Layer",chips:["5 Dashboards","C-Suite & Heads","Replit Build"],imgs:[SS.collDash2,SS.collDash4,SS.unitEco2,SS.unitEco3]},
-  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA Suite",desc:"Complete SaaS product suite for a Boston-based grad student membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
+  {id:"casa",pill:<><strong>~50</strong> screens</>,tags:["Consumer App","CRM","External Client"],title:"CASA Suite",desc:"Complete SaaS product suite for a Boston-based grad membership org — members-only app and full ops CRM, from zero.",tools:["Claude","Replit","Notion"],cta:"Walk Through the Build",chips:["15 app Screens","35 CRM Screens","Bespoke Product Ecosystem"],imgs:[SS.casaFirstScreen,SS.casaOnboard,SS.casaEvents,SS.casaEvDetail,SS.casaPerks,SS.casaBlog]},
   {id:"parentapp",pill:<><strong>5,000+</strong> users</>,tags:["Retention & Trust","0→1"],title:"HooLiv Parent App & Outpass System",desc:"Turned a trust deficit between families and student accommodation into a unified digital experience.",tools:["ChatGPT","Genspark","Figma"],cta:"Explore the Experience",hasVideo:true,chips:["Walkthrough Video","Trust Layer Design","Outpass Logic"]},
   {id:"lms",pill:<><strong>~100%</strong> adoption</>,tags:["Org Operations","0→1"],title:"Leave Management System",desc:"Replaced a fully manual leave process with a full-stack LMS, and held the quality line to ship it right.",tools:["ChatGPT","v0","Replit"],cta:"See the Quality Bar",chips:["Mobile + Web","Company-wide Rollout","200+ Employees"],imgs:[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]},
   {id:"b2b",pill:<><strong>~10 min</strong> saved</>,tags:["Revenue Operations","Discovery-Led"],title:"B2B Customer Invoices Module",desc:"Found and standardised a recurring ops process that had never been looked at through a product lens.",tools:["ChatGPT","v0","Bolt"],cta:"Explore the Build",chips:["Live KPI View","Interview-to-Spec","5-Member Team"],imgs:[SS.b2b1,SS.b2b2]},
@@ -637,11 +663,11 @@ function MoreCard({card,fillHeight=false}){
       <div className="hgcon">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <div className="hgtags">{card.tags.map(t=><span key={t} className="hgtag">{t}</span>)}</div>
-          {!isRoom&&<div style={{display:"flex",gap:4}}>{card.tools.map(t=><div key={t} className="hgto" style={{width:18,height:18}}><LogoSVG tool={t} size={16}/></div>)}</div>}
+          {!isRoom&&<div style={{display:"flex",gap:5}}>{card.tools.map(t=><div key={t} className="hgto" style={{width:22,height:22}}><LogoSVG tool={t} size={18}/></div>)}</div>}
         </div>
         <div className="hgti" style={{fontSize:isPhone?18:20}}>{card.title}</div>
-        <div className="hgrv" style={{maxHeight:"none",opacity:1,marginTop:10}}>
-          <p className="hgde more-card-desc" style={{fontSize:11.5,transition:"all .3s"}}>{card.desc}</p>
+        <div className="hgrv" style={{maxHeight:"none",opacity:1,marginTop:10,paddingBottom:4}}>
+          <p className="hgde more-card-desc" style={{fontSize:11.5,marginBottom:0,transition:"all .3s"}}>{card.desc}</p>
           {isRoom&&<div className="hgtl">{card.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={18}/></div>)}</div>}
         </div>
       </div>
@@ -1078,7 +1104,7 @@ function DashModal(){return(<>
     <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
         <h2 className="moti" style={{marginBottom:5}}>Analytics Dashboards Suite</h2>
@@ -1166,7 +1192,7 @@ function CASAModal(){return(<>
     <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Consumer App + CRM · External Client · Boston</div>
         <h2 className="moti" style={{marginBottom:5}}>CASA Suite</h2>
@@ -1201,7 +1227,7 @@ function ParentModal(){
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
         <h2 className="moti" style={{marginBottom:5}}>HooLiv Parent App & Outpass System</h2>
@@ -1238,7 +1264,7 @@ function LMSModal(){return(<>
     <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Operations & Internal Tools · 0→1</div>
         <h2 className="moti" style={{marginBottom:5}}>Leave Management System</h2>
@@ -1298,7 +1324,7 @@ function B2BModal(){return(<>
     <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Revenue Operations · Discovery-Led</div>
         <h2 className="moti" style={{marginBottom:5}}>B2B Customer Invoices Module</h2>
@@ -1623,7 +1649,7 @@ export default function Portfolio(){
         <h2 className="st">Shipped with <em>intent</em></h2>
         <div style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
-      <section style={{padding:"72px 64px",background:"var(--cream)"}}>
+      <section id="more-work" style={{padding:"72px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
         <h2 className="st">Also <em>live</em></h2>
         <div className="mg"><MoreGrid/></div>
@@ -1636,7 +1662,7 @@ export default function Portfolio(){
         <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
-      <section style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
+      <section id="intel" style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
       <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
