@@ -1684,7 +1684,7 @@ export default function Portfolio(){
   const[toastMsg,showToast]=useToast();
   useResponsiveZoom();
   return(
-    <div id="zoom-scale-root">);
+    <div id="zoom-scale-root">
   return(
     <div>
       <GlobalCSS/>
