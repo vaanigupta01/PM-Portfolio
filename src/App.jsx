@@ -130,6 +130,24 @@ function ParallaxLayer({speed=0.2,children,style={}}){
   const y=useParallax();
   return <div style={{transform:`translate3d(0,${y*speed}px,0)`,willChange:"transform",...style}}>{children}</div>;
 }
+function useResponsiveZoom(designWidth=1400){
+  useEffect(()=>{
+    const apply=()=>{
+      const w=window.innerWidth;
+      const target=document.getElementById("zoom-scale-root");
+      if(!target)return;
+      if(w<=1024){
+        const ratio=Math.min(1,w/designWidth*1.55); // 1.55 compensates for content not needing full 1400px on mobile
+        target.style.zoom=ratio;
+      }else{
+        target.style.zoom=1;
+      }
+    };
+    apply();
+    window.addEventListener("resize",apply);
+    return()=>window.removeEventListener("resize",apply);
+  },[designWidth]);
+}
 function useInView(t=0.12){
   const ref=useRef(null);
   useEffect(()=>{
@@ -172,6 +190,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes fIn{from{opacity:0}to{opacity:1}}
 @keyframes phBlRot{0%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}25%{border-radius:44% 56% 38% 62%/48% 52% 48% 52%}50%{border-radius:38% 62% 60% 40%/52% 44% 56% 48%}75%{border-radius:52% 48% 44% 56%/38% 60% 40% 62%}100%{border-radius:60% 40% 53% 47%/54% 47% 53% 46%}}
 @keyframes meshDrift{0%,100%{transform:translate(0,0) scale(1.1)}33%{transform:translate(-30px,20px) scale(1.15)}66%{transform:translate(20px,-15px) scale(1.08)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 .hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;min-width:max-content;width:100%;}
@@ -299,20 +318,15 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .hgc:hover .more-card-desc{-webkit-line-clamp:unset;display:block;}
 }
 
-//apply zoom to specific sections, not body children:
-@media(max-width:1024px){
-  #work,#more-work,#thinking,#intel,#about,footer{zoom:0.7;}
-}
-@media(max-width:640px){
-  #work,#more-work,#thinking,#intel,#about,footer{zoom:0.45;}
-}
-
-.nav-hamburger{display:none;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
+.nav-mobile-controls{display:none;}
+.nlinks-mobile{display:none;}
 @media(max-width:768px){
-  .nav-hamburger{display:flex;align-items:center;justify-content:center;}
-  .nlinks{position:fixed;top:60px;left:0;right:0;background:var(--iv);flex-direction:column;align-items:flex-start;gap:0;max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);}
-  .nlinks.open{max-height:300px;padding:12px 20px 20px;}
-  .nlinks .na,.nlinks .nc{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
+  .nlinks-desktop{display:none;}
+  .nav-mobile-controls{display:flex;align-items:center;gap:10px;}
+  .nav-hamburger{display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
+  .nlinks-mobile{display:flex;flex-direction:column;align-items:flex-start;gap:0;position:fixed;top:60px;left:0;right:0;background:var(--iv);max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);z-index:99;}
+  .nlinks-mobile.open{max-height:300px;padding:12px 20px 20px;}
+  .nlinks-mobile .na{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
 }
 
 // ─── Responsiveness by scaling on mobile, Hero BG Spanning, Nav Padding, Fallback for Firefox since it doesn't support zoom ────
@@ -324,7 +338,7 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .nlinks{gap:16px;}
   .hgti{font-size:clamp(18px,3vw,26px)!important;}
   .mot,.moli li,.mosu{font-size:15px!important;}
-  .hero{min-width:100vw;padding-right:40px;overflow:visible;}
+  //.hero{min-width:100vw;padding-right:40px;overflow:visible;}
   .blob1,.blob2,.blob3{filter:blur(48px);}
 }
 @media(max-width:640px){
@@ -365,16 +379,26 @@ function Nav(){
   const[menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{const f=()=>setSc(window.scrollY>40);window.addEventListener("scroll",f);return()=>window.removeEventListener("scroll",f);},[]);
   const go=id=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
+  const resumeUrl="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing";
   return(
     <nav className={sc?"sc":""}>
       <div className="nl">Vaani <span>Gupta</span></div>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <a className="nc" href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer">View Résumé</a>
+
+      <div className="nlinks-desktop">
+        <span className="na" onClick={()=>go("work")}>Work</span>
+        <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
+        <span className="na" onClick={()=>go("about")}>About</span>
+        <a className="nc" href={resumeUrl} target="_blank" rel="noreferrer">View Résumé</a>
+      </div>
+
+      <div className="nav-mobile-controls">
+        <a className="nc" href={resumeUrl} target="_blank" rel="noreferrer">Résumé</a>
         <button className="nav-hamburger" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-      <div className={`nlinks${menuOpen?" open":""}`}>
+
+      <div className={`nlinks-mobile${menuOpen?" open":""}`}>
         <span className="na" onClick={()=>go("work")}>Work</span>
         <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
         <span className="na" onClick={()=>go("about")}>About</span>
@@ -422,23 +446,29 @@ function LinkCTA({label,url,tool}){return <a href={url} target="_blank" rel="nor
 // no onError fires — so we don't even attempt a raw iframe; we go straight to the
 // reliable fallback until a working embedUrl is supplied).
 function NotionEmbed({url,title,embedUrl=null,height=460}){
+  const[loaded,setLoaded]=useState(false);
   if(!embedUrl){
     return(
       <a href={url} target="_blank" rel="noreferrer" className="emw" style={{display:"flex",gap:14,alignItems:"flex-start",padding:"20px 22px",textDecoration:"none"}}>
         <LogoSVG tool="Notion" size={36}/>
         <div>
           <div style={{fontFamily:"var(--h)",fontSize:14.5,fontWeight:600,color:"var(--ink)",marginBottom:4}}>{title}</div>
-          <div style={{fontSize:11,color:"var(--ink-mu)",marginBottom:6,lineHeight:1.5}}>Live preview pending — generate an embed URL via NotionHero or Notion's own Share → Publish → Embed this page, then drop it into the `embedUrl` prop.</div>
           <span style={{fontSize:12,color:"var(--plum)",fontFamily:"var(--l)",fontWeight:600}}>Open full document in Notion ↗</span>
         </div>
       </a>
     );
   }
   return(
-    <div className="emw" style={{height:height+48}}>
+    <div className="emw" style={{height:height+48,position:"relative"}}>
+      {!loaded&&(
+        <div style={{position:"absolute",inset:0,zIndex:1,background:"var(--cream)",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}>
+          <div style={{width:24,height:24,border:"3px solid var(--rule)",borderTopColor:"var(--plum)",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
+          <span style={{fontSize:11,color:"var(--ink-mu)",fontFamily:"var(--l)"}}>Loading document…</span>
+        </div>
+      )}
       <div className="eml"><LogoSVG tool="Notion" size={16}/>{title}</div>
       <a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a>
-      <iframe src={embedUrl} className="emf" style={{height}} title={title} loading="lazy"/>
+      <iframe src={embedUrl} className="emf" style={{height}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
     </div>
   );
 }
@@ -941,6 +971,21 @@ function KitchenCard(){
 function Img({src,alt="",style={}}){return <img src={src} alt={alt} style={{display:"block",...style}} onError={e=>{e.target.style.opacity=".3";}}/>;}
 function MockRow({imgs,h=180}){return <div style={{display:"flex",gap:8,height:h,justifyContent:"center",alignItems:"center",padding:"0 8px"}}>{imgs.map(([src,w],i)=><div key={i} style={{width:w,height:"100%",flexShrink:0,borderRadius:8,overflow:"hidden",border:"1px solid rgba(34,29,25,.1)",boxShadow:"0 4px 14px rgba(34,29,25,.1)"}}><Img src={src} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/></div>)}</div>;}
 
+function LoadingIframe({src,title,style={}}){
+  const[loaded,setLoaded]=useState(false);
+  return(
+    <div style={{position:"absolute",inset:0,width:"100%",height:"100%"}}>
+      {!loaded&&(
+        <div style={{position:"absolute",inset:0,zIndex:2,background:"var(--cream)",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}>
+          <div style={{width:24,height:24,border:"3px solid var(--rule)",borderTopColor:"var(--plum)",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
+          <span style={{fontSize:11,color:"var(--ink-mu)",fontFamily:"var(--l)"}}>Loading…</span>
+        </div>
+      )}
+      <iframe src={src} style={{width:"100%",height:"100%",border:"none",...style}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
+    </div>
+  );
+}
+
 function CarouselVideo({src,cardW=160,cardH=340}){
   const ref=useRef(null);
   const[hov,setHov]=useState(false);
@@ -994,6 +1039,48 @@ function CarouselVideo({src,cardW=160,cardH=340}){
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function AutoScrollFrame({src}){
+  const ref=useRef(null);
+  const hovRef=useRef(false);
+  const rafRef=useRef(null);
+  const dirRef=useRef(1);
+
+  const startLoop=()=>{
+    const el=ref.current;
+    if(!el)return;
+    if(rafRef.current)cancelAnimationFrame(rafRef.current);
+    el.scrollTop=0;
+    dirRef.current=1;
+    const step=()=>{
+      if(el){
+        const max=el.scrollHeight-el.clientHeight;
+        if(max>2&&!hovRef.current){
+          el.scrollTop+=0.5*dirRef.current;
+          if(dirRef.current===1&&el.scrollTop>=max-1)dirRef.current=-1;
+          else if(dirRef.current===-1&&el.scrollTop<=1)dirRef.current=1;
+        }
+      }
+      rafRef.current=requestAnimationFrame(step);
+    };
+    rafRef.current=requestAnimationFrame(step);
+  };
+
+  useEffect(()=>{
+    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
+  },[]);
+
+  return(
+    <div ref={ref}
+      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
+      onMouseEnter={()=>hovRef.current=true}
+      onMouseLeave={()=>hovRef.current=false}
+      onClick={()=>window.open(src,"_blank")}>
+      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}
+        onLoad={startLoop}/>
     </div>
   );
 }
@@ -1052,53 +1139,11 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
   );
 }
 
-function AutoScrollFrame({src}){
-  const ref=useRef(null);
-  const hovRef=useRef(false);
-  const rafRef=useRef(null);
-  const dirRef=useRef(1);
-
-  const startLoop=()=>{
-    const el=ref.current;
-    if(!el)return;
-    if(rafRef.current)cancelAnimationFrame(rafRef.current);
-    el.scrollTop=0;
-    dirRef.current=1;
-    const step=()=>{
-      if(el){
-        const max=el.scrollHeight-el.clientHeight;
-        if(max>2&&!hovRef.current){
-          el.scrollTop+=0.5*dirRef.current;
-          if(dirRef.current===1&&el.scrollTop>=max-1)dirRef.current=-1;
-          else if(dirRef.current===-1&&el.scrollTop<=1)dirRef.current=1;
-        }
-      }
-      rafRef.current=requestAnimationFrame(step);
-    };
-    rafRef.current=requestAnimationFrame(step);
-  };
-
-  useEffect(()=>{
-    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
-  },[]);
-
-  return(
-    <div ref={ref}
-      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
-      onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}
-      onClick={()=>window.open(src,"_blank")}>
-      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}
-        onLoad={startLoop}/>
-    </div>
-  );
-}
-
 function DashModal(){return(<>
   {/* HEADER — Occupancy Heatmap at 67% zoom */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0A1A18,#0D2020)"}}>
     <div style={{position:"absolute",inset:0,width:"150%",height:"150%",marginLeft:"-25%",transform:"scale(0.67)",transformOrigin:"top center"}}>
-      <iframe src="https://v0-occupancy-heatmap-dashboard.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Occupancy Heatmap Dashboard" loading="lazy"/>
+      <LoadingIframe src="https://v0-occupancy-heatmap-dashboard.vercel.app/" title="Occupancy Heatmap Dashboard"/>
     </div>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>Occupancy Heat Map Dashboard</div>
     <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
@@ -1187,7 +1232,7 @@ function LandCarousel({images}){
 
 function CASAModal(){return(<>
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#071814,#0A2420)"}}>
-    <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" style={{width:"100%",height:"100%",border:"none"}} title="CASA PRD" loading="lazy"/>
+    <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" title="CASA PRD"/>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>CASA Community App — PRD</div>
     <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
@@ -1222,7 +1267,7 @@ function ParentModal(){
   return(<>
     {/* HEADER — PRD embed */}
     <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
-      <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" style={{width:"100%",height:"100%",border:"none"}} title="Parent App PRD" loading="lazy"/>
+      <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" title="Parent App PRD"/>
       <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — Specs</div>
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
@@ -1258,7 +1303,7 @@ function LMSModal(){return(<>
   {/* HEADER — prototype instead of images */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#050E0C,#091A14)"}}>
     <div style={{position:"absolute",inset:0,transform:"scale(0.9)",transformOrigin:"top center",width:"112%",height:"112%",marginLeft:"-6%"}}>
-      <iframe src="https://v0-leave-management-prototype-sand.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="LMS Prototype" loading="lazy"/>
+      <LoadingIframe src="https://v0-leave-management-prototype-sand.vercel.app/" title="LMS Prototype"/>
     </div>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>LMS Prototype</div>
     <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
@@ -1318,7 +1363,7 @@ function B2BModal(){return(<>
   {/* HEADER — B2B Customer Record prototype at 80% zoom */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0E0606,#1C0A0A)"}}>
     <div style={{position:"absolute",inset:0,width:"125%",height:"125%",marginLeft:"-12.5%",transform:"scale(0.8)",transformOrigin:"top center"}}>
-      <iframe src="https://v0-b2-b-customer-record.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="B2B Customer Record" loading="lazy"/>
+      <LoadingIframe src="https://v0-b2-b-customer-record.vercel.app/" title="B2B Customer Record"/>
     </div>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>B2B Customer Record</div>
     <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
@@ -1637,6 +1682,9 @@ export default function Portfolio(){
   const[activeCS,setActiveCS]=useState(null);
   const[activeAnalysis,setActiveAnalysis]=useState(null);
   const[toastMsg,showToast]=useToast();
+  useResponsiveZoom();
+  return(
+    <div id="zoom-scale-root">);
   return(
     <div>
       <GlobalCSS/>
