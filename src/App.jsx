@@ -658,7 +658,7 @@ function CaseGrid({cases,onClickCase}){
 
 // ─── MORE WORK ─────────────────────────────────────────────────────────────────
 const MORE=[
-  {title:"Consumer App Redesign",tags:["Engagement & VAS"],desc:"Identified the need for a visual overhaul and led redesign direction alongside the designer — giving the HooLiv consumer app the fresh, contemporary look it needed.",imgs:[SS.smartprep,SS.vasList,SS.vasServices],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(40,30,50,.93)","--sm":"rgba(40,30,50,.5)","--sch":"rgba(40,30,50,.97)","--smh":"rgba(40,30,50,.82)"}},
+  {title:"Design Direction & Consistency",tags:["Engagement & VAS"],desc:"Led visual redesign direction for the HooLiv consumer app and currently drive design-system consistency — typography, spacing, hierarchy — across the company website revamp, translating brand intent into UI decisions.",imgs:[SS.smartprep,SS.vasList,SS.vasServices],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(40,30,50,.93)","--sm":"rgba(40,30,50,.5)","--sch":"rgba(40,30,50,.97)","--smh":"rgba(40,30,50,.82)"}},
   {title:"Readers' Hub · upGrad GenAI · Exam Prep",tags:["Engagement & VAS"],desc:"End-to-end ownership across three VAS integrations — partner onboarding, full product scope, and GTM rollout. ~20% lift in service adoption and engagement.",imgs:[SS.bookR,SS.readersHub,SS.upgradCard,SS.acadza],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.5)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"}},
   {title:"Room Allotment Engine",tags:["Allocation Systems"],desc:"Policy-driven allocation replacing manual room assignment — affinity-based auto-allocation using student demographic and interest data, through a unified Occupancy Heat Map interface. PRD and prototype complete.",imgs:[SS.roomAlloc],tools:["ChatGPT","Figma","v0"],prdUrl:"https://vaanig-spring-boa-26a.notion.site/2d900c0515c4801a89bfc34709afbe58",prdEmbedUrl:"https://vaanig-spring-boa-26a.notion.site/ebd//2d900c0515c4801a89bfc34709afbe58",sc:{"--sc":"rgba(56,42,12,.93)","--sm":"rgba(56,42,12,.5)","--sch":"rgba(56,42,12,.97)","--smh":"rgba(56,42,12,.82)"}},
 ];
@@ -1471,15 +1471,13 @@ function AnalysisModal({item,onClose}){
         {/* Header — embed preview fills the full placeholder area */}
         <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0D0D18,#181828)"}}>
           {item.sheetUrl?(
-            <iframe
+            <LoadingIframe
               src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")}
-              style={{width:"100%",height:"100%",border:"none"}}
-              title="Sheet Preview" loading="lazy"/>
+              title="Sheet Preview"/>
           ):item.embedLink?(
-            <iframe
+            <LoadingIframe
               src={item.embedLink}
-              style={{width:"100%",height:"100%",border:"none"}}
-              title="Notion Preview" loading="lazy"/>
+              title="Notion Preview"/>
           ):(
             <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
               <LogoSVG tool="Notion" size={64}/>
@@ -1685,8 +1683,6 @@ export default function Portfolio(){
   useResponsiveZoom();
   return(
     <div id="zoom-scale-root">
-  return(
-    <div>
       <GlobalCSS/>
       <Toast msg={toastMsg}/>
       <Nav/>
