@@ -1043,48 +1043,91 @@ function CarouselVideo({src,cardW=160,cardH=340}){
   );
 }
 
-function AutoScrollFrame({src}){
-  const ref=useRef(null);
-  const hovRef=useRef(false); //try removing the whole pause on hover functionality next time if it still doesn't bounce
-  const rafRef=useRef(null);
-  const dirRef=useRef(1);
-  //const lastTimeRef = useRef(null); ChatGPT
+function AutoScrollFrame({src}) {
+  const ref = useRef(null);
+  const rafRef = useRef(null);
+  const dirRef = useRef(1);
+  const lastTimeRef = useRef(null);
 
-  const SPEED = 28; // pixels per second added by ChatGPT, independent of browser's animation frequency. 28 px/second, regardless of whether the browser is rendering at 60 FPS, 120 FPS, etc.
+  const SPEED = 28; // pixels per second
 
-  const startLoop=()=>{
-    const el=ref.current;
-    if(!el)return;
-    if(rafRef.current)cancelAnimationFrame(rafRef.current);
-    el.scrollTop=0;
-    dirRef.current=1;
-    //lastTimeRef.current = null; ChatGPT
-    const step=()=>{
-      if(el){
-        const max=el.scrollHeight-el.clientHeight;
-        if(max>2&&!hovRef.current){
-          //el.scrollTop+=0.5*dirRef.current;
-          if(dirRef.current===1&&el.scrollTop>=max-1)dirRef.current=-1;
-          else if(dirRef.current===-1&&el.scrollTop<=1)dirRef.current=1;
+  const startLoop = () => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+
+    el.scrollTop = 0;
+    dirRef.current = 1;
+    lastTimeRef.current = null;
+
+    const step = (time) => {
+      if (!el) return;
+
+      const max = el.scrollHeight - el.clientHeight;
+
+      if (max > 2) {
+        if (lastTimeRef.current === null) {
+          lastTimeRef.current = time;
+        }
+
+        const delta = (time - lastTimeRef.current) / 1000;
+        lastTimeRef.current = time;
+
+        el.scrollTop += SPEED * delta * dirRef.current;
+
+        // Reached bottom → reverse
+        if (dirRef.current === 1 && el.scrollTop >= max) {
+          el.scrollTop = max;
+          dirRef.current = -1;
+        }
+
+        // Reached top → reverse
+        else if (dirRef.current === -1 && el.scrollTop <= 0) {
+          el.scrollTop = 0;
+          dirRef.current = 1;
         }
       }
-      rafRef.current=requestAnimationFrame(step);
+
+      rafRef.current = requestAnimationFrame(step);
     };
-    rafRef.current=requestAnimationFrame(step);
+
+    rafRef.current = requestAnimationFrame(step);
   };
 
-  useEffect(()=>{
-    return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
-  },[]);
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
-  return(
-    <div ref={ref}
-      style={{width:"100%",height:"100%",overflowY:"auto",scrollbarWidth:"none",cursor:"pointer"}}
-      onMouseEnter={()=>hovRef.current=true}
-      onMouseLeave={()=>hovRef.current=false}
-      onClick={()=>window.open(src,"_blank")}>
-      <img src={src} alt="" style={{width:"100%",height:"auto",display:"block"}}
-        onLoad={startLoop}/>
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: "100%",
+        height: "100%",
+        overflowY: "auto",
+        overflowX: "hidden",
+        scrollbarWidth: "none",
+        cursor: "pointer"
+      }}
+      onClick={() => window.open(src, "_blank")}
+    >
+      <img
+        src={src}
+        alt=""
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "block"
+        }}
+        onLoad={startLoop}
+      />
     </div>
   );
 }
