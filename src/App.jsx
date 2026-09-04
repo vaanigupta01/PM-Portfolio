@@ -1,59 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-
-// ─── IMAGE PATHS — upload originals to /public/images/ in your Cloudflare project ───
-// RENAME MAP (your upload filename → clean name for /public/images/):
-//  Vaani PM Portfolio.jpg                     → vaani.jpg
-//  1781394291519_image.png                    → coll-dash-1.jpg
-//  1781394378793_image.png                    → coll-dash-2.jpg
-//  1781394792256_image.png                    → coll-dash-3.jpg
-//  1781394848235_image.png                    → coll-dash-4.jpg
-//  1781393798827_image.png                    → unit-eco-1.jpg
-//  1781393866117_image.png                    → unit-eco-2.jpg
-//  1781394106974_image.png                    → unit-eco-3.jpg
-//  1780790877741_image.png                    → casa-first-screen.jpg
-//  Screenshot_20260605_184140_Casa.jpg        → casa-onboard.jpg
-//  Screenshot_20260605_184246_Casa.jpg        → casa-events.jpg
-//  Screenshot_20260605_184459_Casa.jpg        → casa-ev-detail.jpg
-//  Screenshot_20260605_184659_Casa.jpg        → casa-perks.jpg
-//  Screenshot_20260605_184721_Casa.jpg        → casa-blog.jpg
-//  1780791200578_image.png                    → casa-crm-1.jpg
-//  1780791247351_image.png                    → casa-crm-2.jpg
-//  1780791291146_image.png                    → casa-crm-3.jpg
-//  1780791376251_image.png                    → casa-crm-4.jpg
-//  Screenshot_20260604_175515_My_HooLiv.jpg   → parent-home.jpg
-//  1780786151063_image.png                    → parent-home2.jpg
-//  1780786629551_image.png                    → parent-pay.jpg
-//  1780786941118_image.png                    → outpass-tenant.jpg
-//  1780790705736_image.png                    → outpass-detail.jpg
-//  1780791742803_Screenshot_*_HooLiv_Suite.jpg → lms-dash.jpg
-//  1780791762566_Screenshot_*_HooLiv_Suite.jpg → lms-record.jpg
-//  1780791778253_Screenshot_*_HooLiv_Suite.jpg → lms-history.jpg
-//  1780791787338_Screenshot_*_HooLiv_Suite.jpg → lms-manage.jpg
-//  1781364079979_image.png                    → b2b-crm-1.jpg
-//  1781364178567_image.png                    → b2b-crm-2.jpg
-//  1781384586596_Landing_Page_*.png           → readers-hub.jpg
-//  1781385368702_*.jpg                        → upgrad-card.jpg
-//  1781385374816_image.png                    → vas-services.jpg
-//  1781385473321_Screenshot_*.jpg             → acadza.jpg
-//  SmartPrep_Carousel__1_.png                 → smartprep.jpg
-//  1777974605769_image.png                    → comp-grid-hooliv.jpg
-//  1781871938338_image.png                    → comp-grid-wedding.jpg
-//  1781871743724_image.png                    → room-alloc.jpg
-// ─── NOTION EMBEDS — ACTION NEEDED FOR LIVE PREVIEWS ──────────────────────────
-// Raw notion.site URLs CANNOT be iframed directly (Notion sets X-Frame-Options
-// that silently blocks embedding — no error fires, you'd just see a blank box).
-// To make each PRD/case-study preview actually render inline, generate a wrapper
-// URL using ONE of these (both free):
-//   A) Notion's own official embed (recommended, no third party):
-//      Open the page in Notion → Share → Publish → "Embed this page" → Copy code
-//      → grab the `src="..."` value from the iframe snippet they give you.
-//   B) NotionHero (notionhero.io/guides/embeds):
-//      Paste your public notion.site URL → it returns a src like
-//      https://e.notionhero.io/e1/p/{id} → use that.
-// Then pass it as the `embedUrl` prop on the matching <NotionEmbed> call below
-// (search for "NotionEmbed" — there are 6 calls, one per PRD/case study).
-// Until you do this, each one renders a clean fallback card that links out —
-// fully functional, just not an inline live preview.
 const SS = {
   vaani:"/images/vaani.jpg", collDash1:"/images/coll-dash-1.jpg", collDash2:"/images/coll-dash-2.jpg",
   collDash3:"/images/coll-dash-3.jpg", collDash4:"/images/coll-dash-4.jpg",
@@ -79,7 +24,6 @@ const SS = {
 
 // ─── LOGOS ────────────────────────────────────────────────────────────────────
 function LogoSVG({tool,size=22}){
-  // Sources: lobehub unpkg CDN for AI tools, official CDNs for others
   const BASE="https://unpkg.com/@lobehub/icons-static-svg@latest/icons/";
   const logos={
     "ChatGPT": BASE+"openai.svg",
@@ -130,24 +74,6 @@ function ParallaxLayer({speed=0.2,children,style={}}){
   const y=useParallax();
   return <div style={{transform:`translate3d(0,${y*speed}px,0)`,willChange:"transform",...style}}>{children}</div>;
 }
-function useResponsiveZoom(designWidth=1400){
-  useEffect(()=>{
-    const apply=()=>{
-      const w=window.innerWidth;
-      const target=document.getElementById("zoom-scale-root");
-      if(!target)return;
-      if(w<=1024){
-        const ratio=Math.min(1,w/designWidth*1.55); // 1.55 compensates for content not needing full 1400px on mobile
-        target.style.zoom=ratio;
-      }else{
-        target.style.zoom=1;
-      }
-    };
-    apply();
-    window.addEventListener("resize",apply);
-    return()=>window.removeEventListener("resize",apply);
-  },[designWidth]);
-}
 function useInView(t=0.12){
   const ref=useRef(null);
   useEffect(()=>{
@@ -196,7 +122,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;min-width:max-content;width:100%;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .nl{font-family:var(--h);font-size:21px;font-weight:600;color:var(--ink);}.nl span{color:var(--plum);font-style:italic;}
-.nlinks{display:flex;gap:30px;align-items:center;}
+.nlinks-desktop{display:flex;gap:30px;align-items:center;}
 .na{font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;color:var(--ink-mu);text-decoration:none;cursor:pointer;transition:color .2s;}.na:hover{color:var(--plum);}
 .nc{background:var(--ink);color:var(--iv);padding:9px 20px;border-radius:30px;font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;text-decoration:none;transition:all .2s;}.nc:hover{background:var(--plum);}
 .toast{position:fixed;bottom:36px;left:50%;background:var(--ink);color:var(--iv);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:300;animation:tIn .25s ease;box-shadow:0 12px 32px rgba(0,0,0,.2);}
@@ -301,7 +227,6 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;justify-content:space-between;align-items:center;}
 .ftn{font-family:var(--h);font-size:24px;font-weight:600;color:white;margin-bottom:3px;}.fts{font-size:13px;color:rgba(250,247,241,.55);font-weight:300;}
 .ftl{display:flex;gap:16px;align-items:center;}.fta{font-size:12.5px;color:rgba(250,247,241,.7);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px;cursor:pointer;}.fta:hover{color:var(--coral);}
-
 @media(max-width:1024px){
   .hero,.abg{grid-template-columns:1fr;padding:92px 32px 48px;gap:36px;}
   nav{padding:14px 28px;}.csg,.ag{grid-template-columns:1fr;}.feat{grid-column:1;aspect-ratio:4/5;}
@@ -310,14 +235,11 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   footer{flex-direction:column;gap:18px;text-align:center;}
   .hgrv{max-height:none!important;opacity:1!important;margin-top:12px!important;}
 }
-
 @media(max-width:640px){nav{padding:12px 18px;}.hero{padding:72px 18px 40px;}.mg,.wca{grid-template-columns:1fr;}.mob{padding:24px 20px 32px;}.moc{right:18px;}}
-
 @media(min-width:1025px){
   .more-card-desc{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
   .hgc:hover .more-card-desc{-webkit-line-clamp:unset;display:block;}
 }
-
 .nav-mobile-controls{display:none;}
 .nlinks-mobile{display:none;}
 @media(max-width:768px){
@@ -328,32 +250,32 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .nlinks-mobile.open{max-height:300px;padding:12px 20px 20px;}
   .nlinks-mobile .na{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
 }
-
-// ─── Responsiveness by scaling on mobile, Hero BG Spanning, Nav Padding, Fallback for Firefox since it doesn't support zoom ────
+/* ─── Real responsive layout ──────────────────────────────── */
 @media(max-width:1024px){
-  body>*:not(#hero-section){zoom:0.7;}
-  #hero-section .hh{font-size:clamp(28px,6vw,54px)!important;}
-  #hero-section .hs{font-size:15px!important;}
-  nav{font-size:14px!important;padding:12px 20px!important;gap:12px;}
-  .nlinks{gap:16px;}
-  .hgti{font-size:clamp(18px,3vw,26px)!important;}
-  .mot,.moli li,.mosu{font-size:15px!important;}
-  //.hero{min-width:100vw;padding-right:40px;overflow:visible;}
+  nav{padding:14px 24px;}
+  .nlinks-desktop{gap:20px;}
   .blob1,.blob2,.blob3{filter:blur(48px);}
+  .mg{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .bento-scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;justify-content:flex-start!important;}
+  .modal-head-row{flex-direction:column!important;align-items:flex-start!important;gap:14px!important;}
+  .modal-head-tools{text-align:left!important;}
+  .lms-ss-row{flex-wrap:wrap!important;}
+  .lms-ss-row>div{flex:1 1 45%!important;min-width:140px;}
+  .b2b-ss-row{flex-wrap:wrap!important;}
+  .b2b-ss-row>div{flex:1 1 45%!important;min-width:140px;}
+  .about-grid{grid-template-columns:1fr!important;}
+  .kitchen-grid{grid-template-columns:1fr!important;}
 }
 @media(max-width:640px){
-  body>*:not(#hero-section){zoom:0.45;}
-  #hero-section .hh{font-size:clamp(32px,7vw,54px)!important;}
-  #hero-section .hs{font-size:18px!important;}
-  .mot,.moli li,.mosu{font-size:16px!important;}
-}
-@supports not (zoom:1){
-  @media(max-width:1024px){
-    body>*:not(#hero-section){zoom:unset;transform:scale(0.7);transform-origin:top left;width:calc(100% / 0.7);}
-  }
-  @media(max-width:640px){
-    body>*:not(#hero-section){transform:scale(0.45);width:calc(100% / 0.45);}
-  }
+  .hero{padding:88px 20px 40px;}
+  .hh{font-size:clamp(30px,8vw,40px);}
+  .hs{font-size:14px;}
+  .hm{grid-template-columns:1fr 1fr;gap:8px;}
+  .hmt{padding:12px 14px;}
+  .hmn{font-size:24px;}
+  .st{font-size:clamp(24px,6vw,30px);}
+  .lms-ss-row>div,.b2b-ss-row>div{flex:1 1 100%!important;}
+  .moti{font-size:24px;}
 }
 `}</style>;
 
@@ -383,21 +305,18 @@ function Nav(){
   return(
     <nav className={sc?"sc":""}>
       <div className="nl">Vaani <span>Gupta</span></div>
-
       <div className="nlinks-desktop">
         <span className="na" onClick={()=>go("work")}>Work</span>
         <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
         <span className="na" onClick={()=>go("about")}>About</span>
         <a className="nc" href={resumeUrl} target="_blank" rel="noreferrer">View Résumé</a>
       </div>
-
       <div className="nav-mobile-controls">
         <a className="nc" href={resumeUrl} target="_blank" rel="noreferrer">Résumé</a>
         <button className="nav-hamburger" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-
       <div className={`nlinks-mobile${menuOpen?" open":""}`}>
         <span className="na" onClick={()=>go("work")}>Work</span>
         <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
@@ -439,12 +358,6 @@ function Hero(){
 
 // ─── EMBED HELPERS ────────────────────────────────────────────────────────────
 function LinkCTA({label,url,tool}){return <a href={url} target="_blank" rel="noreferrer" className="moln">{tool&&<LogoSVG tool={tool} size={20}/>}{label}</a>;}
-// NotionEmbed: pass `embedUrl` (a NotionHero / Notion-official-embed URL) once you've
-// generated one for this page — see comment block above SS for instructions.
-// Without embedUrl, this renders the safe fallback card immediately (Notion's raw
-// notion.site URLs block iframing via X-Frame-Options, and that failure is SILENT —
-// no onError fires — so we don't even attempt a raw iframe; we go straight to the
-// reliable fallback until a working embedUrl is supplied).
 function NotionEmbed({url,title,embedUrl=null,height=460}){
   const[loaded,setLoaded]=useState(false);
   if(!embedUrl){
@@ -479,10 +392,6 @@ function SheetEmbed({url,label="Sheet",height=280}){
 function SlidesEmbed({url,label="Deck",height=280}){
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
-/*function VideoEmbed({url,height=300}){
-  const id=url.match(/\/d\/([^/]+)/)?.[1];
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleDrive" size={16}/>Walkthrough Video</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={id?`https://drive.google.com/file/d/${id}/preview`:url} className="emf" style={{height}} title="Video" allow="autoplay" loading="lazy"/></div>);
-}*/
 function ProtoEmbed({url,label="Prototype",height=300,tool="v0"}){
   return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
 }
@@ -509,15 +418,13 @@ const PHONE_H=440;
 const LAND_W=496;
 const LAND_H=230;
 const GRID_GAP=20;
-// Separate, larger dimensions for the Product Work CaseGrid specifically —
-// narrower landscape (closes the col1/col2 gap, stops B2B clipping the viewport
-// edge), wider + taller portrait cards (fills the blank space beside LMS),
-// everything scaled up overall per feedback that cards read too small.
+// Separate, larger dimensions for the Product Work CaseGrid specifically narrower landscape (closes the col1/col2 gap, stops B2B clipping the viewport edge),
+// wider + taller portrait cards (fills the blank space beside LMS), everything scaled up overall per feedback that cards read too small.
 const CW_LAND_W=420;
 const CW_LAND_H=270;
 const CW_PHONE_W=280;
 const CW_PHONE_H=500;
- 
+
 function VideoCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
   const vidSrc="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
@@ -553,7 +460,7 @@ function VideoCard({cs,onClick,fillHeight=false}){
     </div>
   );
 }
- 
+
 function PhoneCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
   return(
@@ -574,7 +481,7 @@ function PhoneCard({cs,onClick,fillHeight=false}){
     </div>
   );
 }
- 
+
 function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
   const ref=useInView();
   return(
@@ -603,7 +510,7 @@ function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
     </div>
   );
 }
- 
+
 function CaseCard({cs,onClick}){
   // Route to the right card shape based on case id
   if(cs.id==="parentapp") return <VideoCard cs={cs} onClick={onClick}/>;
@@ -611,7 +518,7 @@ function CaseCard({cs,onClick}){
   if(cs.id==="dashboards"||cs.id==="b2b") return <LandCard cs={cs} onClick={onClick} showPRD={cs.id==="b2b"}/>;
   return null;
 }
- 
+
 function CaseGrid({cases,onClickCase}){
   const dash=cases.find(c=>c.id==="dashboards");
   const casa=cases.find(c=>c.id==="casa");
@@ -662,12 +569,11 @@ const MORE=[
   {title:"Readers' Hub · upGrad GenAI · Exam Prep",tags:["Engagement & VAS"],desc:"End-to-end ownership across three VAS integrations — partner onboarding, full product scope, and GTM rollout. ~20% lift in service adoption and engagement.",imgs:[SS.bookR,SS.readersHub,SS.upgradCard,SS.acadza],tools:["ChatGPT","Figma"],sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.5)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"}},
   {title:"Room Allotment Engine",tags:["Allocation Systems"],desc:"Policy-driven allocation replacing manual room assignment — affinity-based auto-allocation using student demographic and interest data, through a unified Occupancy Heat Map interface. PRD and prototype complete.",imgs:[SS.roomAlloc],tools:["ChatGPT","Figma","v0"],prdUrl:"https://vaanig-spring-boa-26a.notion.site/2d900c0515c4801a89bfc34709afbe58",prdEmbedUrl:"https://vaanig-spring-boa-26a.notion.site/ebd//2d900c0515c4801a89bfc34709afbe58",sc:{"--sc":"rgba(56,42,12,.93)","--sm":"rgba(56,42,12,.5)","--sch":"rgba(56,42,12,.97)","--smh":"rgba(56,42,12,.82)"}},
 ];
- 
+
 function MoreCard({card,fillHeight=false}){
   const ref=useInView();
   const[hov,setHov]=useState(false);
   const isRoom=!!card.prdUrl;
-  // Phone cards for consumer + readers, wide card for room allotment
   const isPhone=!isRoom;
   return(
     <div ref={ref} className="hgc iv" style={{...card.sc,width:"100%",height:"100%",aspectRatio:"unset",borderRadius:18,cursor:"default"}}
@@ -704,7 +610,7 @@ function MoreCard({card,fillHeight=false}){
     </div>
   );
 }
- 
+
 function MoreGrid(){
   const phone=MORE.filter(c=>!c.prdUrl);
   const room=MORE.find(c=>c.prdUrl);
@@ -731,8 +637,7 @@ function WeddingCard(){
   const[startX,setStartX]=useState(0);
   const[startRot,setStartRot]=useState(0);
   const rafRef=useRef(null);
-  const hoverRef=useRef(false); // stable ref for hover state inside RAF
-
+  const hoverRef=useRef(false);
   useEffect(()=>{
     const tick=()=>{
       if(!hoverRef.current){
@@ -742,23 +647,20 @@ function WeddingCard(){
     };
     rafRef.current=requestAnimationFrame(tick);
     return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
-  },[]); // single RAF loop, never restarts
-
+  },[]);
   const setHover=v=>{hoverRef.current=v;setHovering(v);};
-
   const onMouseDown=e=>{setDragging(true);hoverRef.current=true;setStartX(e.clientX);setStartRot(rot);};
   const onMouseMove=e=>{if(!dragging)return;setRot(startRot+(e.clientX-startX)*0.3);};
   const onMouseUp=()=>{setDragging(false);hoverRef.current=hovering;};
   const onTouchStart=e=>{hoverRef.current=true;setDragging(true);setStartX(e.touches[0].clientX);setStartRot(rot);};
   const onTouchMove=e=>{if(!dragging)return;setRot(startRot+(e.touches[0].clientX-startX)*0.3);};
   const onTouchEnd=()=>{hoverRef.current=false;setDragging(false);};
-
   const FACE_COUNT=3;
   const CARD_W=440;
   const CARD_H=290;
-  // Increase radius so faces don't overlap/pierce each other
+   // Increase radius so faces don't overlap/pierce each other
   const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT)));
-
+  
   const cards=[
     {
       id:"personas",label:"User Personas",accent:"#9B2D5E",
@@ -832,10 +734,9 @@ function WeddingCard(){
       )
     }
   ];
-
+  
   return(
     <div ref={ref} className="wc iv" style={{overflow:"visible"}}>
-      {/* HEADER — dark, matches portfolio */}
       <div style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20}}>
         <div>
           <div style={{marginBottom:8}}>
@@ -851,8 +752,6 @@ function WeddingCard(){
           <div style={{fontSize:10,color:"rgba(255,255,255,.4)",marginTop:5,fontWeight:300}}>Discovery experience signal</div>
         </div>
       </div>
-
-      {/* BODY — responsive: stacks on mobile, side-by-side on desktop */}
       <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:28,padding:"24px 32px 28px",alignItems:"center"}}
         className="wed-body-grid">
         <style>{`
@@ -862,8 +761,6 @@ function WeddingCard(){
             .wed-carousel-inner{width:100%!important;}
           }
         `}</style>
-
-        {/* LEFT — problem + research */}
         <div>
           <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--plum)",fontWeight:600,marginBottom:10}}>The Problem</div>
           <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.8,fontWeight:300,marginBottom:10}}>Couples planning weddings navigate a deeply fragmented experience — vendor discovery scattered across Instagram, WeddingWire, and word of mouth; budgets in Google Sheets; timelines across WhatsApp groups.</p>
@@ -882,7 +779,7 @@ function WeddingCard(){
           <LogoRow tools={["ChatGPT","Figma"]} size={22}/>
         </div>
 
-        {/* RIGHT — 3D carousel */}
+        {/*3D carousel */}
         <div style={{width:CARD_W+40,flexShrink:0}} className="wed-carousel-col">
           <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:10,textAlign:"center"}}>Drag or hover to explore</div>
           <div
@@ -941,7 +838,7 @@ function KitchenCard(){
         <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3}}>Kitchen Consumption & Expenditure Stats Engine</div>
       </div>
       <div style={{padding:"24px 32px 28px",background:"var(--paper)"}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:14}}>
+        <div className="kitchen-grid" style={{display:"grid",gridTemplateColumns:"1fr 1.5fr 1fr",gap:14}}>
           <div style={{background:"var(--cream)",border:"1px solid var(--rule)",borderRadius:12,padding:"22px 22px"}}>
             <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--ink-mu)",fontWeight:600,marginBottom:12}}>The Problem</div>
             <p style={{fontSize:13,color:"var(--ink-mid)",lineHeight:1.75,fontWeight:300}}>Kitchen operations across 2 city kitchens were recording data but no one was using it. The data quality problem was upstream, not analytical.</p>
@@ -990,14 +887,12 @@ function CarouselVideo({src,cardW=160,cardH=340}){
   const ref=useRef(null);
   const[hov,setHov]=useState(false);
   const[playing,setPlaying]=useState(true);
-
   useEffect(()=>{
     if(ref.current){
       ref.current.playbackRate=1.15;
       ref.current.play().catch(()=>{});
     }
   },[]);
-
   const togglePlay=e=>{
     e.stopPropagation();
     if(ref.current){
@@ -1005,7 +900,6 @@ function CarouselVideo({src,cardW=160,cardH=340}){
       else{ref.current.pause();setPlaying(false);}
     }
   };
-
   const goFullscreen=e=>{
     e.stopPropagation();
     if(ref.current){
@@ -1013,7 +907,6 @@ function CarouselVideo({src,cardW=160,cardH=340}){
       else if(ref.current.webkitRequestFullscreen)ref.current.webkitRequestFullscreen();
     }
   };
-
   return(
     <div
       style={{width:cardW,height:cardH,borderRadius:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#000",position:"relative",cursor:"pointer"}}
@@ -1042,7 +935,7 @@ function CarouselVideo({src,cardW=160,cardH=340}){
     </div>
   );
 }
-
+      
 function AutoScrollFrame({src}) {
   const ref = useRef(null);
   const rafRef = useRef(null);
@@ -1137,7 +1030,6 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
   const hovRef=useRef(false);
   const dirRef=useRef(1);
   const rafRef=useRef(null);
-
   useEffect(()=>{
     const el=rowRef.current;
     if(!el)return;
@@ -1155,11 +1047,9 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
     rafRef.current=requestAnimationFrame(step);
     return()=>{if(rafRef.current)cancelAnimationFrame(rafRef.current);};
   },[]);
-
   const preImages=before.length>0?before:images;
   const postImages=after;
   const cardStyle={width:cardW,height:cardH,borderRadius:landscape?10:18,overflow:"hidden",border:"2px solid var(--rule)",flexShrink:0,background:"#fff"};
-
   return(
     <div ref={rowRef}
       style={{display:"flex",gap:10,marginTop:16,overflowX:"hidden",scrollbarWidth:"none"}}
@@ -1196,27 +1086,24 @@ function DashModal(){return(<>
     <a href="https://v0-occupancy-heatmap-dashboard.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Analytics & Intelligence · Stakeholder-Led Strategic Discovery</div>
         <h2 className="moti" style={{marginBottom:5}}>Analytics Dashboards Suite</h2>
         <p className="mosu" style={{marginBottom:0}}>Collections · Occupancy · Unit Economics</p>
       </div>
-      <div style={{textAlign:"right",flexShrink:0}}>
+      <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
         <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
         <LogoRow tools={["ChatGPT","v0","Claude","Replit","Excel"]} size={24}/>
       </div>
     </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv operates across thousands of tenants, B2B partners, and multi-layered financial flows spanning 9 cities and 50 properties — but leadership was navigating all of it without a single analytics layer.</p><p>A CRM existed with data tables, but the previous collections MIS within it went largely unused. Analytics, graphs, and actionable insights were completely missing. Occupancy was being checked at an individual city or property level, manually. Unit economics had never been pulled together in one place.</p><p>Founders and region and city heads were making pricing, capacity, and collections decisions without structured data to back them. The gap wasn't a data gap — it was a visibility and synthesis gap.</p></div></div>
     <div className="mose"><h3 className="mosh">My Discovery Process</h3><div className="mot"><p>I structured discovery independently for each dashboard — running stakeholder interviews with the founding team (CEO, CDAIO, CSO, COO) and region and city heads, understanding what decisions each role needed to make and what data would support those decisions. I translated these into dense, structured requirements tables mapping every metric to its calculation logic, data source, visualisation type, and granularity level.</p><p>I then led stakeholder review sessions for every dashboard — presenting the full interactive prototype, walking each stakeholder through every chart and filter, fielding queries, capturing feedback, and aligning on what success looked like before engineering wrote a single line of code. These weren't just sign-offs. They were where assumption mismatches surfaced, operational concepts got refined, and the real decision-making logic got embedded into what I was building.</p></div></div>
-
-    {/* Dashboard screenshots carousel — after Discovery Process */}
     <div className="mose">
       <div style={{borderRadius:10,overflow:"hidden",height:240}}>
         <HorizScrollCarousel images={[SS.collDash1,SS.collDash3,SS.collDash4,SS.unitEco3,SS.unitEco2,SS.collDash2,SS.unitEco1]} cardH={240} cardW={400} landscape/>
       </div>
     </div>
-
     <div className="mose"><h3 className="mosh">What I Built</h3>
       {[{name:"Collections Dashboard",tag:"Live — Phase 1 & 2",desc:"Real-time dues overview — total outstanding, invoiced, collected vs pending, commitment schedules, city-wise breakdown, status distribution, B2B dues by client. Used daily by founders, ops heads, finance, and accounts across 9 cities and 50 properties.",proto:"https://v0-ticket-management-dashboard-seven.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit"},
         {name:"Occupancy MIS Dashboard",tag:"Live — Phase 1",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
@@ -1231,7 +1118,6 @@ function DashModal(){return(<>
         </div>
       ))}
     </div>
-
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>Throughout every build, I serve as the connective tissue between data, design, and the engineering team — translating requirements into implementation logic, making real-time product decisions as edge cases emerge, and maintaining the intent of what each chart is actually supposed to tell its reader.</p><p>I conduct pre-release acceptance testing on every dashboard before it goes live, catching data mapping errors, calculation discrepancies, filter logic issues, and UI inconsistencies. Every dashboard going live goes through the same rigorous pass.</p></div></div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p>The Collections Dashboard — across both phases — is live with real data, used daily across HooLiv's leadership and ops structure. The Unit Economics Dashboard will, for the first time, give HooLiv's founders a real answer to the question that underpins every expansion decision in the coliving business: <strong>are we actually making money per bed?</strong></p></div></div>
   </div>
@@ -1242,11 +1128,9 @@ function LandCarousel({images}){
   const dirRef=useRef(1);
   const hovRef=useRef(false);
   const idxRef=useRef(0);
-
   useEffect(()=>{
     idxRef.current=idx;
   },[idx]);
-
   useEffect(()=>{
     const t=setInterval(()=>{
       if(hovRef.current)return;
@@ -1258,7 +1142,7 @@ function LandCarousel({images}){
     },3000);
     return()=>clearInterval(t);
   },[images.length]);
-
+  
   return(
     <div style={{position:"relative",width:"100%",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)"}}
       onMouseEnter={()=>hovRef.current=true}
@@ -1284,13 +1168,13 @@ function CASAModal(){return(<>
     <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Consumer App + CRM · External Client · Boston</div>
         <h2 className="moti" style={{marginBottom:5}}>CASA Suite</h2>
         <p className="mosu" style={{marginBottom:0}}>~50 screens · Full product ownership</p>
       </div>
-      <div style={{textAlign:"right",flexShrink:0}}>
+      <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
         <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
         <LogoRow tools={["Claude","Replit","Notion"]} size={24}/>
       </div>
@@ -1312,20 +1196,19 @@ function CASAModal(){return(<>
 function ParentModal(){
   const vidSrc="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
   return(<>
-    {/* HEADER — PRD embed */}
     <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
       <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" title="Parent App PRD"/>
       <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — Specs</div>
       <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Retention & Trust · Consumer Product · 5,000+ Users</div>
         <h2 className="moti" style={{marginBottom:5}}>HooLiv Parent App & Outpass System</h2>
         <p className="mosu" style={{marginBottom:0}}>Live and serving 5,000+ tenants and their parents</p>
       </div>
-      <div style={{textAlign:"right",flexShrink:0}}>
+      <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
         <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
         <LogoRow tools={["ChatGPT","Genspark","Notion","Figma"]} size={24}/>
       </div>
@@ -1333,7 +1216,6 @@ function ParentModal(){
       <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>HooLiv houses 5,000+ students across India. Their parents had no digital touchpoint with the accommodation their child was living in — no visibility into payments, no way to receive or act on notices, no connection to the services available. And when a student needed to leave the property for a late outing, a home visit, or an emergency, the approval process was entirely manual — creating accountability gaps and leaving parents with no real peace of mind.</p><p>The problem wasn't just operational or UX friction. It was a trust deficit at scale.</p></div></div>
       <div className="mose"><h3 className="mosh">What I Built</h3>
         <ul className="moli"><li><strong>Outpass Mechanism</strong> — tenants initiate requests; parents approve or reject digitally across outpass types: late outing, home visit, emergency, general. For situations where a parent is unreachable, the warden can coordinate by call and upload a handwritten approval photo as an operational exception path.</li><li><strong>Payment & Dues Tracking</strong> — parents view invoices, balances, and payment history in real time.</li><li><strong>Property Notices</strong> — management pushes hostel, city, or pan-India level updates directly to parents.</li><li><strong>VAS Discovery</strong> — parents can see and explore the services available to their child.</li></ul>
-        {/* Video + SSs horizontal slider — video first, then all app/outpass SSs */}
         <HorizScrollCarousel
           before={[SS.outpassTenant,SS.outpassDetail]}
           videoSrc={vidSrc}
@@ -1347,7 +1229,6 @@ function ParentModal(){
 }
 
 function LMSModal(){return(<>
-  {/* HEADER — prototype instead of images */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#050E0C,#091A14)"}}>
     <div style={{position:"absolute",inset:0,transform:"scale(0.9)",transformOrigin:"top center",width:"112%",height:"112%",marginLeft:"-6%"}}>
       <LoadingIframe src="https://v0-leave-management-prototype-sand.vercel.app/" title="LMS Prototype"/>
@@ -1356,40 +1237,31 @@ function LMSModal(){return(<>
     <a href="https://v0-leave-management-prototype-sand.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Operations & Internal Tools · 0→1</div>
         <h2 className="moti" style={{marginBottom:5}}>Leave Management System</h2>
         <p className="mosu" style={{marginBottom:0}}>~100% adoption · 200+ employees · First org-wide launch</p>
       </div>
-      <div style={{textAlign:"right",flexShrink:0}}>
+      <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
         <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
         <LogoRow tools={["ChatGPT","v0","Replit","Notion"]} size={24}/>
       </div>
     </div>
-    {/* The Problem */}
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>Leave applications happened over WhatsApp. No approval workflow, no record system, no analytics. I identified this as a solvable ops gap — scoped the solution, defined the requirements, and proposed building a proper system.</p><p>Before writing a single requirement, I collaborated with the COO to understand the HR policies that would govern the new system — and where those policies could be made more practical. One example: medical or death certificate uploads were originally required for sick and bereavement leave regardless of duration. I pushed for a more human-centered rule — certificates required only if the leave exceeded 3 days. That kind of policy-to-product translation was baked into the PRD from the start.</p></div></div>
-
-    {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
         <div className="eml"><LogoSVG tool="Notion" size={16}/>Leave Management System — PRD</div>
         <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="Leave Management System — PRD" loading="lazy"/>
       </div>
-    </div>  {/* ← THIS ONE WAS MISSING */}
-
-    {/* What I Built */}
+    </div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <p style={{fontSize:13,color:"var(--ink-mu)",marginBottom:10,fontWeight:300}}>Full-stack LMS across in-ops mobile app and web-based Employee Self-Service Portal, built on Replit:</p>
       <ul className="moli"><li>Multi-type leave calculations and tracking</li><li>Leave application and record management</li><li>Manager approval queues</li><li>Compensatory off mechanics</li><li>Team leave overview</li><li>Attendance regularisation</li><li>Admin analytics panel</li></ul>
     </div>
-
-    {/* The Quality Story */}
     <div className="mose"><h3 className="mosh">The Quality Story</h3><div className="qual"><p>The web portal was built in a delivery-first culture, without a formal PRD, using AI tools directly. When I tested it, the issues were extensive — calculation errors, incorrect logic across leave types, poor UI/UX decisions, API inconsistencies that replicated across the mobile app, and one leave type designed entirely wrong from the ground up.</p><p style={{marginTop:10}}>I caught and documented all of it. On the incorrectly designed leave type, I held firm — shipping wrong calculation logic from day one was not a trade-off worth making. That leave type was pulled from launch scope and queued for correction in the next phase.</p></div></div>
-
-    {/* Screenshots after Quality Story — all 4 in one row, middle aligned */}
     <div className="mose">
-            <div style={{display:"flex",gap:8,alignItems:"center"}}>
+            <div className="lms-ss-row" style={{display:"flex",gap:8,alignItems:"center"}}>
         {[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord].map((s,i)=>(
           <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)"}}>
             <img src={s} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
@@ -1397,39 +1269,32 @@ function LMSModal(){return(<>
         ))}
       </div>
     </div>
-
-    {/* The Launch */}
     <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 200+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
-
-    {/* Impact */}
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~100% adoption</strong> with no prior system in place — the only leave management infrastructure the company has.</p></div></div>
   </div>
 </>);}
 
 function B2BModal(){return(<>
-  {/* HEADER — B2B Customer Record prototype at 80% zoom */}
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0E0606,#1C0A0A)"}}>
-    <div style={{position:"absolute",inset:0,width:"125%",height:"125%",marginLeft:"-12.5%",transform:"scale(0.8)",transformOrigin:"top center"}}>
+    <div style={{position:"absolute",inset:0,width:"125%",height:"125%",marginLeft:"-12.5%",transform:"scale(0.8)",transformOrigin:"top center"}}>   {/* HEADER — B2B Customer Record prototype at 80% zoom */}
       <LoadingIframe src="https://v0-b2-b-customer-record.vercel.app/" title="B2B Customer Record"/>
     </div>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>B2B Customer Record</div>
     <a href="https://v0-b2-b-customer-record.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+    <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
       <div>
         <div className="moov">Revenue Operations · Discovery-Led</div>
         <h2 className="moti" style={{marginBottom:5}}>B2B Customer Invoices Module</h2>
         <p className="mosu" style={{marginBottom:0}}>~10 min saved · Accounts team of 5 · SOP delivered</p>
       </div>
-      <div style={{textAlign:"right",flexShrink:0}}>
+      <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
         <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
         <LogoRow tools={["ChatGPT","v0","Bolt","Notion","Claude"]} size={24}/>
       </div>
     </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>I started with a user interview with the Accounts Head. What I found was a recurring, high-frequency billing process entirely held together by Tally, email, and informal follow-ups — with no transparency, no standardisation, and no structure.</p><p>Region heads raised invoice requests informally. Accounts created invoices manually in Tally and tracked status through a combination of memory and chasing. A business stakeholder interview confirmed the opacity extended upward too — city heads had no invoice visibility, and finance had no B2B billing analytics at all. This was a process that had clearly never been looked at through a product lens.</p></div></div>
-
-    {/* PRD right after Problem */}
     <div className="mose"><h3 className="mosh">PRD</h3>
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
         <div className="eml"><LogoSVG tool="Notion" size={16}/>Invoice Creation & Email Dispatch for B2B Customers — PRD</div>
@@ -1437,29 +1302,22 @@ function B2BModal(){return(<>
       </div>
       <a href="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
     </div>
-
     <div className="mose"><h3 className="mosh">The Opportunity</h3><div className="mot"><p>Integrating B2B invoice creation and dispatch into the CRM would centralise both revenue streams under one system of record — enabling analytics, automation, and future extensions (GST pipeline, reminders, reporting) on top of a unified data layer.</p></div></div>
-
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <ul className="moli"><li><strong>Integrated invoice creation, preview, email dispatch, and tracking</strong> inside the CRM — no Tally dependency.</li><li><strong>Standardised invoice request procedure for region heads</strong> — no more informal back-and-forth.</li><li><strong>Self-serve invoice status visibility for city heads</strong> — no escalation needed.</li><li><strong>Real-time B2B billing analytics for finance and leadership</strong> — a first.</li><li><strong>Comprehensive SOP</strong> — org-wide, covering accounts team workflows and ops staff responsible for city-wise B2B customer invoices.</li></ul>
     </div>
-
-    {/* Invoice Module prototype at 90% zoom after What I Built */}
     <div className="mose">
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:280}}>
-        <div style={{position:"absolute",inset:0,width:"112%",height:"112%",marginLeft:"-6%",transform:"scale(0.9)",transformOrigin:"top center"}}>
+        <div style={{position:"absolute",inset:0,width:"112%",height:"112%",marginLeft:"-6%",transform:"scale(0.9)",transformOrigin:"top center"}}>  {/* Invoice Module prototype at 90% zoom after What I Built */}
           <iframe src="https://v0-invoice-module-requirements.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Invoice Module" loading="lazy"/>
         </div>
         <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>New Invoice — Add, Preview, Send</div>
         <a href="https://v0-invoice-module-requirements.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
       </div>
     </div>
-
     <div className="mose"><h3 className="mosh">How I Led the Build</h3><div className="mot"><p>A region head during the walkthrough and user testing complimented the product for being intuitive — exactly the signal you want from the user you built it for. Iterations are ongoing: recently collaborated with the CFO and Accounts Head to add a Credit Note feature, expanding the module's billing capabilities.</p></div></div>
-
-    {/* Two real product SSs side by side after How I Led the Build */}
     <div className="mose">
-      <div style={{display:"flex",gap:8}}>
+      <div className="b2b-ss-row" style={{display:"flex",gap:8}}>
         <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",cursor:"pointer"}} onClick={()=>window.open(SS.b2b1,"_blank")}>
           <img src={SS.b2b1} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
         </div>
@@ -1468,7 +1326,6 @@ function B2BModal(){return(<>
         </div>
       </div>
     </div>
-
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~10 minutes saved per invoice</strong> for a team of 5. Standardised procedure for region heads. Real-time B2B billing analytics for finance and leadership — none of which existed before.</p></div></div>
   </div>
 </>);}
@@ -1515,7 +1372,6 @@ function AnalysisModal({item,onClose}){
     <div className="mo" onClick={onClose}>
       <div className="modal" onClick={e=>e.stopPropagation()}>
         <button className="moc" onClick={onClose}>×</button>
-        {/* Header — embed preview fills the full placeholder area */}
         <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0D0D18,#181828)"}}>
           {item.sheetUrl?(
             <LoadingIframe
@@ -1539,8 +1395,6 @@ function AnalysisModal({item,onClose}){
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
       )}
-          {/* Type pill overlay */}
-          {/*<div style={{position:"absolute",top:14,left:14,fontFamily:"var(--l)",fontSize:11,letterSpacing:2,textTransform:"uppercase",padding:"5px 14px",borderRadius:20,background:"rgba(155,45,94,.85)",color:"white",border:"1px solid rgba(155,45,94,.6)",fontWeight:700,backdropFilter:"blur(8px)"}}>{item.type}</div>*/}
         </div>
         <div className="mob">
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
@@ -1590,7 +1444,6 @@ function AnalysisCard({item,onClick}){
       </div>
       <div className="hgsc"/>
       <div className="hgpl" style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:1.5,textTransform:"uppercase"}}>{item.type}</div>
-      {/* Sheet / Notion open CTA — top right corner of card */}
       {(item.sheetUrl||item.link)&&(
         <a
           href={item.sheetUrl||item.link}
@@ -1636,7 +1489,6 @@ function IntelSection(){
           .intel-sheet-col iframe{height:240px!important;}
         }
       `}</style>
-      {/* TOP — deck left, info right */}
       <div style={{display:"grid",gridTemplateColumns:`min(${DECK_W}px,100%) 1fr`,gap:32,padding:"32px 40px 28px",alignItems:"start"}} className="intel-top-grid">
         <div className="intel-deck-col">
           <SlidesEmbed url="https://docs.google.com/presentation/d/1KJW4MiMjfGnHi1_yc1tNKRWu2d3taENu/edit" label="Competitive Analysis Deck" height={DECK_H}/>
@@ -1651,12 +1503,9 @@ function IntelSection(){
           </div>
         </div>
       </div>
-
-      {/* EXPANDED PANEL — findings start at deck's lower edge, sheet right */}
       {exp&&(
         <div style={{padding:"0 40px 0"}} className="intel-exp-grid-wrap">
           <div style={{display:"grid",gridTemplateColumns:"1fr min(500px,100%)",gap:32,alignItems:"start"}} className="intel-exp-grid">
-            {/* Left col — findings start at top of this grid row, aligning with deck bottom */}
             <div style={{paddingTop:24,paddingBottom:36}}>
               <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--forest)",fontWeight:600,marginBottom:14}}>Key Findings & Insights</div>
               <ul className="iwli">
@@ -1665,15 +1514,12 @@ function IntelSection(){
                 <li>Funding trajectory, pricing strategy benchmarking, technology adoption, and geographic reach mapped across players — revealing the white space HooLiv is positioned to occupy as the category matures</li>
               </ul>
             </div>
-            {/* Right col — sheet, aligned to top */}
             <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:36}}>
               <SheetEmbed url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/edit" label="Full Research Dataset" height={320}/>
             </div>
           </div>
         </div>
       )}
-
-      {/* CTA */}
       <div style={{padding:"0 40px 20px"}}>
         <button onClick={()=>setExp(!exp)} className="iweb">{exp?"Show less ↑":"See the full breakdown with data ↓"}</button>
       </div>
@@ -1686,17 +1532,14 @@ function AboutWithQuote(){
   const ref=useInView();
   return(
     <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
-      {/* Plum diagonal half — upper left */}
       <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 50% 0, 30% 100%, 0 100%)",zIndex:0}}/>
-      {/* Quote — left side */}
-      <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
+      <div className="about-grid" style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
         <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(26px,2.8vw,40px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.22,letterSpacing:-.5,margin:0}}>
             "Venture into<br/>the overlooked.<br/>Question<br/>the default.<br/>Defy the status quo<br/>with the clarity<br/>to insist<br/>on what is right."
           </blockquote>
           <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
         </div>
-        {/* About — right side */}
         <div style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <div className="ov" style={{marginBottom:11}}>About</div>
           <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
@@ -1708,6 +1551,7 @@ function AboutWithQuote(){
     </section>
   );
 }
+
 function Footer({showToast}){
   return(
     <footer>
@@ -1727,9 +1571,8 @@ export default function Portfolio(){
   const[activeCS,setActiveCS]=useState(null);
   const[activeAnalysis,setActiveAnalysis]=useState(null);
   const[toastMsg,showToast]=useToast();
-  useResponsiveZoom();
   return(
-    <div id="zoom-scale-root">
+    <div>
       <GlobalCSS/>
       <Toast msg={toastMsg}/>
       <Nav/>
@@ -1738,7 +1581,7 @@ export default function Portfolio(){
       <section id="work" style={{padding:"84px 64px"}}>
         <div className="ov">Product Work</div>
         <h2 className="st">Shipped with <em>intent</em></h2>
-        <div style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
+        <div className="bento-scroll-wrap" style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
       <section id="more-work" style={{padding:"72px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
