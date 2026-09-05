@@ -125,7 +125,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .nlinks-desktop{display:flex;gap:30px;align-items:center;}
 .na{font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;color:var(--ink-mu);text-decoration:none;cursor:pointer;transition:color .2s;}.na:hover{color:var(--plum);}
 .nc{background:var(--ink);color:var(--iv);padding:9px 20px;border-radius:30px;font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;cursor:pointer;border:none;text-decoration:none;transition:all .2s;}.nc:hover{background:var(--plum);}
-.toast{position:fixed;bottom:36px;left:50%;background:var(--ink);color:var(--iv);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:300;animation:tIn .25s ease;box-shadow:0 12px 32px rgba(0,0,0,.2);}
+.toast{position:fixed;bottom:36px;left:50%;transform:translate(-50%,0);background:var(--ink);color:var(--iv);padding:12px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:300;animation:tIn .25s ease;box-shadow:0 12px 32px rgba(0,0,0,.2);}
 .hero{min-height:94vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;padding:108px 64px 56px;gap:64px;position:relative;overflow:hidden;background:transparent;}
 .blob{position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;}
 .blob1{width:620px;height:620px;background:radial-gradient(circle,rgba(155,45,94,.42)0%,transparent 68%);top:-160px;right:-80px;animation:bF1 16s ease-in-out infinite;}
@@ -188,7 +188,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .molk{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
 .moln{display:inline-flex;align-items:center;gap:6px;padding:6px 14px 6px 6px;border-radius:28px;border:1px solid var(--rule);background:var(--paper);font-size:12px;font-family:var(--l);color:var(--ink-mu);text-decoration:none;transition:all .2s;cursor:pointer;}.moln:hover{border-color:var(--plum-b);color:var(--plum);}
 .htbl{width:100%;border-collapse:collapse;font-size:12.5px;}.htbl th{background:var(--cream);color:var(--ink-mu);font-family:var(--l);font-size:9.5px;letter-spacing:1px;text-align:left;padding:7px 11px;border-bottom:1px solid var(--rule);text-transform:uppercase;}.htbl td{padding:8px 11px;color:var(--ink-mid);border-bottom:1px solid var(--rule);line-height:1.5;}
-.hb{display:inline-block;padding:2px 8px;border-radius:9px;font-size:9.5px;font-family:var(--l);}.hb.hi{background:rgba(42,92,74,.12);color:var(--forest);}.hb.me{background:rgba(184,134,46,.1);color:var(--gold);}.hb.lo{background:var(--cream);color:var(--ink-mu);}
+.hb{display:inline-block;padding:2px 8px;border-radius:9px;font-size:9.5px;font-family:var(--l);white-space:nowrap;}.hb.hi{background:rgba(42,92,74,.12);color:var(--forest);}.hb.me{background:rgba(184,134,46,.1);color:var(--gold);}.hb.lo{background:var(--cream);color:var(--ink-mu);}
 .ms{font-size:10.5px;font-family:var(--l);color:var(--ink-mu);letter-spacing:.5px;margin-bottom:3px;text-transform:uppercase;font-weight:600;}
 .emw{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--rule);background:var(--cream);}.emf{width:100%;border:none;display:block;}
 .eml{position:absolute;top:10px;left:10px;z-index:2;background:rgba(34,29,25,.8);backdrop-filter:blur(6px);color:white;font-size:10px;font-family:var(--l);padding:4px 10px;border-radius:14px;display:flex;align-items:center;gap:6px;}
@@ -1402,7 +1402,7 @@ function AnalysisModal({item,onClose}){
             {item.linkedinPost&&<a href={item.linkedinPost} target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,fontSize:11,fontFamily:"var(--l)",color:"var(--plum)",textDecoration:"none",fontWeight:600,letterSpacing:.5,textTransform:"uppercase"}}><LogoSVG tool="LinkedIn" size={16}/>LinkedIn Post</a>}
           </div>
           <h2 className="moti">{item.company}</h2>
-          <p className="mosu">{item.title}</p>
+          <p className="mosu" style={{marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>{item.title}</p>
           <div className="mose"><h3 className="mosh">Scenario</h3><div className="mot"><p>{c.scenario}</p></div></div>
           {c.eliminated&&<div className="mose"><h3 className="mosh">Causes Eliminated</h3><div className="mot"><p>{c.eliminated}</p></div></div>}
           {c.approach&&<div className="mose"><h3 className="mosh">My Approach</h3><ul className="moli">{c.approach.map((a,i)=><li key={i}>{a}</li>)}</ul></div>}
@@ -1506,7 +1506,7 @@ function IntelSection(){
       {exp&&(
         <div style={{padding:"0 40px 0"}} className="intel-exp-grid-wrap">
           <div style={{display:"grid",gridTemplateColumns:"1fr min(500px,100%)",gap:32,alignItems:"start"}} className="intel-exp-grid">
-            <div style={{paddingTop:24,paddingBottom:36}}>
+            <div style={{paddingTop:24,paddingBottom:20}}>
               <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--forest)",fontWeight:600,marginBottom:14}}>Key Findings & Insights</div>
               <ul className="iwli">
                 <li>BCG matrix positioning — HooLiv in high-risk/high-reward growth position alongside The Hosteller; ZoloStays in harvest mode with 50K beds across 10 metros</li>
@@ -1514,15 +1514,18 @@ function IntelSection(){
                 <li>Funding trajectory, pricing strategy benchmarking, technology adoption, and geographic reach mapped across players — revealing the white space HooLiv is positioned to occupy as the category matures</li>
               </ul>
             </div>
-            <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:36}}>
+            <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:20,display:"flex",flexDirection:"column",gap:10}}>
               <SheetEmbed url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/edit" label="Full Research Dataset" height={320}/>
+              <button onClick={()=>setExp(!exp)} className="iweb" style={{alignSelf:"flex-end",marginTop:0}}>Show less ↑</button>
             </div>
           </div>
         </div>
       )}
-      <div style={{padding:"0 40px 20px"}}>
-        <button onClick={()=>setExp(!exp)} className="iweb">{exp?"Show less ↑":"See the full breakdown with data ↓"}</button>
-      </div>
+      {!exp&&(
+        <div style={{padding:"0 40px 20px"}}>
+          <button onClick={()=>setExp(!exp)} className="iweb">See the full breakdown with data ↓</button>
+        </div>
+      )}
     </div>
   );
 }
