@@ -333,11 +333,11 @@ function Hero(){
       <ParallaxLayer speed={-0.22} style={{position:"absolute",bottom:0,left:0,zIndex:0,pointerEvents:"none"}}><div className="blob blob2"/></ParallaxLayer>
       <ParallaxLayer speed={0.18} style={{position:"absolute",top:"35%",left:"38%",zIndex:0,pointerEvents:"none"}}><div className="blob blob3"/></ParallaxLayer>
       <ParallaxLayer speed={0.04} style={{position:"relative",zIndex:3}}>
-        <div style={{animation:"fadeUp .6s ease .04s both"}}><div className="hey">Business & Product Manager</div></div>
+        <div style={{animation:"fadeUp .6s ease .04s both"}}><div className="hey">Product Manager</div></div>
         <h1 className="hh" style={{animation:"fadeUp .6s ease .1s both"}}>Brewing product systems with an <em>obsessive quality bar</em> — from discovery to users</h1>
         <p className="hs" style={{animation:"fadeUp .6s ease .16s both"}}>10+ products shipped across consumer apps, internal CRMs, operations tooling and analytics platforms in PropTech and community tech — combining structured discovery, cross-functional execution, and a relentless insistence on getting it right to drive engagement, efficiency, and real outcomes.</p>
         <div className="hm" style={{animation:"fadeUp .6s ease .2s both"}}>
-          {[["10+","Products Shipped"],["5K+","Users on Consumer App"],["~100%","Internal Adoption"],["2×","Published ML Researcher"]].map(([n,l])=>(
+          {[["15+","Features Shipped"],["5K+","Users on Consumer App"],["~100%","Internal Adoption"],["2","ML Research Publications"]].map(([n,l])=>(
             <div className="hmt" key={n}><div className="hmn">{n}</div><div className="hml">{l}</div></div>
           ))}
         </div>
@@ -875,7 +875,7 @@ function LoadingIframe({src,title,style={}}){
       {!loaded&&(
         <div style={{position:"absolute",inset:0,zIndex:2,background:"var(--cream)",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:8}}>
           <div style={{width:24,height:24,border:"3px solid var(--rule)",borderTopColor:"var(--plum)",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
-          <span style={{fontSize:11,color:"var(--ink-mu)",fontFamily:"var(--l)"}}>Loading…</span>
+          <span style={{fontSize:11,color:"var(--ink-mu)",fontFamily:"var(--l)"}}>Loading preview…</span>
         </div>
       )}
       <iframe src={src} style={{width:"100%",height:"100%",border:"none",...style}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
@@ -1252,7 +1252,7 @@ function LMSModal(){return(<>
     <div className="mose"><h3 className="mosh">PRD</h3>
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
         <div className="eml"><LogoSVG tool="Notion" size={16}/>Leave Management System — PRD</div>
-        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="Leave Management System — PRD" loading="lazy"/>
+        <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" style={{height:"calc(100% + 60px)",marginTop:"-1px"}}/>
       </div>
     </div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
@@ -1296,10 +1296,10 @@ function B2BModal(){return(<>
     </div>
     <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>I started with a user interview with the Accounts Head. What I found was a recurring, high-frequency billing process entirely held together by Tally, email, and informal follow-ups — with no transparency, no standardisation, and no structure.</p><p>Region heads raised invoice requests informally. Accounts created invoices manually in Tally and tracked status through a combination of memory and chasing. A business stakeholder interview confirmed the opacity extended upward too — city heads had no invoice visibility, and finance had no B2B billing analytics at all. This was a process that had clearly never been looked at through a product lens.</p></div></div>
     <div className="mose"><h3 className="mosh">PRD</h3>
-      <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
-        <div className="eml"><LogoSVG tool="Notion" size={16}/>Invoice Creation & Email Dispatch for B2B Customers — PRD</div>
-        <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"calc(100% + 60px)",border:"none",display:"block",marginTop:"-1px"}} title="B2B PRD" loading="lazy"/>
-      </div>
+    <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:380,background:"var(--cream)"}}>
+      <div className="eml"><LogoSVG tool="Notion" size={16}/>Invoice Creation & Email Dispatch for B2B Customers — PRD</div>
+      <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" title="B2B PRD" style={{height:"calc(100% + 60px)",marginTop:"-1px"}}/>
+    </div>
       <a href="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
     </div>
     <div className="mose"><h3 className="mosh">The Opportunity</h3><div className="mot"><p>Integrating B2B invoice creation and dispatch into the CRM would centralise both revenue streams under one system of record — enabling analytics, automation, and future extensions (GST pipeline, reminders, reporting) on top of a unified data layer.</p></div></div>
@@ -1435,9 +1435,9 @@ function AnalysisCard({item,onClick}){
     <div ref={ref} className="hgc hg-card-an iv" style={{...item.sc,aspectRatio:"16/10",borderRadius:18}} onClick={onClick}>
       <div className="hgbg">
         {item.sheetUrl?(
-          <iframe src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")} style={{width:"150%",height:"150%",border:"none",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}} title="Sheet" loading="lazy"/>
+          <LoadingIframe src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")} title="Sheet" style={{width:"150%",height:"150%",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}}/>
         ):item.embedLink?(
-          <iframe src={item.embedLink} style={{width:"150%",height:"150%",border:"none",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}} title="Notion Preview" loading="lazy"/>
+          <LoadingIframe src={item.embedLink} title="Notion Preview" style={{width:"150%",height:"150%",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}}/>
         ):(
           <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}><LogoSVG tool="Notion" size={56}/></div>
         )}
@@ -1506,17 +1506,17 @@ function IntelSection(){
       {exp&&(
         <div style={{padding:"0 40px 0"}} className="intel-exp-grid-wrap">
           <div style={{display:"grid",gridTemplateColumns:"1fr min(500px,100%)",gap:32,alignItems:"start"}} className="intel-exp-grid">
-            <div style={{paddingTop:24,paddingBottom:20}}>
+            <div style={{paddingTop:24,paddingBottom:24}}>
               <div style={{fontFamily:"var(--l)",fontSize:10,letterSpacing:2,textTransform:"uppercase",color:"var(--forest)",fontWeight:600,marginBottom:14}}>Key Findings & Insights</div>
               <ul className="iwli">
                 <li>BCG matrix positioning — HooLiv in high-risk/high-reward growth position alongside The Hosteller; ZoloStays in harvest mode with 50K beds across 10 metros</li>
                 <li>Business model analysis — asset-light vs asset-heavy, lease & operate, management contract, BTS models, franchise across players</li>
                 <li>Funding trajectory, pricing strategy benchmarking, technology adoption, and geographic reach mapped across players — revealing the white space HooLiv is positioned to occupy as the category matures</li>
               </ul>
+              <button onClick={()=>setExp(!exp)} className="iweb" style={{marginTop:16}}>Show less ↑</button>
             </div>
-            <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:20,display:"flex",flexDirection:"column",gap:10}}>
+            <div className="intel-sheet-col" style={{paddingTop:24,paddingBottom:24}}>
               <SheetEmbed url="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/edit" label="Full Research Dataset" height={320}/>
-              <button onClick={()=>setExp(!exp)} className="iweb" style={{alignSelf:"flex-end",marginTop:0}}>Show less ↑</button>
             </div>
           </div>
         </div>
@@ -1525,6 +1525,7 @@ function IntelSection(){
         <div style={{padding:"0 40px 20px"}}>
           <button onClick={()=>setExp(!exp)} className="iweb">See the full breakdown with data ↓</button>
         </div>
+      )}
       )}
     </div>
   );
@@ -1548,7 +1549,7 @@ function AboutWithQuote(){
           <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
           <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
           <div className="abs" style={{fontSize:13.5}}>What makes me distinctly good at this: I'm intuitive, a fast learner, a researcher, a strong communicator across both engineering and business stakeholders, and someone who brings genuine product leadership — not just coordination — to every team I work with.</div>
-          <div className="abtg" style={{marginTop:18}}><span className="abt ft">AI-First Workflow</span><span className="abt">B.Tech CSE + MBA</span><span className="abt">2× ML Research Publications</span></div>
+          <div className="abtg" style={{marginTop:18}}><span className="abt ft">AI-First Workflow</span><span className="abt">B.Tech CSE + MBA</span><span className="abt">Published ML Researcher</span></div>
         </div>
       </div>
     </section>
