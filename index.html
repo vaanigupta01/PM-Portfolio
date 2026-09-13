@@ -12,6 +12,26 @@
     <link rel="preconnect" href="https://docs.google.com"/>
     <link rel="prefetch" href="https://docs.google.com/spreadsheets/d/143GPmbdL2iMTBEMTNLzfiVo5NuaknqiU/preview"/>
     <link rel="dns-prefetch" href="https://vercel.app"/>
+    
+   <!-- Microsoft Clarity Tracking + PRD Click Events -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window,document,"clarity","script","yfigdrx2pu");
+
+      // Custom Event Listener for PRD Clicks
+      document.addEventListener("DOMContentLoaded", function() {
+          document.body.addEventListener("click", function(event) {
+              var prdLink = event.target.closest("[data-prd-name]");
+              if (prdLink) {
+                  var prdName = prdLink.getAttribute("data-prd-name");
+                  window.clarity("event", "prd_click", { name: prdName });
+              }
+          });
+      });
+  </script>
   </head>
   <body>
     <div id="root"></div>
