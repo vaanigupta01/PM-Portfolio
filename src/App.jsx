@@ -119,7 +119,7 @@ html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);colo
 @keyframes spin{to{transform:rotate(360deg)}}
 .hero-mesh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;background:radial-gradient(ellipse 55% 65% at 8% 25%,rgba(155,45,94,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 92% 75%,rgba(42,92,74,.22) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 58% 8%,rgba(196,90,50,.18) 0%,transparent 55%);animation:meshDrift 22s ease-in-out infinite;}
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;min-width:max-content;width:100%;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;width:100%;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .nl{font-family:var(--h);font-size:21px;font-weight:600;color:var(--ink);}.nl span{color:var(--plum);font-style:italic;}
 .nlinks-desktop{display:flex;gap:30px;align-items:center;}
@@ -247,8 +247,9 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .nav-mobile-controls{display:flex;align-items:center;gap:10px;}
   .nav-hamburger{display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
   .nlinks-mobile{display:flex;flex-direction:column;align-items:flex-start;gap:0;position:fixed;top:60px;left:0;right:0;background:var(--iv);max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);z-index:99;}
-  .nlinks-mobile.open{max-height:300px;padding:12px 20px 20px;}
+  .nlinks-mobile.open{max-height:300px;padding:12px 20px 4px;}
   .nlinks-mobile .na{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
+  .nlinks-mobile .na:last-child{border-bottom:none;}
 }
 /* ─── Real responsive layout ──────────────────────────────── */
 @media(max-width:1024px){
@@ -278,6 +279,10 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .moti{font-size:24px;}
 }
 `}</style>;
+/* ─── For Excessive side and vertical padding on main sections — mobile override ─────────────────── */
+@media(max-width:640px){
+  .page-section{padding:40px 16px!important;}
+}
 
 // ─── NAV + HERO ───────────────────────────────────────────────────────────────
 function Toast({msg}){if(!msg)return null;return <div className="toast">{msg}</div>;}
@@ -317,6 +322,7 @@ function Nav(){
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
+      {menuOpen&&<div onClick={()=>setMenuOpen(false)} style={{position:"fixed",inset:0,zIndex:98}}/>}
       <div className={`nlinks-mobile${menuOpen?" open":""}`}>
         <span className="na" onClick={()=>go("work")}>Work</span>
         <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
@@ -488,7 +494,7 @@ function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
     <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":LAND_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg">
         {showPRD
-          ? <iframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="B2B PRD"/>
+          ? <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" title="B2B PRD" style={{pointerEvents:"none"}}/>
           : <AutoCarousel images={cs.imgs} interval={2600}/>
         }
       </div>
@@ -590,6 +596,7 @@ function MoreCard({card,fillHeight=false}){
         <a
           href={card.prdUrl}
           target="_blank" rel="noreferrer"
+          data-prd-name="Room_Allotment_Engine"
           onClick={e=>e.stopPropagation()}
           style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
           Open PRD
@@ -1165,7 +1172,7 @@ function CASAModal(){return(<>
   <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#071814,#0A2420)"}}>
     <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//32000c0515c4800f869ed93766eed8e9" title="CASA PRD"/>
     <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>CASA Community App — PRD</div>
-    <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
+        <a href="https://vaanig-spring-boa-26a.notion.site/CASA-Community-App-Product-Requirements-Document-32000c0515c4800f869ed93766eed8e9" target="_blank" rel="noreferrer" data-prd-name="CASA_Community_App_PRD" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
   </div>
   <div className="mob">
     <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
@@ -1199,7 +1206,7 @@ function ParentModal(){
     <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#080820,#101038)"}}>
       <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//2cd00c0515c4805fbdf1ef7fbc592c98" title="Parent App PRD"/>
       <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="Notion" size={16}/>Parent Access Module — Specs</div>
-      <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
+      <a href="https://vaanig-spring-boa-26a.notion.site/Parent-Access-Module-UX-Led-Product-Specification-2cd00c0515c4805fbdf1ef7fbc592c98" target="_blank" rel="noreferrer" data-prd-name="Parent_Access_Module_PRD" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
     </div>
     <div className="mob">
     <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
@@ -1254,6 +1261,7 @@ function LMSModal(){return(<>
         <div className="eml"><LogoSVG tool="Notion" size={16}/>Leave Management System — PRD</div>
         <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//30b00c0515c480b8b5fefe82d73f739d" title="Leave Management System — PRD" style={{height:"calc(100% + 60px)",marginTop:"-1px"}}/>
       </div>
+      <a href="https://vaanig-spring-boa-26a.notion.site/Leave-Management-System-PRD-30b00c0515c480b8b5fefe82d73f739d" target="_blank" rel="noreferrer" data-prd-name="LMS_PRD" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
     </div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
       <p style={{fontSize:13,color:"var(--ink-mu)",marginBottom:10,fontWeight:300}}>Full-stack LMS across in-ops mobile app and web-based Employee Self-Service Portal, built on Replit:</p>
@@ -1300,7 +1308,7 @@ function B2BModal(){return(<>
       <div className="eml"><LogoSVG tool="Notion" size={16}/>Invoice Creation & Email Dispatch for B2B Customers — PRD</div>
       <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" title="B2B PRD" style={{height:"calc(100% + 60px)",marginTop:"-1px"}}/>
     </div>
-      <a href="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" target="_blank" rel="noreferrer" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
+            <a href="https://vaanig-spring-boa-26a.notion.site/Invoice-Creation-Email-Dispatch-for-B2B-Customers-PRD-29300c0515c480fba1f9e714d5955d6a" target="_blank" rel="noreferrer" data-prd-name="B2B_Invoice_PRD" style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11.5,color:"var(--plum)",fontFamily:"var(--l)",textDecoration:"none",fontWeight:600}}>Open full PRD in Notion ↗</a>
     </div>
     <div className="mose"><h3 className="mosh">The Opportunity</h3><div className="mot"><p>Integrating B2B invoice creation and dispatch into the CRM would centralise both revenue streams under one system of record — enabling analytics, automation, and future extensions (GST pipeline, reminders, reporting) on top of a unified data layer.</p></div></div>
     <div className="mose"><h3 className="mosh">What I Built</h3>
@@ -1309,7 +1317,7 @@ function B2BModal(){return(<>
     <div className="mose">
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:280}}>
         <div style={{position:"absolute",inset:0,width:"112%",height:"112%",marginLeft:"-6%",transform:"scale(0.9)",transformOrigin:"top center"}}>  {/* Invoice Module prototype at 90% zoom after What I Built */}
-          <iframe src="https://v0-invoice-module-requirements.vercel.app/" style={{width:"100%",height:"100%",border:"none"}} title="Invoice Module" loading="lazy"/>
+          <LoadingIframe src="https://v0-invoice-module-requirements.vercel.app/" title="Invoice Module"/>
         </div>
         <div className="eml" style={{position:"absolute",top:10,left:10,zIndex:3}}><LogoSVG tool="v0" size={16}/>New Invoice — Add, Preview, Send</div>
         <a href="https://v0-invoice-module-requirements.vercel.app/" target="_blank" rel="noreferrer" className="emo" style={{position:"absolute",top:10,right:10,zIndex:3}}>Open ↗</a>
@@ -1390,6 +1398,7 @@ function AnalysisModal({item,onClose}){
         <a
           href={item.sheetUrl||item.link}
           target="_blank" rel="noreferrer"
+          data-prd-name={item.sheetUrl?`${item.company.replace(/[^a-zA-Z0-9]+/g,'_')}_RCA_Sheet`:`${item.company.replace(/[^a-zA-Z0-9]+/g,'_')}_PRD`}
           style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",backdropFilter:"blur(10px)",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
           {item.sheetUrl?"Open Sheet":"Open PRD"}
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -1448,6 +1457,7 @@ function AnalysisCard({item,onClick}){
         <a
           href={item.sheetUrl||item.link}
           target="_blank" rel="noreferrer"
+          data-prd-name={item.sheetUrl?`${item.company.replace(/[^a-zA-Z0-9]+/g,'_')}_RCA_Sheet`:`${item.company.replace(/[^a-zA-Z0-9]+/g,'_')}_PRD`}
           onClick={e=>e.stopPropagation()}
           style={{position:"absolute",top:14,right:14,zIndex:4,display:"flex",alignItems:"center",gap:5,background:"white",backdropFilter:"blur(10px)",border:"none",color:"var(--ink)",padding:"5px 14px",borderRadius:20,fontSize:10.5,fontFamily:"var(--l)",fontWeight:700,letterSpacing:.4,textDecoration:"none",textTransform:"uppercase",boxShadow:"0 2px 12px rgba(0,0,0,.35)"}}>
           {item.sheetUrl?"Open Sheet":"Open PRD"}
@@ -1582,25 +1592,25 @@ export default function Portfolio(){
       <Nav/>
       <DesktopBanner/>
       <Hero/>
-      <section id="work" style={{padding:"84px 64px"}}>
+      <section id="work" className="page-section" style={{padding:"84px 64px"}}>
         <div className="ov">Product Work</div>
         <h2 className="st">Shipped with <em>intent</em></h2>
         <div className="bento-scroll-wrap" style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
-      <section id="more-work" style={{padding:"72px 64px",background:"var(--cream)"}}>
+      <section id="more-work" className="page-section" style={{padding:"72px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
         <h2 className="st">Also <em>live</em></h2>
         <div className="mg"><MoreGrid/></div>
         <WeddingCard/>
         <KitchenCard/>
       </section>
-      <section id="thinking" style={{padding:"84px 64px"}}>
+      <section id="thinking" className="page-section" style={{padding:"84px 64px"}}>
         <div className="ov">PM Thinking & Analysis</div>
         <h2 className="st">Beyond <em>execution</em></h2>
         <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
-      <section id="intel" style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
+      <section id="intel" className="page-section" style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
       <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
