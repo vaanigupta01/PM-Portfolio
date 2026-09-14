@@ -277,12 +277,9 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .st{font-size:clamp(24px,6vw,30px);}
   .lms-ss-row>div,.b2b-ss-row>div{flex:1 1 100%!important;}
   .moti{font-size:24px;}
+  .page-section{padding:40px 16px!important;}  /*For Excessive side and vertical padding on main sections — mobile override*/
 }
 `}</style>;
-/* ─── For Excessive side and vertical padding on main sections — mobile override ─────────────────── */
-@media(max-width:640px){
-  .page-section{padding:40px 16px!important;}
-}
 
 // ─── NAV + HERO ───────────────────────────────────────────────────────────────
 function Toast({msg}){if(!msg)return null;return <div className="toast">{msg}</div>;}
@@ -548,21 +545,21 @@ function CaseGrid({cases,onClickCase}){
   const containerW=col3X+CW_PHONE_W;
   return(
     <div style={{position:"relative",width:containerW,height:containerH,maxWidth:"100%",marginLeft:"auto",marginRight:"auto"}}>
-      <div style={{position:"absolute",top:dashTop,left:col1X,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16}}>
+      <div style={{position:"absolute",top:dashTop,left:col1X,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16,willChange:"transform"}}>
         <LandCard cs={dash} onClick={()=>onClickCase(dash.id)} fillHeight/>
       </div>
       {/* Swapped: this slot (shorter, col1) now shows LMS instead of CASA */}
-      <div style={{position:"absolute",top:casaTop,left:col1X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16}}>
+      <div style={{position:"absolute",top:casaTop,left:col1X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16,willChange:"transform"}}>
         <PhoneCard cs={lms} onClick={()=>onClickCase(lms.id)} fillHeight/>
       </div>
-      <div style={{position:"absolute",top:parentTop,left:col2X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16}}>
+      <div style={{position:"absolute",top:parentTop,left:col2X,width:CW_PHONE_W,height:CW_PHONE_H,overflow:"hidden",borderRadius:16,willChange:"transform"}}>
         <VideoCard cs={parent} onClick={()=>onClickCase(parent.id)} fillHeight/>
       </div>
       {/* Swapped: this slot (taller, extended, col3) now shows CASA instead of LMS — CASA's long screenshots fit the extra height better */}
-      <div style={{position:"absolute",top:lmsTop,left:col3X,width:CW_PHONE_W,height:lmsH,overflow:"hidden",borderRadius:16}}>
+      <div style={{position:"absolute",top:lmsTop,left:col3X,width:CW_PHONE_W,height:lmsH,overflow:"hidden",borderRadius:16,willChange:"transform"}}>
         <PhoneCard cs={casa} onClick={()=>onClickCase(casa.id)} fillHeight/>
       </div>
-      <div style={{position:"absolute",top:b2bTop,left:b2bLeft,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16}}>
+      <div style={{position:"absolute",top:b2bTop,left:b2bLeft,width:CW_LAND_W,height:CW_LAND_H,overflow:"hidden",borderRadius:16,willChange:"transform"}}>
         <LandCard cs={b2b} onClick={()=>onClickCase(b2b.id)} showPRD fillHeight/>
       </div>
     </div>
@@ -1269,13 +1266,7 @@ function LMSModal(){return(<>
     </div>
     <div className="mose"><h3 className="mosh">The Quality Story</h3><div className="qual"><p>The web portal was built in a delivery-first culture, without a formal PRD, using AI tools directly. When I tested it, the issues were extensive — calculation errors, incorrect logic across leave types, poor UI/UX decisions, API inconsistencies that replicated across the mobile app, and one leave type designed entirely wrong from the ground up.</p><p style={{marginTop:10}}>I caught and documented all of it. On the incorrectly designed leave type, I held firm — shipping wrong calculation logic from day one was not a trade-off worth making. That leave type was pulled from launch scope and queued for correction in the next phase.</p></div></div>
     <div className="mose">
-            <div className="lms-ss-row" style={{display:"flex",gap:8,alignItems:"center"}}>
-        {[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord].map((s,i)=>(
-          <div key={i} style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)"}}>
-            <img src={s} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
-          </div>
-        ))}
-      </div>
+      <HorizScrollCarousel images={[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]}/>
     </div>
     <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 200+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
     <div className="mose"><h3 className="mosh">Impact</h3><div className="imp"><p><strong>~100% adoption</strong> with no prior system in place — the only leave management infrastructure the company has.</p></div></div>
