@@ -92,7 +92,7 @@ function AutoCarousel({images,interval=2600}){
   if(!images.length)return null;
   return(
     <div style={{position:"relative",width:"100%",height:"100%",overflow:"hidden"}}>
-      {images.map((src,x)=><img key={x} src={src} alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",opacity:x===i?1:0,transition:"opacity .7s ease"}}/>)}
+      {images.map((src,x)=><img key={x} src={src} alt="" loading={x===0?"eager":"lazy"} fetchPriority={x===0?"high":"auto"} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",opacity:x===i?1:0,transition:"opacity .7s ease"}}/>)}
       {images.length>1&&<div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4,zIndex:2}}>{images.map((_,x)=><div key={x} style={{width:x===i?14:5,height:5,borderRadius:3,background:x===i?"white":"rgba(255,255,255,.45)",transition:"width .3s"}}/>)}</div>}
     </div>
   );
@@ -106,6 +106,8 @@ const GlobalCSS=()=><style>{`
 :root{--iv:#FAF7F1;--cream:#F1ECE2;--paper:#FFF;--ink:#221D19;--ink-mid:#52483F;--ink-mu:#8C8073;--rule:#E5DDD0;--plum:#9B2D5E;--plum-d:rgba(155,45,94,.08);--plum-b:rgba(155,45,94,.25);--forest:#2A5C4A;--coral:#C45A32;--gold:#8C6A1E;--h:'Fraunces',Georgia,serif;--l:'Space Grotesk',sans-serif;--b:'Inter',sans-serif;}
 html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);color:var(--ink);line-height:1.65;overflow-x:hidden;}
 ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--cream);}::-webkit-scrollbar-thumb{background:var(--plum);border-radius:2px;}
+html,body{max-width:100vw;overflow-x:hidden;} //
+#hero-section{contain:layout paint;}         // Hard containment boundary forced on the whole page, not just the hero
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bF1{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(36px,-26px)scale(1.06)}66%{transform:translate(-18px,14px)scale(.95)}}
 @keyframes bF2{0%,100%{transform:translate(0,0)}33%{transform:translate(-26px,20px)scale(.96)}66%{transform:translate(20px,-12px)scale(1.04)}}
@@ -269,6 +271,7 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
 }
 @media(max-width:640px){
   .hero{padding:88px 20px 40px;}
+  .hg-card-an{aspect-ratio:unset!important;min-height:320px!important;}
   .hh{font-size:clamp(30px,8vw,40px);}
   .hs{font-size:14px;}
   .hm{grid-template-columns:1fr 1fr;gap:8px;}
@@ -278,6 +281,14 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .lms-ss-row>div,.b2b-ss-row>div{flex:1 1 100%!important;}
   .moti{font-size:24px;}
   .page-section{padding:40px 16px!important;}  /*For Excessive side and vertical padding on main sections — mobile override*/
+  .more-grid-inner{grid-template-columns:240px 240px 280px!important;}
+  .wed-header-flex{flex-wrap:wrap!important;}
+  .wed-metric-card{width:100%!important;min-width:0!important;}
+  .about-diagonal-bg{display:none!important;}
+  .about-quote-block{background:var(--plum)!important;padding:56px 28px!important;}
+  .about-copy-block{background:var(--cream)!important;padding:40px 28px 56px!important;}
+  .ftl{flex-direction:column;align-items:center;gap:14px;}
+  .fta{white-space:nowrap;}
 }
 `}</style>;
 
@@ -304,7 +315,7 @@ function Nav(){
   useEffect(()=>{const f=()=>setSc(window.scrollY>40);window.addEventListener("scroll",f);return()=>window.removeEventListener("scroll",f);},[]);
   const go=id=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
   const resumeUrl="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing";
-  return(
+  return(<>
     <nav className={sc?"sc":""}>
       <div className="nl">Vaani <span>Gupta</span></div>
       <div className="nlinks-desktop">
@@ -319,13 +330,14 @@ function Nav(){
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
-      {menuOpen&&<div onClick={()=>setMenuOpen(false)} style={{position:"fixed",inset:0,zIndex:98}}/>}
       <div className={`nlinks-mobile${menuOpen?" open":""}`}>
         <span className="na" onClick={()=>go("work")}>Work</span>
         <span className="na" onClick={()=>go("thinking")}>PM Thinking</span>
         <span className="na" onClick={()=>go("about")}>About</span>
       </div>
     </nav>
+    {menuOpen&&<div onClick={()=>setMenuOpen(false)} style={{position:"fixed",inset:0,zIndex:97}}/>}
+    </>
   );
 }
 function Hero(){
@@ -393,7 +405,7 @@ function SheetEmbed({url,label="Sheet",height=280}){
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function SlidesEmbed({url,label="Deck",height=280}){
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")} className="emf" style={{height}} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")+"&rm=minimal"} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function ProtoEmbed({url,label="Prototype",height=300,tool="v0"}){
   return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
@@ -620,7 +632,7 @@ function MoreGrid(){
   const room=MORE.find(c=>c.prdUrl);
   const MORE_H=420;
   return(
-    <div style={{
+    <div className="more-grid-inner" style={{
       display:"grid",
       gridTemplateColumns:`${PHONE_W}px ${PHONE_W}px 1fr`,
       gridTemplateRows:`${MORE_H}px`,
@@ -659,11 +671,17 @@ function WeddingCard(){
   const onTouchStart=e=>{hoverRef.current=true;setDragging(true);setStartX(e.touches[0].clientX);setStartRot(rot);};
   const onTouchMove=e=>{if(!dragging)return;setRot(startRot+(e.touches[0].clientX-startX)*0.3);};
   const onTouchEnd=()=>{hoverRef.current=false;setDragging(false);};
+  const[cardW,setCardW]=useState(440);
+  useEffect(()=>{
+    const calc=()=>setCardW(Math.max(260,Math.min(440,window.innerWidth-72)));
+    calc();
+    window.addEventListener("resize",calc);
+    return()=>window.removeEventListener("resize",calc);
+  },[]);
   const FACE_COUNT=3;
-  const CARD_W=440;
-  const CARD_H=290;
-   // Increase radius so faces don't overlap/pierce each other
-  const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT)));
+  const CARD_W=cardW;
+  const CARD_H=Math.round(CARD_W*290/440);
+  const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT))); // Increase radius so faces don't overlap/pierce each other
   
   const cards=[
     {
@@ -741,16 +759,16 @@ function WeddingCard(){
   
   return(
     <div ref={ref} className="wc iv" style={{overflow:"visible"}}>
-      <div style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20}}>
+      <div className="wed-header-flex" style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20}}>
         <div>
           <div style={{marginBottom:8}}>
-            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,marginRight:6,background:"rgba(155,45,94,.2)",color:"#D97FA0",border:"1px solid rgba(155,45,94,.35)"}}>Personal Product Work</span>
-            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)"}}>Research Stage</span>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,marginRight:6,background:"rgba(155,45,94,.2)",color:"#D97FA0",border:"1px solid rgba(155,45,94,.35)",whiteSpace:"nowrap"}}>Personal Product Work</span>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3),whiteSpace:"nowrap""}}>Research Stage</span>
           </div>
           <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3,marginBottom:4}}>Wedding Planning Platform</div>
           <p style={{fontSize:13,color:"rgba(255,255,255,.55)",fontWeight:300,maxWidth:480,lineHeight:1.65}}>Addressing vendor-discovery fragmentation for engaged couples — building a matchmaking-algorithm-driven platform.</p>
         </div>
-        <div style={{background:"rgba(155,45,94,.2)",border:"1px solid rgba(155,45,94,.4)",borderRadius:14,padding:"14px 20px",textAlign:"center",flexShrink:0,minWidth:180}}>
+        <div className="wed-metric-card" style={{background:"rgba(155,45,94,.2)",border:"1px solid rgba(155,45,94,.4)",borderRadius:14,padding:"14px 20px",textAlign:"center",flexShrink:0,minWidth:180}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(155,45,94,.8)",marginBottom:6,fontWeight:600}}>Primary Metric</div>
           <div style={{fontFamily:"var(--h)",fontSize:14,fontWeight:600,color:"white",lineHeight:1.35}}>Shortlist-to-booking<br/>conversion rate</div>
           <div style={{fontSize:10,color:"rgba(255,255,255,.4)",marginTop:5,fontWeight:300}}>Discovery experience signal</div>
@@ -838,7 +856,7 @@ function KitchenCard(){
   return(
     <div ref={ref} className="wc iv">
       <div style={{background:"linear-gradient(135deg,#1A0B14,#2D1022)",borderRadius:"18px 18px 0 0",padding:"24px 32px 20px"}}>
-        <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,display:"inline-block",marginBottom:8,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)"}}>Ops & Data Work · Excel-based · Internal Tool</div>
+        <div style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,display:"inline-block",marginBottom:8,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)",whiteSpace:"nowrap"}}>Ops & Data · Excel-based · Internal Tool</div>
         <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3}}>Kitchen Consumption & Expenditure Stats Engine</div>
       </div>
       <div style={{padding:"24px 32px 28px",background:"var(--paper)"}}>
@@ -1265,7 +1283,7 @@ function LMSModal(){return(<>
       <ul className="moli"><li>Multi-type leave calculations and tracking</li><li>Leave application and record management</li><li>Manager approval queues</li><li>Compensatory off mechanics</li><li>Team leave overview</li><li>Attendance regularisation</li><li>Admin analytics panel</li></ul>
     </div>
     <div className="mose"><h3 className="mosh">The Quality Story</h3><div className="qual"><p>The web portal was built in a delivery-first culture, without a formal PRD, using AI tools directly. When I tested it, the issues were extensive — calculation errors, incorrect logic across leave types, poor UI/UX decisions, API inconsistencies that replicated across the mobile app, and one leave type designed entirely wrong from the ground up.</p><p style={{marginTop:10}}>I caught and documented all of it. On the incorrectly designed leave type, I held firm — shipping wrong calculation logic from day one was not a trade-off worth making. That leave type was pulled from launch scope and queued for correction in the next phase.</p></div></div>
-    <div className="mose">
+    <div className="mose" style={{display:"flex",justifyContent:"center"}}>
       <HorizScrollCarousel images={[SS.lmsDash,SS.lmsHistory,SS.lmsManage,SS.lmsRecord]}/>
     </div>
     <div className="mose"><h3 className="mosh">The Launch</h3><div className="mot"><p>I led the first org-wide product walkthrough call — 200+ employees. I demonstrated both the app and the web portal live, walked everyone through all leave types, their specific rules, caveats, and practical edge cases. I owned the pending fixes transparently and set expectations for Phase 2. The CEO acknowledged the work publicly on the org WhatsApp group after the call.</p></div></div>
@@ -1527,7 +1545,6 @@ function IntelSection(){
           <button onClick={()=>setExp(!exp)} className="iweb">See the full breakdown with data ↓</button>
         </div>
       )}
-      )}
     </div>
   );
 }
@@ -1537,15 +1554,15 @@ function AboutWithQuote(){
   const ref=useInView();
   return(
     <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
-      <div style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 50% 0, 30% 100%, 0 100%)",zIndex:0}}/>
+      <div className="about-diagonal-bg" style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 50% 0, 30% 100%, 0 100%)",zIndex:0}}/>
       <div className="about-grid" style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
-        <div style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+        <div className="about-quote-block" style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <blockquote style={{fontFamily:"var(--h)",fontSize:"clamp(26px,2.8vw,40px)",fontStyle:"italic",fontWeight:400,color:"white",lineHeight:1.22,letterSpacing:-.5,margin:0}}>
             "Venture into<br/>the overlooked.<br/>Question<br/>the default.<br/>Defy the status quo<br/>with the clarity<br/>to insist<br/>on what is right."
           </blockquote>
           <div style={{marginTop:28,fontFamily:"var(--l)",fontSize:11,color:"rgba(255,255,255,.5)",letterSpacing:1.5,textTransform:"uppercase"}}>Vaani Gupta</div>
         </div>
-        <div style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+        <div className="about-copy-block" style={{padding:"72px 64px 72px 48px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
           <div className="ov" style={{marginBottom:11}}>About</div>
           <h2 style={{fontFamily:"var(--h)",fontSize:"clamp(22px,2.2vw,30px)",fontWeight:600,color:"var(--ink)",lineHeight:1.18,letterSpacing:-.4,marginBottom:18}}>Championing users. Catalysing systems. <em style={{fontStyle:"italic",color:"var(--plum)",fontWeight:500}}>Honing the craft.</em></h2>
           <p style={{fontSize:13.5,color:"var(--ink-mid)",lineHeight:1.85,fontWeight:300,marginBottom:14}}>My work is systematic, detail-obsessed, and design-considered. I bridge stakeholder alignment, prototyping, and engineering sprints — driving rigorous UAT to catch the critical, pre-release bugs that would break the experience, while shaping the strategic narrative for launch.</p>
@@ -1583,25 +1600,25 @@ export default function Portfolio(){
       <Nav/>
       <DesktopBanner/>
       <Hero/>
-      <section id="work" className="page-section" style={{padding:"84px 64px"}}>
+      <section id="work" className="page-section" style={{padding:"56px 64px"}}>
         <div className="ov">Product Work</div>
         <h2 className="st">Shipped with <em>intent</em></h2>
         <div className="bento-scroll-wrap" style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
-      <section id="more-work" className="page-section" style={{padding:"72px 64px",background:"var(--cream)"}}>
+      <section id="more-work" className="page-section" style={{padding:"48px 64px",background:"var(--cream)"}}>
         <div className="ov">More Shipped Work</div>
         <h2 className="st">Also <em>live</em></h2>
         <div className="mg"><MoreGrid/></div>
         <WeddingCard/>
         <KitchenCard/>
       </section>
-      <section id="thinking" className="page-section" style={{padding:"84px 64px"}}>
+      <section id="thinking" className="page-section" style={{padding:"56px 64px"}}>
         <div className="ov">PM Thinking & Analysis</div>
         <h2 className="st">Beyond <em>execution</em></h2>
         <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
         <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
       </section>
-      <section id="intel" className="page-section" style={{padding:"64px 64px",background:"var(--cream)"}}><IntelSection/></section>
+      <section id="intel" className="page-section" style={{padding:"40px 64px",background:"var(--cream)"}}><IntelSection/></section>
       <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
