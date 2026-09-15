@@ -763,7 +763,7 @@ function WeddingCard(){
         <div>
           <div style={{marginBottom:8}}>
             <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,marginRight:6,background:"rgba(155,45,94,.2)",color:"#D97FA0",border:"1px solid rgba(155,45,94,.35)",whiteSpace:"nowrap"}}>Personal Product Work</span>
-            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3),whiteSpace:"nowrap""}}>Research Stage</span>
+            <span style={{fontFamily:"var(--l)",fontSize:9.5,letterSpacing:1,textTransform:"uppercase",fontWeight:600,padding:"4px 11px",borderRadius:20,background:"rgba(196,90,50,.15)",color:"#E8956A",border:"1px solid rgba(196,90,50,.3)",whiteSpace:"nowrap"}}>Research Stage</span>
           </div>
           <div style={{fontFamily:"var(--h)",fontSize:22,fontWeight:600,color:"white",letterSpacing:-.3,marginBottom:4}}>Wedding Planning Platform</div>
           <p style={{fontSize:13,color:"rgba(255,255,255,.55)",fontWeight:300,maxWidth:480,lineHeight:1.65}}>Addressing vendor-discovery fragmentation for engaged couples — building a matchmaking-algorithm-driven platform.</p>
