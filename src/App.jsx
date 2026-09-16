@@ -123,6 +123,7 @@ html,body{max-width:100vw;overflow-x:hidden;} //
 .iv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease;}.iv.vis{opacity:1;transform:translateY(0);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 56px;display:flex;justify-content:space-between;align-items:center;background:rgba(250,247,241,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--rule);transition:all .3s;flex-wrap:nowrap;width:100%;}
 nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
+nav.nav-hidden{transform:translateY(-100%);}
 .nl{font-family:var(--h);font-size:21px;font-weight:600;color:var(--ink);}.nl span{color:var(--plum);font-style:italic;}
 .nlinks-desktop{display:flex;gap:30px;align-items:center;}
 .na{font-family:var(--l);font-size:12px;letter-spacing:.5px;text-transform:uppercase;font-weight:500;color:var(--ink-mu);text-decoration:none;cursor:pointer;transition:color .2s;}.na:hover{color:var(--plum);}
@@ -228,7 +229,7 @@ nav.sc{background:rgba(250,247,241,.95);padding:12px 56px;}
 .stb{background:rgba(184,134,46,.05);border:1px solid rgba(184,134,46,.16);border-radius:11px;padding:15px 19px;}.stbl{font-family:var(--l);font-size:10px;letter-spacing:1.5px;color:var(--gold);margin-bottom:6px;text-transform:uppercase;font-weight:600;}
 footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;justify-content:space-between;align-items:center;}
 .ftn{font-family:var(--h);font-size:24px;font-weight:600;color:white;margin-bottom:3px;}.fts{font-size:13px;color:rgba(250,247,241,.55);font-weight:300;}
-.ftl{display:flex;gap:16px;align-items:center;}.fta{font-size:12.5px;color:rgba(250,247,241,.7);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px;cursor:pointer;}.fta:hover{color:var(--coral);}
+.ftl{display:flex;gap:16px;align-items:center;}.ftl-row{display:flex;gap:16px;align-items:center;}.fta{font-size:12.5px;color:rgba(250,247,241,.7);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px;cursor:pointer;}.fta:hover{color:var(--coral);}
 @media(max-width:1024px){
   .hero,.abg{grid-template-columns:1fr;padding:92px 32px 48px;gap:36px;}
   nav{padding:14px 28px;}.csg,.ag{grid-template-columns:1fr;}.feat{grid-column:1;aspect-ratio:4/5;}
@@ -248,8 +249,8 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .nlinks-desktop{display:none;}
   .nav-mobile-controls{display:flex;align-items:center;gap:10px;}
   .nav-hamburger{display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--ink);cursor:pointer;padding:6px;}
-  .nlinks-mobile{display:flex;flex-direction:column;align-items:flex-start;gap:0;position:fixed;top:60px;left:0;right:0;background:var(--iv);max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);z-index:99;}
-  .nlinks-mobile.open{max-height:300px;padding:12px 20px 4px;}
+  .nlinks-mobile{display:flex;flex-direction:column;align-items:flex-start;gap:0;position:fixed;top:60px;left:0;right:0;background:var(--iv);max-height:0;overflow:hidden;transition:max-height .3s ease;border-bottom:1px solid var(--rule);z-index:99;padding:0 20px;}
+  .nlinks-mobile.open{max-height:300px;padding-top:12px;padding-bottom:4px;}
   .nlinks-mobile .na{width:100%;padding:12px 0;border-bottom:1px solid var(--rule);}
   .nlinks-mobile .na:last-child{border-bottom:none;}
 }
@@ -271,7 +272,9 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
 }
 @media(max-width:640px){
   .hero{padding:88px 20px 40px;}
+  .pw-card .hgsc{background:linear-gradient(to top,var(--sc,.9)0%,var(--sm,.55)55%,rgba(20,15,12,.15)80%,transparent 92%)!important;}
   .hg-card-an{aspect-ratio:unset!important;min-height:320px!important;}
+  .hg-card-an .hgsc{background:linear-gradient(to top,var(--sc,.9)0%,var(--sm,.55)55%,rgba(20,15,12,.15)80%,transparent 92%)!important;}
   .hh{font-size:clamp(30px,8vw,40px);}
   .hs{font-size:14px;}
   .hm{grid-template-columns:1fr 1fr;gap:8px;}
@@ -285,9 +288,10 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .wed-header-flex{flex-wrap:wrap!important;}
   .wed-metric-card{width:100%!important;min-width:0!important;}
   .about-diagonal-bg{display:none!important;}
-  .about-quote-block{background:var(--plum)!important;padding:56px 28px!important;}
+  .about-quote-block{background:var(--plum)!important;padding:56px 28px!important;text-align:center!important;}
   .about-copy-block{background:var(--cream)!important;padding:40px 28px 56px!important;}
-  .ftl{flex-direction:column;align-items:center;gap:14px;}
+  .ftl{flex-direction:column;align-items:center;gap:10px;}
+  .ftl-row{gap:16px;flex-wrap:wrap;justify-content:center;}
   .fta{white-space:nowrap;}
 }
 `}</style>;
@@ -313,10 +317,28 @@ function Nav(){
   const[sc,setSc]=useState(false);
   const[menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{const f=()=>setSc(window.scrollY>40);window.addEventListener("scroll",f);return()=>window.removeEventListener("scroll",f);},[]);
+  useEffect(()=>{
+    if(!menuOpen)return;
+    const onScroll=()=>setMenuOpen(false);
+    window.addEventListener("scroll",onScroll,{passive:true});
+    return()=>window.removeEventListener("scroll",onScroll);
+  },[menuOpen]);  
   const go=id=>{document.getElementById(id)?.scrollIntoView({behavior:"smooth"});setMenuOpen(false);};
   const resumeUrl="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing";
+  const[navHidden,setNavHidden]=useState(false);
+  const lastY=useRef(0);
+  useEffect(()=>{
+    const onScroll=()=>{
+      const y=window.scrollY;
+      if(y>lastY.current&&y>80)setNavHidden(true);
+      else setNavHidden(false);
+      lastY.current=y;
+    };
+    window.addEventListener("scroll",onScroll,{passive:true});
+    return()=>window.removeEventListener("scroll",onScroll);
+  },[]);  
   return(<>
-    <nav className={sc?"sc":""}>
+    <nav className={`${sc?"sc":""} ${navHidden?"nav-hidden":""}`}>
       <div className="nl">Vaani <span>Gupta</span></div>
       <div className="nlinks-desktop">
         <span className="na" onClick={()=>go("work")}>Work</span>
@@ -405,7 +427,7 @@ function SheetEmbed({url,label="Sheet",height=280}){
   return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function SlidesEmbed({url,label="Deck",height=280}){
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")+"&rm=minimal"} className="emf" style={{height}} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")+"?rm=minimal"} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function ProtoEmbed({url,label="Prototype",height=300,tool="v0"}){
   return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
@@ -444,7 +466,7 @@ function VideoCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
   const vidSrc="/images/Parent App_My HooLiv_Screen_Recording_compressed.mp4";
   return(
-    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
+    <div ref={ref} className="hgc iv pw-card" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg" style={{background:"#000"}}>
         <video poster="/images/parent-pay.jpg"
           autoPlay muted loop playsInline
@@ -479,7 +501,7 @@ function VideoCard({cs,onClick,fillHeight=false}){
 function PhoneCard({cs,onClick,fillHeight=false}){
   const ref=useInView();
   return(
-    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
+    <div ref={ref} className="hgc iv pw-card" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg"><AutoCarousel images={cs.imgs} interval={2400}/></div>
       <div className="hgsc"/>
       <div className="hgpl">{cs.pill}</div>
@@ -500,7 +522,7 @@ function PhoneCard({cs,onClick,fillHeight=false}){
 function LandCard({cs,onClick,showPRD=false,fillHeight=false}){
   const ref=useInView();
   return(
-    <div ref={ref} className="hgc iv" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":LAND_H,borderRadius:22}} onClick={onClick}>
+    <div ref={ref} className="hgc iv pw-card" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":LAND_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg">
         {showPRD
           ? <LoadingIframe src="https://vaanig-spring-boa-26a.notion.site/ebd//29300c0515c480fba1f9e714d5955d6a" title="B2B PRD" style={{pointerEvents:"none"}}/>
@@ -680,7 +702,7 @@ function WeddingCard(){
   },[]);
   const FACE_COUNT=3;
   const CARD_W=cardW;
-  const CARD_H=Math.round(CARD_W*290/440);
+  const CARD_H=420;
   const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT))); // Increase radius so faces don't overlap/pierce each other
   
   const cards=[
@@ -690,13 +712,13 @@ function WeddingCard(){
       body:(
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>3 archetypes · Figma</div>
-          <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
+          <div style={{flex:1,minHeight:140,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
             <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
               style={{width:"100%",height:"100%",border:"none",display:"block"}} loading="lazy" title="User Personas"/>
           </div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+          <div style={{display:"flex",gap:6,overflowX:"auto",flexWrap:"nowrap",marginBottom:8,paddingBottom:2,scrollbarWidth:"none"}}>
             {["Detail-Obsessed Planner","Budget-First Pragmatist","Aesthetics-Led Dreamer"].map((a,i)=>(
-              <span key={i} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)"}}>{a}</span>
+              <span key={i} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)",whiteSpace:"nowrap",flexShrink:0}}>{a}</span>
             ))}
           </div>
           <a href="https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
@@ -1579,10 +1601,14 @@ function Footer({showToast}){
     <footer>
       <div><div className="ftn">Vaani Gupta</div><div className="fts">Designed and built with intention.</div></div>
       <div className="ftl">
-        <span className="fta" onClick={()=>copyEmail(showToast)}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>vaanigupta01@gmail.com</span>
-        <a href="tel:+919663872509" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>+91 96638 72509</a>
-        <a href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer" className="fta">View Résumé</a>
-        <a href="https://linkedin.com/in/vaani-gupta" target="_blank" rel="noreferrer" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>LinkedIn</a>
+        <div className="ftl-row">
+          <span className="fta" onClick={()=>copyEmail(showToast)}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>vaanigupta01@gmail.com</span>
+          <a href="tel:+919663872509" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>+91 96638 72509</a>
+        </div>
+        <div className="ftl-row">
+          <a href="https://drive.google.com/file/d/1gfF4LHM6LbfBHyPb2QUVbxKDF5Giq99R/view?usp=sharing" target="_blank" rel="noreferrer" className="fta">View Résumé</a>
+          <a href="https://linkedin.com/in/vaani-gupta" target="_blank" rel="noreferrer" className="fta"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>LinkedIn</a>
+        </div>
       </div>
     </footer>
   );
