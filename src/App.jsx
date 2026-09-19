@@ -707,7 +707,7 @@ function WeddingCard(){
   },[]);
   const FACE_COUNT=3;
   const CARD_W=cardW;
-  const CARD_H=Math.round(CARD_W*290/440)    ;
+  const CARD_H=cardW<440?Math.max(330,Math.round(CARD_W*290/440)):290;
   const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT))); // Increase radius so faces don't overlap/pierce each other
   
   const cards=[
