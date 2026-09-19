@@ -725,7 +725,6 @@ function WeddingCard(){
             {["Detail-Obsessed Planner","Budget-First Pragmatist","Aesthetics-Led Dreamer"].map((a,i)=>(
               <span key={i} className="wed-figma-tag" style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)"}}>{a}</span>
             ))}
-          </div>  
           </div>
           <a href="https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
             target="_blank" rel="noreferrer"
