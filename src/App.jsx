@@ -287,11 +287,16 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .more-grid-inner{grid-template-columns:240px 240px 280px!important;}
   .wed-header-flex{flex-wrap:wrap!important;}
   .wed-metric-card{width:100%!important;min-width:0!important;}
+  .wed-figma-tags{gap:4px;}
+  .wed-figma-tag{font-size:8.5px!important;padding:2px 7px!important;}
   .about-diagonal-bg{display:none!important;}
   .about-quote-block{background:var(--plum)!important;padding:56px 28px!important;text-align:center!important;}
   .about-copy-block{background:var(--cream)!important;padding:40px 28px 56px!important;}
   .ftl{flex-direction:column;align-items:center;gap:10px;}
   .ftl-row{gap:16px;flex-wrap:wrap;justify-content:center;}
+  .ftl-row:first-child{flex-wrap:nowrap;gap:10px;}
+  .ftl-row:first-child .fta{font-size:11px;gap:4px;}
+  .ftl-row:first-child .fta svg{width:11px;height:11px;}
   .fta{white-space:nowrap;}
 }
 `}</style>;
@@ -702,7 +707,7 @@ function WeddingCard(){
   },[]);
   const FACE_COUNT=3;
   const CARD_W=cardW;
-  const CARD_H=420;
+  const CARD_H=Math.round(CARD_W*290/440)    ;
   const radius=Math.round(CARD_W/(2*Math.tan(Math.PI/FACE_COUNT))); // Increase radius so faces don't overlap/pierce each other
   
   const cards=[
@@ -712,14 +717,15 @@ function WeddingCard(){
       body:(
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>3 archetypes · Figma</div>
-          <div style={{flex:1,minHeight:140,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
+          <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
             <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
               style={{width:"100%",height:"100%",border:"none",display:"block"}} loading="lazy" title="User Personas"/>
           </div>
-          <div style={{display:"flex",gap:6,overflowX:"auto",flexWrap:"nowrap",marginBottom:8,paddingBottom:2,scrollbarWidth:"none"}}>
+          <div className="wed-figma-tags" style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
             {["Detail-Obsessed Planner","Budget-First Pragmatist","Aesthetics-Led Dreamer"].map((a,i)=>(
-              <span key={i} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)",whiteSpace:"nowrap",flexShrink:0}}>{a}</span>
+              <span key={i} className="wed-figma-tag" style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.75)",padding:"3px 10px",borderRadius:12,fontSize:10,fontFamily:"var(--l)"}}>{a}</span>
             ))}
+          </div>  
           </div>
           <a href="https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
             target="_blank" rel="noreferrer"
