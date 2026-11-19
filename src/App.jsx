@@ -83,6 +83,38 @@ function useInView(t=0.12){
   },[]);
   return ref;
 }
+// True once the element is within `margin` px of the viewport. Uses its on-page position rather than
+// IntersectionObserver, because several embeds sit inside clipped/animated cards that IO reports as never visible.
+const nearWatchers=new Set();let nearTick=false;
+function runNear(){nearTick=false;const vh=window.innerHeight;nearWatchers.forEach(w=>w(vh));}
+function queueNear(){if(!nearTick){nearTick=true;requestAnimationFrame(runNear);}}
+if(typeof window!=="undefined"){window.addEventListener("scroll",queueNear,{passive:true,capture:true});window.addEventListener("resize",queueNear,{passive:true});}
+function useNear(margin=500){
+  const ref=useRef(null);
+  const[near,setNear]=useState(false);
+  useEffect(()=>{
+    if(near)return;
+    const check=vh=>{const el=ref.current;if(!el)return;const r=el.getBoundingClientRect();
+      if(r.top<vh+margin&&r.bottom>-margin){nearWatchers.delete(check);setNear(true);}};
+    nearWatchers.add(check);check(window.innerHeight);
+    const t=setTimeout(queueNear,600); // re-check after entrance animations settle
+    return()=>{nearWatchers.delete(check);clearTimeout(t);};
+  },[near,margin]);
+  return[ref,near];
+}
+// Renders a same-sized empty box until the visitor scrolls near, then the real iframe — keeps heavy embeds off the first page load.
+function LazyIframe(props){
+  const[ref,near]=useNear();
+  if(near)return <iframe {...props}/>;
+  const{className,style}=props;
+  return <div ref={ref} className={className} style={style} aria-hidden="true"/>;
+}
+// Same idea for videos: show the poster (or an empty box) until near.
+function LazyVideo({poster,style,children,...rest}){
+  const[ref,near]=useNear();
+  if(near)return <video poster={poster} style={style} {...rest}>{children}</video>;
+  return poster?<img ref={ref} src={poster} alt="" loading="lazy" style={{...style,objectFit:style?.objectFit||"cover"}}/>:<div ref={ref} style={style}/>;
+}
 function useToast(){const[m,setM]=useState(null);const show=x=>{setM(x);setTimeout(()=>setM(null),2200);};return[m,show];}
 function copyEmail(show){navigator.clipboard.writeText("vaanigupta01@gmail.com").then(()=>show("Copied to clipboard ✓")).catch(()=>show("vaanigupta01@gmail.com"));}
 
@@ -101,7 +133,6 @@ function Arrow(){return <svg width="13" height="13" viewBox="0 0 24 24" fill="no
 
 // ─── CSS ──────────────────────────────────────────────────────────────────────
 const GlobalCSS=()=><style>{`
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--iv:#FAF7F1;--cream:#F1ECE2;--paper:#FFF;--ink:#221D19;--ink-mid:#52483F;--ink-mu:#8C8073;--rule:#E5DDD0;--plum:#9B2D5E;--plum-d:rgba(155,45,94,.08);--plum-b:rgba(155,45,94,.25);--forest:#2A5C4A;--coral:#C45A32;--gold:#8C6A1E;--h:'Fraunces',Georgia,serif;--l:'Space Grotesk',sans-serif;--b:'Inter',sans-serif;}
 html{scroll-behavior:smooth;}body{font-family:var(--b);background:var(--iv);color:var(--ink);line-height:1.65;overflow-x:hidden;}
@@ -388,7 +419,7 @@ function Hero(){
         <div className="ph" style={{animation:"fadeUp .6s ease .14s both"}}>
           <div className="ph-fr">
             <div className="ph-bl"/>
-            <div className="ph-in"><img src={SS.vaani} alt="Vaani Gupta"/></div>
+            <div className="ph-in"><img src={SS.vaani} alt="Vaani Gupta" fetchPriority="high"/></div>
             <div className="ph-q"><p>"I research before I decide, prototype before I build, iterate continuously and lead teams through every build with the same clarity I'd want as a user."</p><span>— Vaani Gupta</span></div>
             <a href="https://linkedin.com/in/vaani-gupta" target="_blank" rel="noreferrer" className="li-b"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg></a>
           </div>
@@ -423,19 +454,19 @@ function NotionEmbed({url,title,embedUrl=null,height=460}){
       )}
       <div className="eml"><LogoSVG tool="Notion" size={16}/>{title}</div>
       <a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a>
-      <iframe src={embedUrl} className="emf" style={{height}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
+      <LazyIframe src={embedUrl} className="emf" style={{height}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
     </div>
   );
 }
 function SheetEmbed({url,label="Sheet",height=280}){
   const eu=url.replace(/\/edit.*$/,"/preview")+(url.includes("gid=")?"?"+url.split("?")[1]:"");
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSheets" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><LazyIframe src={eu} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function SlidesEmbed({url,label="Deck",height=280}){
-  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url.replace(/\/edit.*$/,"/embed")+"?rm=minimal"} className="emf" style={{height}} title={label} loading="lazy"/></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool="GoogleSlides" size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><LazyIframe src={url.replace(/\/edit.*$/,"/embed")+"?rm=minimal"} className="emf" style={{height}} title={label} loading="lazy"/></div>);
 }
 function ProtoEmbed({url,label="Prototype",height=300,tool="v0"}){
-  return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><iframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
+  return(<div className="emw"><div className="eml"><LogoSVG tool={tool} size={16}/>{label}</div><a href={url} target="_blank" rel="noreferrer" className="emo">Open ↗</a><LazyIframe src={url} className="emf" style={{height}} title={label} loading="lazy"/><div style={{position:"absolute",bottom:10,right:10,background:"rgba(34,29,25,.72)",color:"white",fontSize:10,fontFamily:"var(--l)",padding:"4px 10px",borderRadius:14,pointerEvents:"none",zIndex:3}}>scroll inside ↕</div></div>);
 }
 
 // ─── CASE CARDS ───────────────────────────────────────────────────────────────
@@ -473,18 +504,18 @@ function VideoCard({cs,onClick,fillHeight=false}){
   return(
     <div ref={ref} className="hgc iv pw-card" style={{...SC[cs.id],width:"100%",height:fillHeight?"100%":PHONE_H,borderRadius:22}} onClick={onClick}>
       <div className="hgbg" style={{background:"#000"}}>
-        <video poster="/images/parent-pay.jpg"
+        <LazyVideo poster="/images/parent-pay.jpg"
           autoPlay muted loop playsInline
           onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.7)}
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",filter:"blur(23px) brightness(.80)",transform:"scale(1.15)"}}>
           <source src={vidSrc} type="video/mp4"/>
-        </video>
-        <video poster="/images/parent-pay.jpg"
+        </LazyVideo>
+        <LazyVideo poster="/images/parent-pay.jpg"
           autoPlay muted loop playsInline
           onLoadedMetadata={(e) => (e.currentTarget.playbackRate = 1.7)}
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"contain"}}>
           <source src={vidSrc} type="video/mp4"/>
-        </video>
+        </LazyVideo>
       </div>
       <div className="hgsc"/>
       <div className="hgpl">{cs.pill}</div>
@@ -622,7 +653,7 @@ function MoreCard({card,fillHeight=false}){
       onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
       <div className="hgbg" style={{background:"#1a1410"}}>
         {isRoom?(
-          <iframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
+          <LazyIframe src={card.prdEmbedUrl} style={{width:"100%",height:"100%",border:"none",pointerEvents:"none"}} loading="lazy" title="Room Allotment PRD"/>
         ):(
           <AutoCarousel images={card.imgs} interval={2800}/>
         )}
@@ -718,7 +749,7 @@ function WeddingCard(){
         <div style={{padding:"14px 18px 16px",height:"100%",display:"flex",flexDirection:"column"}}>
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>3 archetypes · Figma</div>
           <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid rgba(255,255,255,.1)",marginBottom:10}}>
-            <iframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
+            <LazyIframe src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/zCKKC9UBHqBvPcY0qPW2Kz/Wedding-Planning-%E2%80%94-User-Personas?node-id=1-219"
               style={{width:"100%",height:"100%",border:"none",display:"block"}} loading="lazy" title="User Personas"/>
           </div>
           <div className="wed-figma-tags" style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
@@ -742,7 +773,7 @@ function WeddingCard(){
           <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:2,textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:10}}>Benchmarked across market position, features, UX, USP, and social proof</div>
           <div style={{flex:1,borderRadius:8,overflow:"auto",border:"1px solid rgba(255,255,255,.1)",marginBottom:10,scrollbarWidth:"thin",scrollbarColor:"rgba(255,255,255,.25) transparent"}}>
             <div style={{position:"relative"}}>
-              <img src={SS.compGridWedding} alt="Competitor Analysis Grid"
+              <img loading="lazy" decoding="async" src={SS.compGridWedding} alt="Competitor Analysis Grid"
                 style={{width:"135%",height:"auto",display:"block",cursor:"zoom-in"}}
                 onClick={e=>{e.stopPropagation();window.open(SS.compGridWedding,"_blank");}}/>
               <a href={SS.compGridWedding} target="_blank" rel="noreferrer"
@@ -914,7 +945,7 @@ function KitchenCard(){
 }
 
 // ─── MODALS ───────────────────────────────────────────────────────────────────
-function Img({src,alt="",style={}}){return <img src={src} alt={alt} style={{display:"block",...style}} onError={e=>{e.target.style.opacity=".3";}}/>;}
+function Img({src,alt="",style={}}){return <img loading="lazy" decoding="async" src={src} alt={alt} style={{display:"block",...style}} onError={e=>{e.target.style.opacity=".3";}}/>;}
 function MockRow({imgs,h=180}){return <div style={{display:"flex",gap:8,height:h,justifyContent:"center",alignItems:"center",padding:"0 8px"}}>{imgs.map(([src,w],i)=><div key={i} style={{width:w,height:"100%",flexShrink:0,borderRadius:8,overflow:"hidden",border:"1px solid rgba(34,29,25,.1)",boxShadow:"0 4px 14px rgba(34,29,25,.1)"}}><Img src={src} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top"}}/></div>)}</div>;}
 
 function LoadingIframe({src,title,style={}}){
@@ -927,12 +958,17 @@ function LoadingIframe({src,title,style={}}){
           <span style={{fontSize:11,color:"var(--ink-mu)",fontFamily:"var(--l)"}}>Loading preview…</span>
         </div>
       )}
-      <iframe src={src} style={{width:"100%",height:"100%",border:"none",...style}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
+      <LazyIframe src={src} style={{width:"100%",height:"100%",border:"none",...style}} title={title} loading="lazy" onLoad={()=>setLoaded(true)}/>
     </div>
   );
 }
 
-function CarouselVideo({src,cardW=160,cardH=340}){
+function CarouselVideo(props){
+  const[ref,near]=useNear();
+  if(near)return <CarouselVideoInner {...props}/>;
+  return <div ref={ref} style={{width:props.cardW||160,height:props.cardH||340,borderRadius:18,border:"2px solid var(--rule)",flexShrink:0,background:"#000"}}/>;
+}
+function CarouselVideoInner({src,cardW=160,cardH=340}){
   const ref=useRef(null);
   const[hov,setHov]=useState(false);
   const[playing,setPlaying]=useState(true);
@@ -1060,7 +1096,7 @@ function AutoScrollFrame({src}) {
       }}
       onClick={() => window.open(src, "_blank")}
     >
-      <img
+      <img loading="lazy" decoding="async"
         src={src}
         alt=""
         style={{
@@ -1107,7 +1143,7 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
       {preImages.map((src,i)=>(
         <div key={`pre-${i}`} style={cardStyle}>
           {landscape
-            ? <img src={src} alt="" style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
+            ? <img loading="lazy" decoding="async" src={src} alt="" style={{width:"100%",height:"auto",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
             : <AutoScrollFrame src={src}/>
           }
         </div>
@@ -1116,7 +1152,7 @@ function HorizScrollCarousel({images=[],before=[],after=[],videoSrc=null,cardW=1
       {postImages.map((src,i)=>(
         <div key={`post-${i}`} style={cardStyle}>
           {landscape
-            ? <img src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
+            ? <img loading="lazy" decoding="async" src={src} alt="" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top",display:"block",cursor:"pointer"}} onClick={()=>window.open(src,"_blank")}/>
             : <AutoScrollFrame src={src}/>
           }
         </div>
@@ -1158,7 +1194,7 @@ function DashModal(){return(<>
         {name:"Occupancy MIS Dashboard",tag:"Live — Phase 1",desc:"Designed for strategic review and planning — occupancy trends, tenant mix, pricing impact, churn patterns, city-level benchmarking, and forecasting. Built for founders and regional leadership.",proto:"https://v0-occupmisdashboard-wireframe.vercel.app/occupancy-mis",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1314828671"},
         {name:"Occupancy Heat Map Dashboard",tag:"Live — Phase 1",desc:"Built for city ops heads who need to act, not just review — property and room-level live monitoring, allocation status, mismatch detection, red-flag alerts, bed-type splits.",proto:"https://v0-occupancy-heatmap-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1724728013"},
         {name:"Occupancy Management Dashboard",tag:"Engineering Underway",desc:"Live check-in/checkout tracking, retention signals, daily accountability metrics for on-ground ops teams.",proto:"https://v0-occupancy-management-dashboard.vercel.app/",sheet:"https://docs.google.com/spreadsheets/d/1f-xiqVAy6od058FkY0Cfn5u24ev5FsYLHhaW48dWifo/edit?gid=1752378348"},
-        {name:"Unit Economics Dashboard",tag:<span style={{display:"inline-flex",alignItems:"center",gap:5}}>Building on <img src="https://replit-brand.replit.app/api/static/replit_brand_kit/logos/replit-primary.svg" alt="Replit" style={{height:11,width:"auto",display:"inline-block",verticalAlign:"middle"}}/></span>,desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
+        {name:"Unit Economics Dashboard",tag:<span style={{display:"inline-flex",alignItems:"center",gap:5}}>Building on <img loading="lazy" decoding="async" src="https://replit-brand.replit.app/api/static/replit_brand_kit/logos/replit-primary.svg" alt="Replit" style={{height:11,width:"auto",display:"inline-block",verticalAlign:"middle"}}/></span>,desc:"Building this on Replit — not a prototype, a shippable product. SQLite-backed, trend detection, colour-coded financial flagging, city-level P&L tracking.",proto:null,sheet:null},
       ].map((b,i)=>(
         <div key={i} style={{marginBottom:12,padding:"14px 18px",background:"var(--cream)",borderRadius:12,border:"1px solid var(--rule)"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,gap:10}}><strong style={{fontFamily:"var(--h)",fontSize:14,color:"var(--ink)"}}>{b.name}</strong><span style={{fontFamily:"var(--l)",fontSize:9.5,color:"var(--ink-mu)",background:"var(--paper)",padding:"3px 9px",borderRadius:18,whiteSpace:"nowrap",border:"1px solid var(--rule)"}}>{b.tag}</span></div>
@@ -1197,7 +1233,7 @@ function LandCarousel({images}){
       onMouseEnter={()=>hovRef.current=true}
       onMouseLeave={()=>hovRef.current=false}>
       {images.map((src,i)=>(
-        <img key={i} src={src} alt=""
+        <img loading="lazy" decoding="async" key={i} src={src} alt=""
           style={{display:"block",width:"100%",height:"auto",position:i===0?"relative":"absolute",top:0,left:0,opacity:i===idx?1:0,transition:"opacity .6s ease",pointerEvents:i===idx?"auto":"none",cursor:"pointer"}}
           onClick={()=>window.open(src,"_blank")}/>
       ))}
@@ -1363,10 +1399,10 @@ function B2BModal(){return(<>
     <div className="mose">
       <div className="b2b-ss-row" style={{display:"flex",gap:8}}>
         <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",cursor:"pointer"}} onClick={()=>window.open(SS.b2b1,"_blank")}>
-          <img src={SS.b2b1} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+          <img loading="lazy" decoding="async" src={SS.b2b1} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
         </div>
         <div style={{flex:1,borderRadius:8,overflow:"hidden",border:"1px solid var(--rule)",cursor:"pointer"}} onClick={()=>window.open(SS.b2b2,"_blank")}>
-          <img src={SS.b2b2} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
+          <img loading="lazy" decoding="async" src={SS.b2b2} alt="" style={{width:"100%",height:"auto",display:"block"}}/>
         </div>
       </div>
     </div>
