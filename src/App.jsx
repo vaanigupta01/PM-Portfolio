@@ -322,7 +322,7 @@ footer{background:var(--ink);color:var(--iv);padding:40px 64px;display:flex;just
   .wed-figma-tag{font-size:8.5px!important;padding:2px 7px!important;}
   .about-diagonal-bg{display:none!important;}
   .about-quote-block{background:var(--plum)!important;padding:56px 28px!important;text-align:center!important;}
-  .about-copy-block{background:var(--cream)!important;padding:40px 28px 56px!important;}
+  .about-copy-block{background:var(--iv)!important;padding:40px 28px 56px!important;}
   .ftl{flex-direction:column;align-items:center;gap:10px;}
   .ftl-row{gap:16px;flex-wrap:wrap;justify-content:center;}
   .ftl-row:first-child{flex-wrap:nowrap;gap:10px;}
@@ -430,7 +430,7 @@ function Hero(){
 }
 
 // ─── EMBED HELPERS ────────────────────────────────────────────────────────────
-function LinkCTA({label,url,tool}){return <a href={url} target="_blank" rel="noreferrer" className="moln">{tool&&<LogoSVG tool={tool} size={20}/>}{label}</a>;}
+function LinkCTA({label,url,tool,prd}){return <a href={url} target="_blank" rel="noreferrer" className="moln" data-prd-name={prd}>{tool&&<LogoSVG tool={tool} size={20}/>}{label}</a>;}
 function NotionEmbed({url,title,embedUrl=null,height=460}){
   const[loaded,setLoaded]=useState(false);
   if(!embedUrl){
@@ -1420,16 +1420,16 @@ function CaseModal({id,onClose}){
 
 // ─── PM THINKING ──────────────────────────────────────────────────────────────
 const ANALYSES=[
-  {id:"zomato",company:"Zomato",type:"Root Cause Analysis",title:"20% MoM Drop in Average Order Value",
-   preview:"Eliminated low-probability causes first. Focused on three high-signal hypotheses including ordering flow bugs and Group Ordering feature interference.",
-   sheetUrl:"https://docs.google.com/spreadsheets/d/1KTgmZ0dlZ73ZWdTiEeplUXJLIx4uXu-o/edit",
-   sc:{"--sc":"rgba(75,28,52,.93)","--sm":"rgba(75,28,52,.45)","--sch":"rgba(75,28,52,.97)","--smh":"rgba(75,28,52,.82)"},
-   content:{scenario:"20% month-over-month drop in Average Order Value with no specific region or segment affected.",eliminated:"Metric logging errors, seasonality (prior month had a holiday-driven surge), demographic shifts, regulatory changes.",hypotheses:[{h:"Competitive pricing pressure",detail:"Competitors offering better per-order deals, nudging users toward smaller Zomato orders.",prob:"Medium"},{h:"Ordering flow bug",detail:"A technical barrier preventing basket increases or showing incorrect availability. Identified Functional, Performance, Availability, and API testing paths to isolate this.",prob:"High"},{h:"Group Ordering feature interference",detail:"Feature released Aug 2024 introduced additional steps into a flow that directly influences cart size. Regression testing + A/B testing recommended.",prob:"High"}],solutions:"Targeted competitive promotions; regression and A/B testing across the ordering flow; UX analysis of Group Ordering's downstream impact on individual order value.",metrics:true,primaryMetric:"Average Order Value (MoM)",supporting:["Session-to-add-to-cart rate","Cart abandonment rate","Basket size distribution"],guardrails:["Revenue per order (avoid cannibalising through heavy discounting)","Group Ordering feature adoption"]}},
-  {id:"netflix",company:"Netflix",type:"Root Cause Analysis",title:"20% QoQ Subscription Cancellation Spike",
-   preview:"Eliminated strong-moat factors. Assessed 9 possible root causes across competitive pressure, pricing sensitivity, subscription fatigue, content fatigue, and behavioural shifts.",
-   sheetUrl:"https://docs.google.com/spreadsheets/d/1KTgmZ0dlZ73ZWdTiEeplUXJLIx4uXu-o/edit?gid=392619316#gid=392619316",
-   sc:{"--sc":"rgba(70,32,18,.93)","--sm":"rgba(70,32,18,.45)","--sch":"rgba(70,32,18,.97)","--smh":"rgba(70,32,18,.82)"},
-   content:{scenario:"20% quarter-over-quarter increase in subscription opt-outs with no specific segment or region driving it.",eliminated:"Strong-moat factors eliminated first — content library quality, UX standards, localisation depth, and brand loyalty scores.",hypotheses:[{h:"Competitor content advantage",detail:"Live sports (IPL, ICC, FIFA) on Amazon Prime and Disney+ Hotstar pulling users who don't find equivalent value in Netflix.",prob:"High"},{h:"Health consciousness / screen time awareness",detail:"Rising awareness of passive screen overconsumption reducing streaming stickiness.",prob:"High"},{h:"Subscription rationalisation",detail:"Users choosing between too many streaming services — Netflix not always winning the kept-vs-cancelled decision.",prob:"Medium"},{h:"Content fatigue",detail:"Users completing the shows they wanted to watch and not finding new compelling reasons to stay.",prob:"Medium"}],solutions:"Deeper regional content investment; broader telecom and DTH partnerships; sustained enforcement of household sharing policy.",metrics:true,primaryMetric:"Subscription Retention Rate (QoQ)",supporting:["D30 reactivation rate","Content engagement depth per subscriber","Churn by content genre"],guardrails:["ARPU (avoid over-discounting to retain)","Content budget ROI","Brand perception scores"]}},
+  {id:"fieldassist",company:"FieldAssist",type:"Product Strategy · Live App Prototype",title:"Getting Shops Stocked Right Before the Summer Rush",
+   preview:"A field rep gets about five minutes per shop. I designed an assistant that tells the rep how much each kirana should order before the summer peak, explains why in words the shopkeeper trusts, and recalculates as the cart changes.",
+   ctaLabel:"Try the Prototype",tools:["Claude","ChatGPT"],
+   cardImages:["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-talking.jpg"],cardTint:"linear-gradient(160deg,#F5EBD3,#E6D2A3)",
+   sc:{"--sc":"rgba(72,52,12,.93)","--sm":"rgba(72,52,12,.45)","--sch":"rgba(72,52,12,.97)","--smh":"rgba(72,52,12,.82)"}},
+  {id:"legistify",company:"Legistify",type:"Product Analytics · Live Dashboard",title:"Finding Where a Litigation Product Leaks Value",
+   preview:"When hearing outcomes go unrecorded and AI credits run dry mid-month, legal teams quietly stop trusting their tool. My dashboard shows a PM where that's happening, from the whole org down to one person, and what to fix first.",
+   ctaLabel:"Explore the Dashboard",tools:["Claude"],
+   cardImage:"/images/legistify-org.jpg",
+   sc:{"--sc":"rgba(36,30,72,.93)","--sm":"rgba(36,30,72,.45)","--sch":"rgba(36,30,72,.97)","--smh":"rgba(36,30,72,.82)"}},
   {id:"multiplayer",company:"Growth PM Case",type:"Product Case Study",title:"Improving Player Retention in a Multiplayer Game",
    preview:"D30 retention declining 28% → 18% over 6 months. Lifecycle analysis, feature decomposition, cohort reasoning, and a prioritised hypothesis framework.",
    link:"https://vaanig-spring-boa-26a.notion.site/Improving-Player-Retention-in-a-Multiplayer-Game-Growth-PM-Case-34100c0515c480bbbe08f80c6446c1ce?pvs=143",
@@ -1443,7 +1443,277 @@ const ANALYSES=[
    embedLink:"https://vaanig-spring-boa-26a.notion.site/ebd//1b300c0515c48089b74ac11e8fdaedc3",
    sc:{"--sc":"rgba(20,48,40,.93)","--sm":"rgba(20,48,40,.45)","--sch":"rgba(20,48,40,.97)","--smh":"rgba(20,48,40,.82)"},
    content:{scenario:"Shopify merchants rely on WhatsApp Business as a primary sales and customer engagement channel, but fragmented workflows — manual product syncing, no order tracking integration, limited automation, COD fraud — are creating lost sales and operational overhead.",user:"Sukanya Mehta, 28, Mumbai — solo SME jewelry brand owner (Shingle Creations) using WhatsApp Business + Shopify + Instagram.",features:[{priority:"P1",name:"Smart WhatsApp-Shopify Integration Hub",desc:"Auto-sync product listings, import orders, integrate chats into Shopify CRM"},{priority:"P1",name:"AI-Powered Cart Recovery & Upselling",desc:"Personalised WhatsApp cart reminders, smart upsells/cross-sells"},{priority:"P1",name:"WhatsApp-Based Instant Checkout & Payment Links",desc:"Complete purchases via UPI, Razorpay, Stripe within WhatsApp"},{priority:"P1",name:"COD Verification & Smart RTO Prevention",desc:"Automated confirmation, OTP verification, prepaid nudge"},{priority:"P2",name:"Automated Order Tracking & Proactive Support"},{priority:"P2",name:"Smart WhatsApp CRM"},{priority:"P2",name:"AI-Based Product Discovery & WhatsApp Storefront"},{priority:"P3",name:"WhatsApp Multi-Agent Support for Teams"},{priority:"P3",name:"Marketing Insights & Performance Dashboard"},{priority:"P3",name:"WhatsApp Business API Lite for Small Merchants"}],wireframes:"Wireframes built for: Instant Checkout, Automated Order Tracking, Marketing Insights Dashboard, API Lite interface.",solutions:"Prioritised P1 features address the highest-impact pain points: cart recovery, seamless checkout, COD fraud reduction, real-time order tracking.",metrics:true,primaryMetric:"Abandoned Cart Recovery Rate",supporting:["COD Fraud/RTO% reduction","WhatsApp-to-purchase conversion rate","Merchant adoption rate"],guardrails:["Order status inquiry volume (reduction signal)","Merchant satisfaction score","API Lite adoption vs full API"]}},
+  {id:"zomato",company:"Zomato",type:"Root Cause Analysis",title:"20% MoM Drop in Average Order Value",
+   preview:"Eliminated low-probability causes first. Focused on three high-signal hypotheses including ordering flow bugs and Group Ordering feature interference.",
+   sheetUrl:"https://docs.google.com/spreadsheets/d/1KTgmZ0dlZ73ZWdTiEeplUXJLIx4uXu-o/edit",
+   sc:{"--sc":"rgba(75,28,52,.93)","--sm":"rgba(75,28,52,.45)","--sch":"rgba(75,28,52,.97)","--smh":"rgba(75,28,52,.82)"},
+   content:{scenario:"20% month-over-month drop in Average Order Value with no specific region or segment affected.",eliminated:"Metric logging errors, seasonality (prior month had a holiday-driven surge), demographic shifts, regulatory changes.",hypotheses:[{h:"Competitive pricing pressure",detail:"Competitors offering better per-order deals, nudging users toward smaller Zomato orders.",prob:"Medium"},{h:"Ordering flow bug",detail:"A technical barrier preventing basket increases or showing incorrect availability. Identified Functional, Performance, Availability, and API testing paths to isolate this.",prob:"High"},{h:"Group Ordering feature interference",detail:"Feature released Aug 2024 introduced additional steps into a flow that directly influences cart size. Regression testing + A/B testing recommended.",prob:"High"}],solutions:"Targeted competitive promotions; regression and A/B testing across the ordering flow; UX analysis of Group Ordering's downstream impact on individual order value.",metrics:true,primaryMetric:"Average Order Value (MoM)",supporting:["Session-to-add-to-cart rate","Cart abandonment rate","Basket size distribution"],guardrails:["Revenue per order (avoid cannibalising through heavy discounting)","Group Ordering feature adoption"]}},
+  {id:"netflix",company:"Netflix",type:"Root Cause Analysis",title:"20% QoQ Subscription Cancellation Spike",
+   preview:"Eliminated strong-moat factors. Assessed 9 possible root causes across competitive pressure, pricing sensitivity, subscription fatigue, content fatigue, and behavioural shifts.",
+   sheetUrl:"https://docs.google.com/spreadsheets/d/1KTgmZ0dlZ73ZWdTiEeplUXJLIx4uXu-o/edit?gid=392619316#gid=392619316",
+   sc:{"--sc":"rgba(70,32,18,.93)","--sm":"rgba(70,32,18,.45)","--sch":"rgba(70,32,18,.97)","--smh":"rgba(70,32,18,.82)"},
+   content:{scenario:"20% quarter-over-quarter increase in subscription opt-outs with no specific segment or region driving it.",eliminated:"Strong-moat factors eliminated first — content library quality, UX standards, localisation depth, and brand loyalty scores.",hypotheses:[{h:"Competitor content advantage",detail:"Live sports (IPL, ICC, FIFA) on Amazon Prime and Disney+ Hotstar pulling users who don't find equivalent value in Netflix.",prob:"High"},{h:"Health consciousness / screen time awareness",detail:"Rising awareness of passive screen overconsumption reducing streaming stickiness.",prob:"High"},{h:"Subscription rationalisation",detail:"Users choosing between too many streaming services — Netflix not always winning the kept-vs-cancelled decision.",prob:"Medium"},{h:"Content fatigue",detail:"Users completing the shows they wanted to watch and not finding new compelling reasons to stay.",prob:"Medium"}],solutions:"Deeper regional content investment; broader telecom and DTH partnerships; sustained enforcement of household sharing policy.",metrics:true,primaryMetric:"Subscription Retention Rate (QoQ)",supporting:["D30 reactivation rate","Content engagement depth per subscriber","Churn by content genre"],guardrails:["ARPU (avoid over-discounting to retain)","Content budget ROI","Brand perception scores"]}},
 ];
+
+// ─── PM THINKING: shared bits for the Legistify and FieldAssist modals ─────────
+const FA_PROTO="https://beverages-seasonality.vaanigupta01.workers.dev/#/home";
+const FA_DECK="https://drive.google.com/file/d/1KSlKJ-uxoKhHCt5TZuF-cctOWz4SbzqG/view?usp=sharing";
+const LG_DASH="https://litigation-pulse.vaanigupta01.workers.dev/#/org";
+const LG_INSIGHTS="https://claude.ai/artifact/ATVHhQg81z4uXigP1ADoVs";
+const LG_DICTIONARY="https://claude.ai/artifact/BGDcMN4MFS9ZE9HZo7tRAL";
+// Mobile carousel in the FieldAssist modal. Add any new fa-*.jpg here.
+const FA_SHOTS=["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-talking.jpg","/images/fa-order.jpg"];
+
+function useMedia(q){
+  const get=()=>typeof window!=="undefined"&&window.matchMedia?window.matchMedia(q).matches:false;
+  const[m,setM]=useState(get);
+  useEffect(()=>{const mq=window.matchMedia(q);const f=()=>setM(mq.matches);f();mq.addEventListener?mq.addEventListener("change",f):mq.addListener(f);return()=>{mq.removeEventListener?mq.removeEventListener("change",f):mq.removeListener(f);};},[q]);
+  return m;
+}
+function BuiltWith({items,align="right"}){
+  return(<div>
+    <div style={{fontFamily:"var(--l)",fontSize:9,letterSpacing:1.5,textTransform:"uppercase",color:"var(--ink-mu)",marginBottom:6}}>Built with</div>
+    <div style={{display:"flex",flexWrap:"wrap",gap:"8px 14px",justifyContent:align==="right"?"flex-end":"flex-start"}}>
+      {items.map(([tool,label])=><span key={tool} style={{display:"inline-flex",alignItems:"center",gap:7,fontFamily:"var(--l)",fontSize:12,color:"var(--ink-mid)"}}><LogoSVG tool={tool} size={24}/>{label}</span>)}
+    </div>
+  </div>);
+}
+function MoveChips({items}){
+  return(<div className="an-chips">
+    {items.map(([label,from,to],i)=><span key={i} className="an-chip">{label&&<span>{label}</span>}<span>{from}</span><span className="an-chip-ar">→</span><strong>{to}</strong></span>)}
+  </div>);
+}
+function OpenPill({href,prd,label="Open ↗",style={}}){
+  return <a href={href} target="_blank" rel="noreferrer" className="emo" data-prd-name={prd} style={{position:"absolute",top:10,right:10,zIndex:3,...style}}>{label}</a>;
+}
+const AN_CSS=`
+.an-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.an-chip{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;font-family:var(--l);font-size:11px;line-height:1.35;padding:4px 11px;border-radius:20px;background:var(--paper);border:1px solid var(--rule);color:var(--ink-mu);max-width:100%;}
+.an-chip strong{color:var(--forest);font-weight:600;}.an-chip-ar{color:var(--plum);}
+.an-card{margin-bottom:12px;padding:16px 19px;background:var(--cream);border-radius:10px;border:1px solid var(--rule);}
+.an-card-ti{font-family:var(--h);font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3;}
+.an-card .ms{margin-top:12px;}
+.an-card p{font-size:12.8px;color:var(--ink-mid);line-height:1.7;font-weight:300;}
+.an-guard{margin-top:12px;padding:9px 13px;background:rgba(184,134,46,.06);border-radius:8px;border:1px solid rgba(184,134,46,.18);font-size:12.3px;color:var(--ink-mid);line-height:1.6;font-weight:300;}
+.an-guard b{font-family:var(--l);font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-right:6px;}
+.an-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.an-mini{padding:10px 13px;background:var(--cream);border:1px solid var(--rule);border-radius:9px;font-size:12.3px;line-height:1.55;color:var(--ink-mu);font-weight:300;}
+.an-mini strong{color:var(--ink);font-weight:600;}
+.an-steps{position:relative;margin:4px 0 0;padding:0;list-style:none;}
+.an-steps li{position:relative;padding:0 0 18px 40px;font-size:13.3px;color:var(--ink-mid);line-height:1.7;font-weight:300;}
+.an-steps li:last-child{padding-bottom:4px;}
+.an-steps li::before{content:'';position:absolute;left:12px;top:24px;bottom:0;width:2px;background:var(--rule);}
+.an-steps li:last-child::before{display:none;}
+.an-steps .an-dot{position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--plum);color:white;font-family:var(--l);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+.an-steps strong{color:var(--ink);font-weight:600;}
+.an-link-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper);border:1px solid var(--rule);border-radius:12px;text-decoration:none;color:inherit;transition:border-color .2s;}
+.an-link-card:hover{border-color:var(--plum-b);}
+.an-phones{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;}
+.an-phones img{width:28%!important;height:auto!important;aspect-ratio:392/768;max-height:90%;object-fit:cover;object-position:top;border-radius:12px;box-shadow:0 10px 28px rgba(40,25,5,.28);display:block;}
+.fa-modal{max-width:1180px!important;height:calc(100vh - 56px);display:grid;grid-template-columns:438px 1fr;margin:0 auto!important;}
+.fa-left{background:linear-gradient(160deg,#2B200A,#48340C);display:flex;flex-direction:column;align-items:center;padding:14px 14px 12px;min-height:0;}
+.fa-phone{width:410px;flex:1;min-height:0;border-radius:34px;background:#111;padding:10px;box-shadow:0 20px 50px rgba(0,0,0,.45);}
+.fa-phone-in{position:relative;width:390px;height:100%;border-radius:26px;overflow:hidden;background:var(--iv);}
+.fa-cap{font-family:var(--l);font-size:10.5px;color:rgba(250,247,241,.6);text-align:center;line-height:1.5;margin-top:10px;}
+.fa-right{overflow-y:auto;min-height:0;}
+.fa-moc{right:max(32px,calc(50% - 576px))!important;}
+@media(max-width:640px){
+  .an-grid2{grid-template-columns:1fr;}
+  .an-phones{align-items:flex-start;padding-top:58px;}
+  .hg-card-an.an-img-card{min-height:540px!important;}
+  .hg-card-an.an-img-card .hgsc{background:linear-gradient(to top,var(--sc,.9)0%,var(--sc,.9)42%,var(--sm,.55)62%,transparent 80%)!important;}
+}
+`;
+
+function LegistifyModal({onClose}){
+  useEffect(()=>{document.body.style.overflow="hidden";return()=>{document.body.style.overflow="";};},[]);
+  const signals=[
+    {t:"1. One counsel firm is breaking the hearing loop",
+     data:"One external firm carries 38% of hearings but reports only 29% on time, with a 9.4-day lag against 1.8 to 2.6 for the others. Close-out slid 72% → 61% after it took on one unit's disputes.",
+     build:[["Reply to update:","an email or WhatsApp on the evening of each hearing. Replying with what happened, the next date and the next step records it, no login needed."],["AI-drafted outcome:","when the court order syncs, AI drafts the outcome and counsel confirms in one tap."],["Escalation:","unreported hearings reach the case manager on day 3."]],
+     move:[["Close-out","61%","79%"],["Firm's lag","9.4 days","under 3"],["Hearings awaiting update","47","about 26"]],
+     guard:"AI drafts edited after confirmation, so speed doesn't cost accuracy."},
+    {t:"2. AI credits run out on day 19",
+     data:"AI Diligence burns 46% of credits, yet only 17% of its outputs get used: 59 credits per useful output against 3.3 for Ask AI. When credits run out on day 19, Ask AI, the low-cost assistant two-thirds of lawyers rely on, falls from about 40 queries a day to 3.",
+     build:[["A separate pool for bulk AI,","so Ask AI never switches off."],["Preview before the batch:","Diligence runs on 5 cases first, shows the results and the full batch's credit cost, and continues only on confirmation."],["Early warning:","admins get an alert at 70% of credits with the projected limit day."]],
+     move:[["Limit day","19","never reached"],["Ask AI after day 19:","3","about 40 a day"],["Diligence outputs used","17%","40%"],["Credits per useful output","59","about 25"]],
+     guard:"Useful Diligence outputs don't drop, so we cut waste and not useful work."},
+    {t:"3. Auto-intake suggestions are mostly noise",
+     data:"Name matching gives 31% precision, and the queue isn't ranked, so reviewers never reach most of it. In 90 days, 502 suggestions expired unread, about 146 of them real cases.",
+     build:[["Rank by match confidence,","starting from each keyword group's track record. No new model needed."],["Fast lane and digest:","confident matches alert the right case manager; the rest go into a weekly digest."],["Route by business unit,","with alerts that name the party, court and first hearing date."]],
+     move:[["Precision","31%","60%"],["Real cases lost to expiry:","about 146","under 30"]],
+     guard:"A monthly audit of archived suggestions for missed cases."},
+  ];
+  const sections=[["Pulse","the five numbers to check each morning"],["Adoption","who uses it, which features stick"],["Intake","do new filings reach the team early"],["Enrich and staff","do cases get the details reports need"],["Hearing loop","is every hearing closed out, and by whom"],["AI behaviour","is AI used, trusted and affordable"],["Value","do leaders and business users get something out of it"],["Platform health","is it fast, fresh and reliable"],["Teams","how each team and counsel firm is performing"]];
+  return(
+    <div className="mo" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <button className="moc" onClick={onClose}>×</button>
+        <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0E0C1E,#1C1838)"}}>
+          <LoadingIframe src={LG_DASH} title="Litigation Health Radar dashboard"/>
+          <OpenPill href={LG_DASH}/>
+        </div>
+        <div className="mob">
+          <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+            <div>
+              <div className="moov">Product Analytics · Legistify</div>
+              <h2 className="moti" style={{marginBottom:5}}>Litigation Health Radar</h2>
+              <p className="mosu" style={{marginBottom:0}}>Traces lost value in a litigation product to the exact team, firm or person causing it.</p>
+            </div>
+            <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0}}>
+              <BuiltWith items={[["Claude","Claude + Claude Code"]]}/>
+            </div>
+          </div>
+          <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot"><p>A litigation tool earns its renewal only while it stays the legal team's system of record, and that breaks quietly: a counsel firm stops recording hearings, AI credits run out mid-month, real cases get buried under noisy suggestions. Logins and case counts keep rising through all of it. A PM needs to see where value leaks, for whom, and what to fix first.</p></div></div>
+          <div className="mose"><h3 className="mosh">How I Approached It</h3>
+            <ul className="moli">
+              <li><strong>Started from the case, not the data.</strong> At each stage of a case's life (intake, staffing, hearings, spend, close) I asked what could fail. Do new filings reach the team before the first hearing? After every hearing, does someone record what happened?</li>
+              <li><strong>Defined 27 metrics, each tied to a decision:</strong> what it answers, why it matters, and what to do if it moves. Vanity counts like total logins were left out on purpose.</li>
+              <li><strong>Organised the dashboard around the lifecycle,</strong> in nine sections that each drill from the org to a business unit, a team and one person. "Break it down" panels and an "i" on every chart explain the why.</li>
+            </ul>
+            <div className="an-grid2" style={{marginTop:12}}>
+              {sections.map(([n,d])=><div key={n} className="an-mini"><strong>{n}:</strong> {d}</div>)}
+            </div>
+          </div>
+          <div className="mose"><h3 className="mosh">The North Star</h3>
+            <div style={{marginBottom:10,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:15,fontWeight:600,color:"var(--forest)"}}>Hearing close-out rate: hearings with an outcome recorded within 2 days.</div></div>
+            <p style={{fontSize:12.8,color:"var(--ink-mu)",lineHeight:1.7,fontWeight:300}}>The hearing is the heartbeat of a case. Recorded on time, the product is the system of record. If not, it's just a tracker, and the team goes back to email and Excel.</p>
+          </div>
+          <div className="mose"><h3 className="mosh">What the Dashboard Caught</h3>
+            <div className="mot" style={{marginBottom:12}}><p>Runs on a made-up company sized to a real customer (about 150 users and 400 active cases), seeded with three realistic problems.</p></div>
+            {signals.map(s=>(
+              <div key={s.t} className="an-card">
+                <div className="an-card-ti">{s.t}</div>
+                <div className="ms" style={{marginTop:0}}>What the data shows</div>
+                <p>{s.data}</p>
+                <div className="ms">What I'd build</div>
+                <ul className="moli" style={{marginTop:4}}>{s.build.map(([b,r])=><li key={b}><strong>{b}</strong> {r}</li>)}</ul>
+                <div className="ms" style={{marginBottom:7}}>What should move</div>
+                <MoveChips items={s.move}/>
+                <div className="an-guard"><b>Guardrail</b>{s.guard}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mose"><h3 className="mosh">One Feature I'd Add: Link Every Case to Its Contract</h3>
+            <div className="mot"><p>46% of active cases start from a contract. Linking Legistify's two products turns contract management and litigation into one lifecycle:</p></div>
+            <ul className="moli" style={{marginTop:8}}>
+              <li><strong>Suggest the contract:</strong> AI matches the opposing party to its contracts when a case is added.</li>
+              <li><strong>Bring the facts across:</strong> contract value, governing law, jurisdiction and the arbitration clause appear on the case, and the value pre-fills exposure.</li>
+              <li><strong>Send the lesson back:</strong> the contract gets an "in dispute" flag, so Contract Management learns which clauses and counterparties end up in court.</li>
+            </ul>
+            <div className="ms" style={{marginTop:10,marginBottom:7}}>What should move</div>
+            <MoveChips items={[["Contract-based cases linked","0%","60% in a quarter"]]}/>
+          </div>
+          <div className="mose"><h3 className="mosh">The Full Recommendations</h3>
+            {/* claude.ai artifact pages refuse to load inside iframes (frame-ancestors 'self'), so this is a link card. */}
+            <a href={LG_INSIGHTS} target="_blank" rel="noreferrer" data-prd-name="Legistify_Insights_Recommendations" className="an-link-card">
+              <LogoSVG tool="Claude" size={36}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontFamily:"var(--h)",fontSize:15.5,fontWeight:600,color:"var(--ink)",marginBottom:2}}>Insights & Recommendations</div>
+                <div style={{fontSize:12.5,color:"var(--ink-mu)",fontWeight:300,lineHeight:1.5}}>Full evidence, the build plan behind each bet, and assumptions</div>
+              </div>
+              <span className="emo" style={{position:"static",flexShrink:0}}>Open ↗</span>
+            </a>
+            <div style={{marginTop:12}}><LinkCTA label="Metric Dictionary ↗" url={LG_DICTIONARY} tool="Claude" prd="Legistify_Metric_Dictionary"/></div>
+          </div>
+          <div className="mose" style={{marginBottom:0}}><h3 className="mosh">How I Built It</h3><div className="mot"><p>I chose the module, metrics, north star and bets, and wrote the spec and data rules. Claude Code built the dashboard and the sample company, with tests keeping every number consistent across views.</p></div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FieldAssistModal({onClose}){
+  useEffect(()=>{document.body.style.overflow="hidden";return()=>{document.body.style.overflow="";};},[]);
+  const desk=useMedia("(min-width:1025px)");
+  const caption="Log in with any username and password · Demo day: Tue 28 Apr 2026";
+  const steps=[
+    ["Before walking in:",<>a suggested order with its pack mix, like "10 cases, enough till Tue 5 May", the reasons behind it, a "What if it hits 43°C?" check, and talking points split into "for the shopkeeper" (weather, last year, schemes, events) and "for you only", so dues and targets never show on a shared screen.</>],
+    ["While building the cart:",<>each pack's suggestion tagged with its reason, such as "Low stock in shop" or "Extra sales potential", schemes on every pack with a strip tracking progress towards the next scheme threshold, and a swap that keeps the order size and scheme when the distributor is short.</>],
+    ["At the order summary, just before submit:",<>one nudge when the cart is 1–2 cases short of a scheme, missing a regular pack or behind pace, or a look at what shops nearby also take.</>],
+    ["After submit:",<>next week's outlook for the shop, so the next visit starts prepared.</>],
+  ];
+  const day=[
+    ["Marathi, Hindi and English,","voice notes included, because many reps are more at home in their own language."],
+    ["A map of the beat","before the day starts, for peace of mind. Tap through to Google Maps to check for blockages before each shop."],
+    ["Call before you go,","to confirm the shop is open, or that the owner isn't out for lunch and save a wasted trip."],
+    ["Voice notes,","because speaking is faster than typing while the shopkeeper waits. Issues shopkeepers raise are logged and categorised automatically."],
+    ["Summer and monthly targets tracked separately,","so pre-season stocking isn't lost behind the monthly case count."],
+    ["Light gamification:","subtle animations reward the first sale of the day, progress towards targets, and gaining on the rep above on the leaderboard. That keeps a healthy competitive streak going through a long day."],
+    ["Morning alerts","for new schemes and distributor stock changes, before the first visit."],
+  ];
+  const body=(
+    <div className="mob">
+      {!desk&&(
+        <div className="mose">
+          <a href={FA_PROTO} target="_blank" rel="noreferrer" className="nc" style={{display:"block",textAlign:"center",padding:"14px 20px",fontSize:13}}>Try the live prototype ↗</a>
+          <p style={{fontFamily:"var(--l)",fontSize:11,color:"var(--ink-mu)",textAlign:"center",marginTop:9}}>{caption}</p>
+          <HorizScrollCarousel images={FA_SHOTS}/>
+        </div>
+      )}
+      <div style={{marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+        <div className="moov">Product Strategy · FieldAssist</div>
+        <h2 className="moti" style={{marginBottom:5}}>Rep Assist</h2>
+        <p className="mosu" style={{marginBottom:0}}>Helps field reps get every kirana stocked adequately before the summer peak, in the few minutes each visit allows.</p>
+      </div>
+      <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot">
+        <p>Every summer, beverage demand surges for a few peak weeks. Shopkeepers order from last month's sales and keep orders small for fear of unsold leftovers, so they enter the peak understocked. By the time they reorder, the distributor and the bottler can't keep up, and the sale goes to another shop or brand.</p>
+        <p>The fix is the right order, placed in the weeks before the surge, at the rep's visit. Size each shop's order for the weeks ahead and the distributor and bottler can plan supply too, so the whole chain enters summer ready.</p>
+      </div></div>
+      <div className="mose"><h3 className="mosh">Who I Designed For</h3><div className="mot"><p>A rep has about five minutes per shop to read the shop, make a pitch and book the order, on a mid-range Android phone with patchy signal, often more at home in Marathi or Hindi than English, with the shopkeeper watching the same screen. So everything had to be quick, glanceable and safe to show.</p></div></div>
+      <div className="mose"><h3 className="mosh">What I Chose to Build</h3><div className="mot"><p>I put the answer inside the order flow the rep already uses: a suggested order with its reasons and one-tap accept or edit, recalculated on every cart change. I ruled out a pre-filled cart, because after two bad calls the rep stops trusting it. I also ruled out a WhatsApp nudge to the shopkeeper, because it bypasses the rep's relationship. The prototype responds live to any cart, drawing on each shop's sales history, its estimated stock on the shelf and the distributor's stock that morning.</p></div></div>
+      <div className="mose"><h3 className="mosh">How the Rep Closes the Right Order</h3>
+        <ol className="an-steps">{steps.map(([b,t],i)=><li key={i}><span className="an-dot">{i+1}</span><strong>{b}</strong> {t}</li>)}</ol>
+        <div className="sol" style={{marginTop:14}}>
+          <div className="ms" style={{color:"var(--plum)",marginBottom:6}}>Behind every number</div>
+          <p>The quantity comes from the shop's last four weeks of sales per pack. Last year's sales set how strongly that shifts with the season and heat for this shop and each pack. The forecast then factors in the heat forecast and local events like IPL match days, and passes six safety checks: stock already on the shelf, closures, rain, distributor limits, cooler space, credit, and a cap against the shop's own best order. New shops borrow from similar shops, banquet halls plan from their bookings, and it knows when to say less: "Order little or nothing: shuts 1 May" for a school canteen.</p>
+        </div>
+      </div>
+      <div className="mose"><h3 className="mosh">Built Around the Rep's Day</h3>
+        <div className="mot" style={{marginBottom:10}}><p>The assistant isn't one screen. It supports the rep from the first tap of the morning to the last shop.</p></div>
+        <div className="an-grid2">{day.map(([b,t])=><div key={b} className="an-mini"><strong>{b}</strong> {t}</div>)}</div>
+      </div>
+      <div className="mose"><h3 className="mosh">Eight Shop Types, Tested Like Real Users</h3>
+        <div className="mot" style={{marginBottom:8}}><p>Eight personas cover all 240 shops in the prototype and prove where the assistant should act and where it should hold back:</p></div>
+        <ul className="moli">
+          <li><strong>Helps most:</strong> Flagship Kirana, Cold-Drink Shop</li>
+          <li><strong>Stays careful:</strong> Cautious Kirana</li>
+          <li><strong>Adapts:</strong> Banquet Hall plans from bookings; Lakeside Snack Stall and New Owner borrow from similar shops</li>
+          <li><strong>Stays quiet:</strong> School Canteen, Beverage Wholesaler</li>
+        </ul>
+      </div>
+      <div className="mose"><h3 className="mosh">How I'd Know It Works</h3>
+        <div style={{marginBottom:14,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:15,fontWeight:600,color:"var(--forest)"}}>Pre-peak readiness: the share of each shop's peak-week need ordered before the peak</div></div>
+        <div style={{marginBottom:12}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{["Suggestions accepted, edited or dismissed","Scheme nudges converted","Peak-week stock-outs","Pilot vs control sales"].map(s=><li key={s}>{s}</li>)}</ul></div>
+        <div style={{padding:"12px 16px",background:"rgba(184,134,46,.06)",borderRadius:10,border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{["June leftovers","Visit time added","Dues growth",`Overrides of "order less"`].map(g=><li key={g}>{g}</li>)}</ul></div>
+        <p style={{fontSize:12.3,color:"var(--ink-mu)",marginTop:10,fontWeight:300}}>Proven through a matched-route pilot six weeks before the peak.</p>
+      </div>
+      <div className="mose"><h3 className="mosh">The Data and the Logic</h3><div className="mot"><p>Runs on a synthetic territory I generated: 240 shops, 60 packs and two years of orders, checked by 34 automated tests. The engine is transparent rules with 17 tests of its own, not a black box, so every number arrives with its reasons. In a real pilot, its coefficients would be recalibrated on actual sales.</p></div></div>
+      <div className="mose"><h3 className="mosh">The Strategy Deck</h3>
+        <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:420,background:"var(--cream)"}}>
+          <LoadingIframe src={FA_DECK.replace(/\/view.*$/,"/preview")} title="Season Check deck"/>
+          <OpenPill href={FA_DECK} prd="FieldAssist_Strategy_Deck"/>
+        </div>
+      </div>
+      <div style={{paddingTop:20,borderTop:"1px solid var(--rule)"}}><BuiltWith align="left" items={[["Claude","Claude + Claude Code"],["ChatGPT","ChatGPT"]]}/></div>
+    </div>
+  );
+  return(
+    <div className="mo" onClick={onClose}>
+      <div className={`modal${desk?" fa-modal":""}`} onClick={e=>e.stopPropagation()}>
+        <button className={`moc${desk?" fa-moc":""}`} onClick={onClose}>×</button>
+        {desk?(<>
+          <div className="fa-left">
+            <div className="fa-phone"><div className="fa-phone-in"><LoadingIframe src={FA_PROTO} title="Rep Assist prototype"/></div></div>
+            <div className="fa-cap">{caption}</div>
+            <a href={FA_PROTO} target="_blank" rel="noreferrer" className="emo" style={{position:"static",marginTop:8}}>Open full screen ↗</a>
+          </div>
+          <div className="fa-right">{body}</div>
+        </>):body}
+      </div>
+    </div>
+  );
+}
 
 function AnalysisModal({item,onClose}){
   useEffect(()=>{document.body.style.overflow="hidden";return()=>{document.body.style.overflow="";};},[]);
@@ -1513,9 +1783,15 @@ function AnalysisModal({item,onClose}){
 function AnalysisCard({item,onClick}){
   const ref=useInView();
   return(
-    <div ref={ref} className="hgc hg-card-an iv" style={{...item.sc,aspectRatio:"16/10",borderRadius:18}} onClick={onClick}>
+    <div ref={ref} className={`hgc hg-card-an iv${item.cardImages||item.cardImage?" an-img-card":""}`} style={{...item.sc,aspectRatio:"16/10",borderRadius:18}} onClick={onClick}>
       <div className="hgbg">
-        {item.sheetUrl?(
+        {item.cardImages?(
+          <div style={{position:"absolute",inset:0,background:item.cardTint||"var(--cream)"}}>
+            <div className="an-phones">{item.cardImages.map(src=><img key={src} src={src} alt="" loading="lazy" decoding="async"/>)}</div>
+          </div>
+        ):item.cardImage?(
+          <img src={item.cardImage} alt="" loading="lazy" decoding="async"/>
+        ):item.sheetUrl?(
           <LoadingIframe src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")} title="Sheet" style={{width:"150%",height:"150%",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}}/>
         ):item.embedLink?(
           <LoadingIframe src={item.embedLink} title="Notion Preview" style={{width:"150%",height:"150%",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}}/>
@@ -1542,8 +1818,9 @@ function AnalysisCard({item,onClick}){
         <div className="hgrv">
           <p className="hgde">{item.preview}</p>
           <div className="hgft">
-            <div className="hgct">{item.sheetUrl?"See the Analysis":"Read the Case"} <Arrow/></div>
+            <div className="hgct">{item.ctaLabel||(item.sheetUrl?"See the Analysis":"Read the Case")} <Arrow/></div>
             <div className="hgtl">
+              {item.tools&&item.tools.map(t=><div key={t} className="hgto"><LogoSVG tool={t} size={20}/></div>)}
               {item.sheetUrl&&<div className="hgto"><LogoSVG tool="GoogleSheets" size={20}/></div>}
               {item.link&&<div className="hgto"><LogoSVG tool="Notion" size={20}/></div>}
               {item.linkedinPost&&<div className="hgto"><LogoSVG tool="LinkedIn" size={20}/></div>}
@@ -1616,7 +1893,7 @@ function IntelSection(){
 function AboutWithQuote(){
   const ref=useInView();
   return(
-    <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--cream)",minHeight:480}}>
+    <section id="about" ref={ref} className="iv" style={{position:"relative",overflow:"hidden",background:"var(--iv)",minHeight:480}}>
       <div className="about-diagonal-bg" style={{position:"absolute",inset:0,background:"var(--plum)",clipPath:"polygon(0 0, 50% 0, 30% 100%, 0 100%)",zIndex:0}}/>
       <div className="about-grid" style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"1fr 1fr",minHeight:480,alignItems:"stretch"}}>
         <div className="about-quote-block" style={{padding:"72px 56px 72px 64px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
@@ -1659,10 +1936,12 @@ function Footer({showToast}){
 export default function Portfolio(){
   const[activeCS,setActiveCS]=useState(null);
   const[activeAnalysis,setActiveAnalysis]=useState(null);
+  const[moreAnalyses,setMoreAnalyses]=useState(false);
   const[toastMsg,showToast]=useToast();
   return(
     <div>
       <GlobalCSS/>
+      <style>{AN_CSS}</style>
       <Toast msg={toastMsg}/>
       <Nav/>
       <DesktopBanner/>
@@ -1672,24 +1951,27 @@ export default function Portfolio(){
         <h2 className="st">Shipped with <em>intent</em></h2>
         <div className="bento-scroll-wrap" style={{display:"flex",justifyContent:"center"}}><CaseGrid cases={CASES} onClickCase={id=>setActiveCS(id)}/></div>
       </section>
-      <section id="more-work" className="page-section" style={{padding:"48px 64px",background:"var(--cream)"}}>
+      <section id="thinking" className="page-section" style={{padding:"56px 64px",background:"var(--cream)"}}>
+        <div className="ov">PM Thinking & Analysis</div>
+        <h2 className="st">Beyond <em>execution</em></h2>
+        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
+        <div className="ag">{(moreAnalyses?ANALYSES:ANALYSES.slice(0,4)).map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
+        <button onClick={()=>setMoreAnalyses(!moreAnalyses)} className="iweb" style={{marginTop:18}}>{moreAnalyses?"Show fewer ↑":"See more analyses ↓"}</button>
+      </section>
+      <section id="more-work" className="page-section" style={{padding:"48px 64px"}}>
         <div className="ov">More Shipped Work</div>
         <h2 className="st">Also <em>live</em></h2>
         <div className="mg"><MoreGrid/></div>
         <WeddingCard/>
         <KitchenCard/>
       </section>
-      <section id="thinking" className="page-section" style={{padding:"56px 64px"}}>
-        <div className="ov">PM Thinking & Analysis</div>
-        <h2 className="st">Beyond <em>execution</em></h2>
-        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
-        <div className="ag">{ANALYSES.map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
-      </section>
       <section id="intel" className="page-section" style={{padding:"40px 64px",background:"var(--cream)"}}><IntelSection/></section>
       <AboutWithQuote/>
       <Footer showToast={showToast}/>
       {activeCS&&<CaseModal id={activeCS} onClose={()=>setActiveCS(null)}/>}
-      {activeAnalysis&&<AnalysisModal item={activeAnalysis} onClose={()=>setActiveAnalysis(null)}/>}
+      {activeAnalysis&&(activeAnalysis.id==="legistify"?<LegistifyModal onClose={()=>setActiveAnalysis(null)}/>
+        :activeAnalysis.id==="fieldassist"?<FieldAssistModal onClose={()=>setActiveAnalysis(null)}/>
+        :<AnalysisModal item={activeAnalysis} onClose={()=>setActiveAnalysis(null)}/>)}
     </div>
   );
 }
