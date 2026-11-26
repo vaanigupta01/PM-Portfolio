@@ -1462,7 +1462,7 @@ const LG_DASH="https://litigation-pulse.vaanigupta01.workers.dev/#/org";
 const LG_INSIGHTS="https://claude.ai/artifact/ATVHhQg81z4uXigP1ADoVs";
 const LG_DICTIONARY="https://claude.ai/artifact/BGDcMN4MFS9ZE9HZo7tRAL";
 // Mobile carousel in the FieldAssist modal. Add any new fa-*.jpg here.
-const FA_SHOTS=["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-schemes.jpg","/images/fa-order.jpg","/images/fa-placed.jpg"];
+const FA_SHOTS=["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-schemes.jpg","/images/fa-order.jpg","/images/fa-placed.jpg","/images/fa-leaderboard.jpg","/images/fa-marathi.jpg"];
 
 function useMedia(q){
   const get=()=>typeof window!=="undefined"&&window.matchMedia?window.matchMedia(q).matches:false;
