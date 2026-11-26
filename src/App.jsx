@@ -1421,7 +1421,7 @@ function CaseModal({id,onClose}){
 // ─── PM THINKING ──────────────────────────────────────────────────────────────
 const ANALYSES=[
   {id:"fieldassist",company:"FieldAssist",type:"Product Strategy · Live App Prototype",title:"Getting Shops Stocked Right Before the Summer Rush",
-   preview:"A field rep gets about five minutes per shop. I designed an assistant that tells the rep how much each kirana should order before the summer peak, explains why in words the shopkeeper trusts, and recalculates as the cart changes.",
+   preview:"A field rep gets about five minutes per shop. I designed an assistant that tells the rep how much each kirana should order before the summer peak. It explains the number in words the shopkeeper trusts, and recalculates as the cart changes.",
    ctaLabel:"Try the Prototype",tools:["Claude","ChatGPT"],
    cardImages:["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-talking.jpg"],cardTint:"linear-gradient(160deg,#F5EBD3,#E6D2A3)",
    sc:{"--sc":"rgba(72,52,12,.93)","--sm":"rgba(72,52,12,.45)","--sch":"rgba(72,52,12,.97)","--smh":"rgba(72,52,12,.82)"}},
@@ -1490,15 +1490,30 @@ const AN_CSS=`
 .an-chips{display:flex;flex-wrap:wrap;gap:6px;}
 .an-chip{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;font-family:var(--l);font-size:11px;line-height:1.35;padding:4px 11px;border-radius:20px;background:var(--paper);border:1px solid var(--rule);color:var(--ink-mu);max-width:100%;}
 .an-chip strong{color:var(--forest);font-weight:600;}.an-chip-ar{color:var(--plum);}
-.an-card{margin-bottom:12px;padding:16px 19px;background:var(--cream);border-radius:10px;border:1px solid var(--rule);}
-.an-card-ti{font-family:var(--h);font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.3;}
-.an-card .ms{margin-top:12px;}
-.an-card p{font-size:12.8px;color:var(--ink-mid);line-height:1.7;font-weight:300;}
-.an-guard{margin-top:12px;padding:9px 13px;background:rgba(184,134,46,.06);border-radius:8px;border:1px solid rgba(184,134,46,.18);font-size:12.3px;color:var(--ink-mid);line-height:1.6;font-weight:300;}
+.an-guard{margin-top:14px;padding:9px 13px;background:rgba(184,134,46,.06);border-radius:8px;border:1px solid rgba(184,134,46,.18);font-size:12.3px;color:var(--ink-mid);line-height:1.6;font-weight:300;}
 .an-guard b{font-family:var(--l);font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-right:6px;}
-.an-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.an-mini{padding:10px 13px;background:var(--cream);border:1px solid var(--rule);border-radius:9px;font-size:12.3px;line-height:1.55;color:var(--ink-mu);font-weight:300;}
-.an-mini strong{color:var(--ink);font-weight:600;}
+.an-sig{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--acc);border-radius:12px;padding:18px 20px 16px;margin-bottom:14px;}
+.an-sig-hd{display:flex;align-items:center;gap:11px;margin-bottom:14px;}
+.an-sig-no{width:28px;height:28px;border-radius:50%;background:var(--acc);color:white;font-family:var(--l);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.an-sig-ti{font-family:var(--h);font-size:16.5px;font-weight:600;color:var(--ink);line-height:1.3;}
+.an-sig-bd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;}
+.an-sig-bd p{font-size:12.8px;color:var(--ink-mid);line-height:1.7;font-weight:300;}
+.an-sig .ms{color:var(--acc);margin-bottom:6px;}
+.an-sig .moli li{font-size:12.8px;margin-bottom:6px;}.an-sig .moli li::before{background:var(--acc);}
+.an-areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;}
+.an-area{padding:13px 15px 14px;background:var(--paper);border:1px solid var(--rule);border-radius:12px;position:relative;overflow:hidden;}
+.an-area::after{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--plum),rgba(155,45,94,.15));}
+.an-area-no{font-family:var(--l);font-size:10px;letter-spacing:1px;color:var(--plum);font-weight:600;margin-bottom:4px;}
+.an-area-nm{font-family:var(--h);font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.25;margin-bottom:3px;}
+.an-area-ds{font-size:12px;color:var(--ink-mu);line-height:1.5;font-weight:300;}
+.an-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.an-feat{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--paper);border:1px solid var(--rule);border-radius:12px;font-size:12.8px;line-height:1.6;color:var(--ink-mid);font-weight:300;transition:border-color .2s,transform .2s;}
+.an-feat:last-child:nth-child(odd){grid-column:1/-1;}
+.an-feat:hover{border-color:var(--plum-b);transform:translateY(-2px);}
+.an-feat strong{color:var(--ink);font-weight:600;}
+.an-feat-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.an-sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;}
+.an-sg>div{padding:12px 16px;border-radius:10px;}
 .an-steps{position:relative;margin:4px 0 0;padding:0;list-style:none;}
 .an-steps li{position:relative;padding:0 0 18px 40px;font-size:13.3px;color:var(--ink-mid);line-height:1.7;font-weight:300;}
 .an-steps li:last-child{padding-bottom:4px;}
@@ -1510,15 +1525,20 @@ const AN_CSS=`
 .an-link-card:hover{border-color:var(--plum-b);}
 .an-phones{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;}
 .an-phones img{width:28%!important;height:auto!important;aspect-ratio:392/768;max-height:90%;object-fit:cover;object-position:top;border-radius:12px;box-shadow:0 10px 28px rgba(40,25,5,.28);display:block;}
-.fa-modal{max-width:1180px!important;height:calc(100vh - 56px);display:grid;grid-template-columns:438px 1fr;margin:0 auto!important;}
-.fa-left{background:linear-gradient(160deg,#2B200A,#48340C);display:flex;flex-direction:column;align-items:center;padding:14px 14px 12px;min-height:0;}
-.fa-phone{width:410px;flex:1;min-height:0;border-radius:34px;background:#111;padding:10px;box-shadow:0 20px 50px rgba(0,0,0,.45);}
-.fa-phone-in{position:relative;width:390px;height:100%;border-radius:26px;overflow:hidden;background:var(--iv);}
-.fa-cap{font-family:var(--l);font-size:10.5px;color:rgba(250,247,241,.6);text-align:center;line-height:1.5;margin-top:10px;}
+.fa-modal{max-width:1180px!important;height:calc(100vh - 56px);display:grid;grid-template-columns:auto minmax(0,1fr);margin:0 auto!important;}
+.fa-left{position:relative;min-height:0;background:var(--iv);border-right:1px solid var(--rule);}
+.fa-full{position:absolute;left:calc(100% - 16px);bottom:18px;z-index:5;height:32px;max-width:32px;padding:0 9px;border-radius:16px;background:var(--paper);border:1px solid var(--rule);box-shadow:0 4px 14px rgba(0,0,0,.12);display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap;text-decoration:none;color:var(--ink-mu);font-family:var(--l);font-size:11px;transition:max-width .3s ease,color .2s,border-color .2s;}
+.fa-full svg{flex-shrink:0;}
+.fa-full:hover,.fa-full:focus-visible{max-width:220px;color:var(--plum);border-color:var(--plum-b);}
 .fa-right{overflow-y:auto;min-height:0;}
 .fa-moc{right:max(32px,calc(50% - 576px))!important;}
+@media(max-width:760px){.an-sig-bd{grid-template-columns:1fr;gap:12px;}}
 @media(max-width:640px){
-  .an-grid2{grid-template-columns:1fr;}
+  .an-feats,.an-sg{grid-template-columns:1fr;}
+  .an-areas{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:420px){
+  .an-areas{grid-template-columns:1fr;}
   .an-phones{align-items:flex-start;padding-top:58px;}
   .hg-card-an.an-img-card{min-height:540px!important;}
   .hg-card-an.an-img-card .hgsc{background:linear-gradient(to top,var(--sc,.9)0%,var(--sc,.9)42%,var(--sm,.55)62%,transparent 80%)!important;}
@@ -1528,21 +1548,21 @@ const AN_CSS=`
 function LegistifyModal({onClose}){
   useEffect(()=>{document.body.style.overflow="hidden";return()=>{document.body.style.overflow="";};},[]);
   const signals=[
-    {t:"1. One counsel firm is breaking the hearing loop",
+    {t:"One counsel firm is breaking the hearing loop",
      data:"One external firm carries 38% of hearings but reports only 29% on time, with a 9.4-day lag against 1.8 to 2.6 for the others. Close-out slid 72% → 61% after it took on one unit's disputes.",
      build:[["Reply to update:","an email or WhatsApp on the evening of each hearing. Replying with what happened, the next date and the next step records it, no login needed."],["AI-drafted outcome:","when the court order syncs, AI drafts the outcome and counsel confirms in one tap."],["Escalation:","unreported hearings reach the case manager on day 3."]],
      move:[["Close-out","61%","79%"],["Firm's lag","9.4 days","under 3"],["Hearings awaiting update","47","about 26"]],
-     guard:"AI drafts edited after confirmation, so speed doesn't cost accuracy."},
-    {t:"2. AI credits run out on day 19",
+     acc:"var(--coral)",guard:"AI drafts edited after confirmation, so speed doesn't cost accuracy."},
+    {t:"AI credits run out on day 19",
      data:"AI Diligence burns 46% of credits, yet only 17% of its outputs get used: 59 credits per useful output against 3.3 for Ask AI. When credits run out on day 19, Ask AI, the low-cost assistant two-thirds of lawyers rely on, falls from about 40 queries a day to 3.",
      build:[["A separate pool for bulk AI,","so Ask AI never switches off."],["Preview before the batch:","Diligence runs on 5 cases first, shows the results and the full batch's credit cost, and continues only on confirmation."],["Early warning:","admins get an alert at 70% of credits with the projected limit day."]],
      move:[["Limit day","19","never reached"],["Ask AI after day 19:","3","about 40 a day"],["Diligence outputs used","17%","40%"],["Credits per useful output","59","about 25"]],
-     guard:"Useful Diligence outputs don't drop, so we cut waste and not useful work."},
-    {t:"3. Auto-intake suggestions are mostly noise",
+     acc:"#7B5CD6",guard:"Useful Diligence outputs don't drop, so we cut waste and not useful work."},
+    {t:"Auto-intake suggestions are mostly noise",
      data:"Name matching gives 31% precision, and the queue isn't ranked, so reviewers never reach most of it. In 90 days, 502 suggestions expired unread, about 146 of them real cases.",
      build:[["Rank by match confidence,","starting from each keyword group's track record. No new model needed."],["Fast lane and digest:","confident matches alert the right case manager; the rest go into a weekly digest."],["Route by business unit,","with alerts that name the party, court and first hearing date."]],
      move:[["Precision","31%","60%"],["Real cases lost to expiry:","about 146","under 30"]],
-     guard:"A monthly audit of archived suggestions for missed cases."},
+     acc:"#4B4FC9",guard:"A monthly audit of archived suggestions for missed cases."},
   ];
   const sections=[["Pulse","the five numbers to check each morning"],["Adoption","who uses it, which features stick"],["Intake","do new filings reach the team early"],["Enrich and staff","do cases get the details reports need"],["Hearing loop","is every hearing closed out, and by whom"],["AI behaviour","is AI used, trusted and affordable"],["Value","do leaders and business users get something out of it"],["Platform health","is it fast, fresh and reliable"],["Teams","how each team and counsel firm is performing"]];
   return(
@@ -1550,7 +1570,8 @@ function LegistifyModal({onClose}){
       <div className="modal" onClick={e=>e.stopPropagation()}>
         <button className="moc" onClick={onClose}>×</button>
         <div className="mohe" style={{padding:0,overflow:"hidden",position:"relative",height:260,background:"linear-gradient(135deg,#0E0C1E,#1C1838)"}}>
-          <LoadingIframe src={LG_DASH} title="Litigation Health Radar dashboard"/>
+          {/* Rendered at 125% and scaled to 80%, so the preview shows the wide-screen layout. */}
+          <LoadingIframe src={LG_DASH} title="Litigation Health Radar dashboard" style={{width:"125%",height:"125%",transform:"scale(.8)",transformOrigin:"top left"}}/>
           <OpenPill href={LG_DASH}/>
         </div>
         <div className="mob">
@@ -1571,38 +1592,53 @@ function LegistifyModal({onClose}){
               <li><strong>Defined 27 metrics, each tied to a decision:</strong> what it answers, why it matters, and what to do if it moves. Vanity counts like total logins were left out on purpose.</li>
               <li><strong>Organised the dashboard around the lifecycle,</strong> in nine sections that each drill from the org to a business unit, a team and one person. "Break it down" panels and an "i" on every chart explain the why.</li>
             </ul>
-            <div className="an-grid2" style={{marginTop:12}}>
-              {sections.map(([n,d])=><div key={n} className="an-mini"><strong>{n}:</strong> {d}</div>)}
+            <div className="an-areas">
+              {sections.map(([n,d],i)=><div key={n} className="an-area"><div className="an-area-no">{String(i+1).padStart(2,"0")}</div><div className="an-area-nm">{n}</div><div className="an-area-ds">{d}</div></div>)}
             </div>
           </div>
           <div className="mose"><h3 className="mosh">The North Star</h3>
-            <div style={{marginBottom:10,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:15,fontWeight:600,color:"var(--forest)"}}>Hearing close-out rate: hearings with an outcome recorded within 2 days.</div></div>
+            <div style={{marginBottom:10,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:14,fontWeight:600,color:"var(--forest)",lineHeight:1.5}}>Hearing close-out rate: hearings with an outcome recorded within 2 days.</div></div>
             <p style={{fontSize:12.8,color:"var(--ink-mu)",lineHeight:1.7,fontWeight:300}}>The hearing is the heartbeat of a case. Recorded on time, the product is the system of record. If not, it's just a tracker, and the team goes back to email and Excel.</p>
           </div>
           <div className="mose"><h3 className="mosh">What the Dashboard Caught</h3>
             <div className="mot" style={{marginBottom:12}}><p>Runs on a made-up company sized to a real customer (about 150 users and 400 active cases), seeded with three realistic problems.</p></div>
-            {signals.map(s=>(
-              <div key={s.t} className="an-card">
-                <div className="an-card-ti">{s.t}</div>
-                <div className="ms" style={{marginTop:0}}>What the data shows</div>
-                <p>{s.data}</p>
-                <div className="ms">What I'd build</div>
-                <ul className="moli" style={{marginTop:4}}>{s.build.map(([b,r])=><li key={b}><strong>{b}</strong> {r}</li>)}</ul>
-                <div className="ms" style={{marginBottom:7}}>What should move</div>
-                <MoveChips items={s.move}/>
+            {signals.map((s,i)=>(
+              <div key={s.t} className="an-sig" style={{"--acc":s.acc}}>
+                <div className="an-sig-hd"><span className="an-sig-no">{i+1}</span><div className="an-sig-ti">{s.t}</div></div>
+                <div className="an-sig-bd">
+                  <div>
+                    <div className="ms">What the data shows</div>
+                    <p>{s.data}</p>
+                    <div className="ms" style={{marginTop:14}}>What should move</div>
+                    <MoveChips items={s.move}/>
+                  </div>
+                  <div>
+                    <div className="ms">What I'd build</div>
+                    <ul className="moli">{s.build.map(([b,r])=><li key={b}><strong>{b}</strong> {r}</li>)}</ul>
+                  </div>
+                </div>
                 <div className="an-guard"><b>Guardrail</b>{s.guard}</div>
               </div>
             ))}
           </div>
           <div className="mose"><h3 className="mosh">One Feature I'd Add: Link Every Case to Its Contract</h3>
-            <div className="mot"><p>46% of active cases start from a contract. Linking Legistify's two products turns contract management and litigation into one lifecycle:</p></div>
-            <ul className="moli" style={{marginTop:8}}>
-              <li><strong>Suggest the contract:</strong> AI matches the opposing party to its contracts when a case is added.</li>
-              <li><strong>Bring the facts across:</strong> contract value, governing law, jurisdiction and the arbitration clause appear on the case, and the value pre-fills exposure.</li>
-              <li><strong>Send the lesson back:</strong> the contract gets an "in dispute" flag, so Contract Management learns which clauses and counterparties end up in court.</li>
-            </ul>
-            <div className="ms" style={{marginTop:10,marginBottom:7}}>What should move</div>
-            <MoveChips items={[["Contract-based cases linked","0%","60% in a quarter"]]}/>
+            <div className="an-sig" style={{"--acc":"var(--forest)"}}>
+              <div className="an-sig-bd">
+                <div>
+                  <p style={{fontSize:13.3}}>46% of active cases start from a contract. Linking Legistify's two products turns contract management and litigation into one lifecycle:</p>
+                </div>
+                <div>
+                  <div className="ms">What I'd build</div>
+                  <ul className="moli">
+                    <li><strong>Suggest the contract:</strong> AI matches the opposing party to its contracts when a case is added.</li>
+                    <li><strong>Bring the facts across:</strong> contract value, governing law, jurisdiction and the arbitration clause appear on the case, and the value pre-fills exposure.</li>
+                    <li><strong>Send the lesson back:</strong> the contract gets an "in dispute" flag, so Contract Management learns which clauses and counterparties end up in court.</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="ms" style={{marginTop:14}}>What should move</div>
+              <MoveChips items={[["Contract-based cases linked","0%","60% in a quarter"]]}/>
+            </div>
           </div>
           <div className="mose"><h3 className="mosh">The Full Recommendations</h3>
             {/* claude.ai artifact pages refuse to load inside iframes (frame-ancestors 'self'), so this is a link card. */}
@@ -1623,10 +1659,26 @@ function LegistifyModal({onClose}){
   );
 }
 
+// The prototype as a real phone screen: a 390 × 844 viewport scaled to the modal's height,
+// with no frame, flush with the modal's left, top and bottom edges.
+function PhoneProto({src,title}){
+  const ref=useRef(null);
+  const[h,setH]=useState(0);
+  useEffect(()=>{const el=ref.current;if(!el)return;const ro=new ResizeObserver(()=>setH(el.clientHeight));ro.observe(el);setH(el.clientHeight);return()=>ro.disconnect();},[]);
+  const sc=h?Math.min(1,Math.max(.68,h/844)):1;
+  return(
+    <div ref={ref} className="fa-left" style={{width:Math.round(390*sc)}}>
+      {h>0&&<div style={{position:"absolute",inset:0,overflow:"hidden"}}><LoadingIframe src={src} title={title} style={{width:390,height:Math.round(h/sc),transform:`scale(${sc})`,transformOrigin:"top left"}}/></div>}
+      <a href={src} target="_blank" rel="noreferrer" className="fa-full" aria-label="Open the prototype full screen">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        <span>Open full screen ↗</span>
+      </a>
+    </div>
+  );
+}
 function FieldAssistModal({onClose}){
   useEffect(()=>{document.body.style.overflow="hidden";return()=>{document.body.style.overflow="";};},[]);
   const desk=useMedia("(min-width:1025px)");
-  const caption="Log in with any username and password · Demo day: Tue 28 Apr 2026";
   const steps=[
     ["Before walking in:",<>a suggested order with its pack mix, like "10 cases, enough till Tue 5 May", the reasons behind it, a "What if it hits 43°C?" check, and talking points split into "for the shopkeeper" (weather, last year, schemes, events) and "for you only", so dues and targets never show on a shared screen.</>],
     ["While building the cart:",<>each pack's suggestion tagged with its reason, such as "Low stock in shop" or "Extra sales potential", schemes on every pack with a strip tracking progress towards the next scheme threshold, and a swap that keeps the order size and scheme when the distributor is short.</>],
@@ -1634,27 +1686,31 @@ function FieldAssistModal({onClose}){
     ["After submit:",<>next week's outlook for the shop, so the next visit starts prepared.</>],
   ];
   const day=[
-    ["Marathi, Hindi and English,","voice notes included, because many reps are more at home in their own language."],
-    ["A map of the beat","before the day starts, for peace of mind. Tap through to Google Maps to check for blockages before each shop."],
-    ["Call before you go,","to confirm the shop is open, or that the owner isn't out for lunch and save a wasted trip."],
-    ["Voice notes,","because speaking is faster than typing while the shopkeeper waits. Issues shopkeepers raise are logged and categorised automatically."],
-    ["Summer and monthly targets tracked separately,","so pre-season stocking isn't lost behind the monthly case count."],
-    ["Light gamification:","subtle animations reward the first sale of the day, progress towards targets, and gaining on the rep above on the leaderboard. That keeps a healthy competitive streak going through a long day."],
-    ["Morning alerts","for new schemes and distributor stock changes, before the first visit."],
+    ["Marathi, Hindi and English,","voice notes included, because many reps are more at home in their own language.",<><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></>],
+    ["A map of the beat","before the day starts, for peace of mind. Tap through to Google Maps to check for blockages before each shop.",<><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/></>],
+    ["Call before you go,","to confirm the shop is open, or that the owner isn't out for lunch and save a wasted trip.",<><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></>],
+    ["Voice notes,","because speaking is faster than typing while the shopkeeper waits. Issues shopkeepers raise are logged and categorised automatically.",<><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></>],
+    ["Summer and monthly targets tracked separately,","so pre-season stocking isn't lost behind the monthly case count.",<><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>],
+    ["Light gamification:","subtle animations reward the first sale of the day, progress towards targets, and gaining on the rep above on the leaderboard. That keeps a healthy competitive streak going through a long day.",<path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.8 5.8 21.1l1.4-7L2 9.3l7-.8z"/>],
+    ["Morning alerts","for new schemes and distributor stock changes, before the first visit.",<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/>],
   ];
   const body=(
     <div className="mob">
       {!desk&&(
         <div className="mose">
           <a href={FA_PROTO} target="_blank" rel="noreferrer" className="nc" style={{display:"block",textAlign:"center",padding:"14px 20px",fontSize:13}}>Try the live prototype ↗</a>
-          <p style={{fontFamily:"var(--l)",fontSize:11,color:"var(--ink-mu)",textAlign:"center",marginTop:9}}>{caption}</p>
           <HorizScrollCarousel images={FA_SHOTS}/>
         </div>
       )}
-      <div style={{marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
-        <div className="moov">Product Strategy · FieldAssist</div>
-        <h2 className="moti" style={{marginBottom:5}}>Rep Assist</h2>
-        <p className="mosu" style={{marginBottom:0}}>Helps field reps get every kirana stocked adequately before the summer peak, in the few minutes each visit allows.</p>
+      <div className="modal-head-row" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:20,marginBottom:24,paddingBottom:24,borderBottom:"1px solid var(--rule)"}}>
+        <div>
+          <div className="moov">Product Strategy · FieldAssist</div>
+          <h2 className="moti" style={{marginBottom:5}}>Sales Rep Assist</h2>
+          <p className="mosu" style={{marginBottom:0}}>Helps field reps get every kirana stocked adequately before the summer peak, in the few minutes each visit allows.</p>
+        </div>
+        <div className="modal-head-tools" style={{textAlign:"right",flexShrink:0,paddingRight:desk?36:0}}>
+          <BuiltWith items={[["Claude","Claude + Claude Code"],["ChatGPT","ChatGPT"]]}/>
+        </div>
       </div>
       <div className="mose"><h3 className="mosh">The Problem</h3><div className="mot">
         <p>Every summer, beverage demand surges for a few peak weeks. Shopkeepers order from last month's sales and keep orders small for fear of unsold leftovers, so they enter the peak understocked. By the time they reorder, the distributor and the bottler can't keep up, and the sale goes to another shop or brand.</p>
@@ -1666,12 +1722,13 @@ function FieldAssistModal({onClose}){
         <ol className="an-steps">{steps.map(([b,t],i)=><li key={i}><span className="an-dot">{i+1}</span><strong>{b}</strong> {t}</li>)}</ol>
         <div className="sol" style={{marginTop:14}}>
           <div className="ms" style={{color:"var(--plum)",marginBottom:6}}>Behind every number</div>
-          <p>The quantity comes from the shop's last four weeks of sales per pack. Last year's sales set how strongly that shifts with the season and heat for this shop and each pack. The forecast then factors in the heat forecast and local events like IPL match days, and passes six safety checks: stock already on the shelf, closures, rain, distributor limits, cooler space, credit, and a cap against the shop's own best order. New shops borrow from similar shops, banquet halls plan from their bookings, and it knows when to say less: "Order little or nothing: shuts 1 May" for a school canteen.</p>
+          <p>The quantity comes from the shop's last four weeks of sales per pack. Last year's sales set how strongly that shifts with the season and heat for this shop and each pack. The forecast then factors in the heat forecast and local events like IPL match days, and passes seven safety checks: stock already on the shelf, closures, rain, distributor limits, cooler space, credit, and a cap against the shop's own best order. New shops borrow from similar shops, banquet halls plan from their bookings, and it knows when to say less: "Order little or nothing: shuts 1 May" for a school canteen.</p>
         </div>
       </div>
       <div className="mose"><h3 className="mosh">Built Around the Rep's Day</h3>
         <div className="mot" style={{marginBottom:10}}><p>The assistant isn't one screen. It supports the rep from the first tap of the morning to the last shop.</p></div>
-        <div className="an-grid2">{day.map(([b,t])=><div key={b} className="an-mini"><strong>{b}</strong> {t}</div>)}</div>
+        <div className="an-feats">{day.map(([b,t,ic],i)=>{const col=["var(--plum)","var(--forest)","var(--coral)","var(--gold)","#4B4FC9"][i%5];return(
+          <div key={b} className="an-feat"><span className="an-feat-ic" style={{background:`color-mix(in srgb, ${col} 11%, transparent)`,color:col}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{ic}</svg></span><div><strong>{b}</strong> {t}</div></div>);})}</div>
       </div>
       <div className="mose"><h3 className="mosh">Eight Shop Types, Tested Like Real Users</h3>
         <div className="mot" style={{marginBottom:8}}><p>Eight personas cover all 240 shops in the prototype and prove where the assistant should act and where it should hold back:</p></div>
@@ -1683,19 +1740,20 @@ function FieldAssistModal({onClose}){
         </ul>
       </div>
       <div className="mose"><h3 className="mosh">How I'd Know It Works</h3>
-        <div style={{marginBottom:14,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:15,fontWeight:600,color:"var(--forest)"}}>Pre-peak readiness: the share of each shop's peak-week need ordered before the peak</div></div>
-        <div style={{marginBottom:12}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{["Suggestions accepted, edited or dismissed","Scheme nudges converted","Peak-week stock-outs","Pilot vs control sales"].map(s=><li key={s}>{s}</li>)}</ul></div>
-        <div style={{padding:"12px 16px",background:"rgba(184,134,46,.06)",borderRadius:10,border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{["June leftovers","Visit time added","Dues growth",`Overrides of "order less"`].map(g=><li key={g}>{g}</li>)}</ul></div>
+        <div style={{marginBottom:14,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:14,fontWeight:600,color:"var(--forest)",lineHeight:1.5}}>Pre-peak readiness: the share of each shop's peak-week need ordered before the peak</div></div>
+        <div className="an-sg">
+        <div style={{background:"var(--paper)",border:"1px solid var(--rule)"}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{["Suggestions accepted, edited or dismissed","Scheme nudges converted","Peak-week stock-outs","Pilot vs control sales"].map(s=><li key={s}>{s}</li>)}</ul></div>
+        <div style={{background:"rgba(184,134,46,.06)",border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{["June leftovers","Visit time added","Dues growth",`Overrides of "order less"`].map(g=><li key={g}>{g}</li>)}</ul></div>
+        </div>
         <p style={{fontSize:12.3,color:"var(--ink-mu)",marginTop:10,fontWeight:300}}>Proven through a matched-route pilot six weeks before the peak.</p>
       </div>
-      <div className="mose"><h3 className="mosh">The Data and the Logic</h3><div className="mot"><p>Runs on a synthetic territory I generated: 240 shops, 60 packs and two years of orders, checked by 34 automated tests. The engine is transparent rules with 17 tests of its own, not a black box, so every number arrives with its reasons. In a real pilot, its coefficients would be recalibrated on actual sales.</p></div></div>
-      <div className="mose"><h3 className="mosh">The Strategy Deck</h3>
+      <div className="mose"><h3 className="mosh">The Data and the Logic</h3><div className="mot"><p>Runs on a synthetic territory I generated: 240 shops, 60 packs and over two years of orders, checked by 34 automated tests. The engine is transparent rules with 17 tests of its own, not a black box, so every number arrives with its reasons. In a real pilot, its coefficients would be recalibrated on actual sales.</p></div></div>
+      <div className="mose" style={{marginBottom:0}}><h3 className="mosh">The Strategy Deck</h3>
         <div style={{position:"relative",borderRadius:12,overflow:"hidden",border:"1px solid var(--rule)",height:420,background:"var(--cream)"}}>
           <LoadingIframe src={FA_DECK.replace(/\/view.*$/,"/preview")} title="Season Check deck"/>
           <OpenPill href={FA_DECK} prd="FieldAssist_Strategy_Deck"/>
         </div>
       </div>
-      <div style={{paddingTop:20,borderTop:"1px solid var(--rule)"}}><BuiltWith align="left" items={[["Claude","Claude + Claude Code"],["ChatGPT","ChatGPT"]]}/></div>
     </div>
   );
   return(
@@ -1703,11 +1761,7 @@ function FieldAssistModal({onClose}){
       <div className={`modal${desk?" fa-modal":""}`} onClick={e=>e.stopPropagation()}>
         <button className={`moc${desk?" fa-moc":""}`} onClick={onClose}>×</button>
         {desk?(<>
-          <div className="fa-left">
-            <div className="fa-phone"><div className="fa-phone-in"><LoadingIframe src={FA_PROTO} title="Rep Assist prototype"/></div></div>
-            <div className="fa-cap">{caption}</div>
-            <a href={FA_PROTO} target="_blank" rel="noreferrer" className="emo" style={{position:"static",marginTop:8}}>Open full screen ↗</a>
-          </div>
+          <PhoneProto src={FA_PROTO} title="Sales Rep Assist prototype"/>
           <div className="fa-right">{body}</div>
         </>):body}
       </div>
@@ -1770,7 +1824,7 @@ function AnalysisModal({item,onClose}){
           </div>}
           {c.solutions&&<div className="mose"><h3 className="mosh">Recommended Solutions</h3><div className="sol"><p>{c.solutions}</p></div></div>}
           {c.metrics&&<div className="mose"><h3 className="mosh">Success Metrics</h3>
-            {c.primaryMetric&&<div style={{marginBottom:14,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:15,fontWeight:600,color:"var(--forest)"}}>{c.primaryMetric}</div></div>}
+            {c.primaryMetric&&<div style={{marginBottom:14,padding:"12px 16px",background:"rgba(42,92,74,.06)",borderRadius:10,border:"1px solid rgba(42,92,74,.18)"}}><div className="ms" style={{color:"var(--forest)"}}>Primary Metric</div><div style={{fontSize:14,fontWeight:600,color:"var(--forest)",lineHeight:1.5}}>{c.primaryMetric}</div></div>}
             {c.supporting&&<div style={{marginBottom:12}}><div className="ms">Supporting (Leading Indicators)</div><ul className="moli" style={{marginTop:4}}>{c.supporting.map((s,i)=><li key={i}>{s}</li>)}</ul></div>}
             {c.guardrails&&<div style={{padding:"12px 16px",background:"rgba(184,134,46,.06)",borderRadius:10,border:"1px solid rgba(184,134,46,.18)"}}><div className="ms" style={{color:"var(--gold)"}}>Guardrail Metrics</div><ul className="moli" style={{marginTop:4}}>{c.guardrails.map((g,i)=><li key={i}>{g}</li>)}</ul></div>}
           </div>}
@@ -1954,7 +2008,7 @@ export default function Portfolio(){
       <section id="thinking" className="page-section" style={{padding:"56px 64px",background:"var(--cream)"}}>
         <div className="ov">PM Thinking & Analysis</div>
         <h2 className="st">Beyond <em>execution</em></h2>
-        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Structured exercises in product diagnosis, root cause analysis, and strategic recommendation — applied to real-world product scenarios.</p>
+        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Real product problems, worked end to end. Root causes diagnosed, requirements written, and two ideas taken further into a live analytics dashboard and a working app prototype.</p>
         <div className="ag">{(moreAnalyses?ANALYSES:ANALYSES.slice(0,4)).map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
         <button onClick={()=>setMoreAnalyses(!moreAnalyses)} className="iweb" style={{marginTop:18}}>{moreAnalyses?"Show fewer ↑":"See more analyses ↓"}</button>
       </section>
