@@ -1423,7 +1423,7 @@ const ANALYSES=[
   {id:"fieldassist",company:"FieldAssist",type:"Product Strategy · Live App Prototype",title:"Getting Shops Stocked Right Before the Summer Rush",
    preview:"A field rep gets about five minutes per shop. I designed an assistant that tells the rep how much each kirana should order before the summer peak. It explains the number in words the shopkeeper trusts, and recalculates as the cart changes.",
    ctaLabel:"Try the Prototype",tools:["Claude","ChatGPT"],
-   cardImages:["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-talking.jpg"],cardTint:"linear-gradient(160deg,#F5EBD3,#E6D2A3)",
+   cardImages:["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-schemes.jpg"],cardTint:"linear-gradient(160deg,#F5EBD3,#E6D2A3)",
    sc:{"--sc":"rgba(72,52,12,.93)","--sm":"rgba(72,52,12,.45)","--sch":"rgba(72,52,12,.97)","--smh":"rgba(72,52,12,.82)"}},
   {id:"legistify",company:"Legistify",type:"Product Analytics · Live Dashboard",title:"Finding Where a Litigation Product Leaks Value",
    preview:"When hearing outcomes go unrecorded and AI credits run dry mid-month, legal teams quietly stop trusting their tool. My dashboard shows a PM where that's happening, from the whole org down to one person, and what to fix first.",
@@ -1462,7 +1462,7 @@ const LG_DASH="https://litigation-pulse.vaanigupta01.workers.dev/#/org";
 const LG_INSIGHTS="https://claude.ai/artifact/ATVHhQg81z4uXigP1ADoVs";
 const LG_DICTIONARY="https://claude.ai/artifact/BGDcMN4MFS9ZE9HZo7tRAL";
 // Mobile carousel in the FieldAssist modal. Add any new fa-*.jpg here.
-const FA_SHOTS=["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-talking.jpg","/images/fa-order.jpg"];
+const FA_SHOTS=["/images/fa-landing.jpg","/images/fa-shop.jpg","/images/fa-schemes.jpg","/images/fa-order.jpg","/images/fa-placed.jpg"];
 
 function useMedia(q){
   const get=()=>typeof window!=="undefined"&&window.matchMedia?window.matchMedia(q).matches:false;
@@ -1512,6 +1512,7 @@ const AN_CSS=`
 .an-feat:hover{border-color:var(--plum-b);transform:translateY(-2px);}
 .an-feat strong{color:var(--ink);font-weight:600;}
 .an-feat-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.an-recs{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;align-items:stretch;}
 .an-sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch;}
 .an-sg>div{padding:12px 16px;border-radius:10px;}
 .an-steps{position:relative;margin:4px 0 0;padding:0;list-style:none;}
@@ -1524,17 +1525,17 @@ const AN_CSS=`
 .an-link-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper);border:1px solid var(--rule);border-radius:12px;text-decoration:none;color:inherit;transition:border-color .2s;}
 .an-link-card:hover{border-color:var(--plum-b);}
 .an-phones{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:3%;}
-.an-phones img{width:28%!important;height:auto!important;aspect-ratio:392/768;max-height:90%;object-fit:cover;object-position:top;border-radius:12px;box-shadow:0 10px 28px rgba(40,25,5,.28);display:block;}
+.an-phones img{width:28%!important;height:auto!important;aspect-ratio:720/1342;max-height:90%;object-fit:cover;object-position:top;border-radius:12px;box-shadow:0 10px 28px rgba(40,25,5,.28);display:block;}
 .fa-modal{max-width:1180px!important;height:calc(100vh - 56px);display:grid;grid-template-columns:auto minmax(0,1fr);margin:0 auto!important;}
 .fa-left{position:relative;min-height:0;background:var(--iv);border-right:1px solid var(--rule);}
-.fa-full{position:absolute;left:calc(100% - 16px);bottom:18px;z-index:5;height:32px;max-width:32px;padding:0 9px;border-radius:16px;background:var(--paper);border:1px solid var(--rule);box-shadow:0 4px 14px rgba(0,0,0,.12);display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap;text-decoration:none;color:var(--ink-mu);font-family:var(--l);font-size:11px;transition:max-width .3s ease,color .2s,border-color .2s;}
-.fa-full svg{flex-shrink:0;}
-.fa-full:hover,.fa-full:focus-visible{max-width:220px;color:var(--plum);border-color:var(--plum-b);}
+.fa-full{position:absolute;left:calc(100% - 17px);bottom:18px;z-index:5;height:34px;max-width:34px;padding:0 10px;border-radius:17px;background:var(--paper);border:1px solid var(--plum-b);box-shadow:0 0 0 4px rgba(155,45,94,.1),0 6px 18px rgba(155,45,94,.28);display:flex;align-items:center;gap:7px;overflow:hidden;white-space:nowrap;text-decoration:none;color:var(--plum);font-family:var(--l);font-size:11px;font-weight:600;transition:max-width .3s ease,background .2s,color .2s;}
+.fa-full svg{flex-shrink:0;}.fa-full span{opacity:0;transition:opacity .2s;}.fa-full:hover span,.fa-full:focus-visible span{opacity:1;}
+.fa-full:hover,.fa-full:focus-visible{max-width:220px;background:var(--plum);color:white;}
 .fa-right{overflow-y:auto;min-height:0;}
 .fa-moc{right:max(32px,calc(50% - 576px))!important;}
 @media(max-width:760px){.an-sig-bd{grid-template-columns:1fr;gap:12px;}}
 @media(max-width:640px){
-  .an-feats,.an-sg{grid-template-columns:1fr;}
+  .an-feats,.an-sg,.an-recs{grid-template-columns:1fr;}
   .an-areas{grid-template-columns:1fr 1fr;}
 }
 @media(max-width:420px){
@@ -1557,7 +1558,7 @@ function LegistifyModal({onClose}){
      data:"AI Diligence burns 46% of credits, yet only 17% of its outputs get used: 59 credits per useful output against 3.3 for Ask AI. When credits run out on day 19, Ask AI, the low-cost assistant two-thirds of lawyers rely on, falls from about 40 queries a day to 3.",
      build:[["A separate pool for bulk AI,","so Ask AI never switches off."],["Preview before the batch:","Diligence runs on 5 cases first, shows the results and the full batch's credit cost, and continues only on confirmation."],["Early warning:","admins get an alert at 70% of credits with the projected limit day."]],
      move:[["Limit day","19","never reached"],["Ask AI after day 19:","3","about 40 a day"],["Diligence outputs used","17%","40%"],["Credits per useful output","59","about 25"]],
-     acc:"#7B5CD6",guard:"Useful Diligence outputs don't drop, so we cut waste and not useful work."},
+     acc:"#7B5CD6",guardRight:true,guard:"Useful Diligence outputs don't drop, so we cut waste and not useful work."},
     {t:"Auto-intake suggestions are mostly noise",
      data:"Name matching gives 31% precision, and the queue isn't ranked, so reviewers never reach most of it. In 90 days, 502 suggestions expired unread, about 146 of them real cases.",
      build:[["Rank by match confidence,","starting from each keyword group's track record. No new model needed."],["Fast lane and digest:","confident matches alert the right case manager; the rest go into a weekly digest."],["Route by business unit,","with alerts that name the party, court and first hearing date."]],
@@ -1615,9 +1616,10 @@ function LegistifyModal({onClose}){
                   <div>
                     <div className="ms">What I'd build</div>
                     <ul className="moli">{s.build.map(([b,r])=><li key={b}><strong>{b}</strong> {r}</li>)}</ul>
+                    {s.guardRight&&<div className="an-guard"><b>Guardrail</b>{s.guard}</div>}
                   </div>
                 </div>
-                <div className="an-guard"><b>Guardrail</b>{s.guard}</div>
+                {!s.guardRight&&<div className="an-guard"><b>Guardrail</b>{s.guard}</div>}
               </div>
             ))}
           </div>
@@ -1626,6 +1628,8 @@ function LegistifyModal({onClose}){
               <div className="an-sig-bd">
                 <div>
                   <p style={{fontSize:13.3}}>46% of active cases start from a contract. Linking Legistify's two products turns contract management and litigation into one lifecycle:</p>
+                  <div className="ms" style={{marginTop:14}}>What should move</div>
+                  <MoveChips items={[["Contract-based cases linked","0%","60% in a quarter"]]}/>
                 </div>
                 <div>
                   <div className="ms">What I'd build</div>
@@ -1636,12 +1640,11 @@ function LegistifyModal({onClose}){
                   </ul>
                 </div>
               </div>
-              <div className="ms" style={{marginTop:14}}>What should move</div>
-              <MoveChips items={[["Contract-based cases linked","0%","60% in a quarter"]]}/>
             </div>
           </div>
           <div className="mose"><h3 className="mosh">The Full Recommendations</h3>
             {/* claude.ai artifact pages refuse to load inside iframes (frame-ancestors 'self'), so this is a link card. */}
+            <div className="an-recs">
             <a href={LG_INSIGHTS} target="_blank" rel="noreferrer" data-prd-name="Legistify_Insights_Recommendations" className="an-link-card">
               <LogoSVG tool="Claude" size={36}/>
               <div style={{flex:1,minWidth:0}}>
@@ -1650,7 +1653,12 @@ function LegistifyModal({onClose}){
               </div>
               <span className="emo" style={{position:"static",flexShrink:0}}>Open ↗</span>
             </a>
-            <div style={{marginTop:12}}><LinkCTA label="Metric Dictionary ↗" url={LG_DICTIONARY} tool="Claude" prd="Legistify_Metric_Dictionary"/></div>
+            <a href={LG_DICTIONARY} target="_blank" rel="noreferrer" data-prd-name="Legistify_Metric_Dictionary" className="an-link-card">
+              <LogoSVG tool="Claude" size={30}/>
+              <div style={{flex:1,minWidth:0,fontFamily:"var(--h)",fontSize:15,fontWeight:600,color:"var(--ink)",lineHeight:1.25}}>Metric Dictionary</div>
+              <span className="emo" style={{position:"static",flexShrink:0}}>Open ↗</span>
+            </a>
+            </div>
           </div>
           <div className="mose" style={{marginBottom:0}}><h3 className="mosh">How I Built It</h3><div className="mot"><p>I chose the module, metrics, north star and bets, and wrote the spec and data rules. Claude Code built the dashboard and the sample company, with tests keeping every number consistent across views.</p></div></div>
         </div>
@@ -1659,16 +1667,17 @@ function LegistifyModal({onClose}){
   );
 }
 
-// The prototype as a real phone screen: a 390 × 844 viewport scaled to the modal's height,
+// The prototype as a real phone screen: a 360 × 780 viewport scaled to the modal's height,
 // with no frame, flush with the modal's left, top and bottom edges.
 function PhoneProto({src,title}){
   const ref=useRef(null);
   const[h,setH]=useState(0);
   useEffect(()=>{const el=ref.current;if(!el)return;const ro=new ResizeObserver(()=>setH(el.clientHeight));ro.observe(el);setH(el.clientHeight);return()=>ro.disconnect();},[]);
-  const sc=h?Math.min(1,Math.max(.68,h/844)):1;
+  const VW=360,VH=780; // a common Android viewport: bigger text than 390 × 844 at the same height
+  const sc=h?Math.min(1.1,Math.max(.8,h/VH)):1;
   return(
-    <div ref={ref} className="fa-left" style={{width:Math.round(390*sc)}}>
-      {h>0&&<div style={{position:"absolute",inset:0,overflow:"hidden"}}><LoadingIframe src={src} title={title} style={{width:390,height:Math.round(h/sc),transform:`scale(${sc})`,transformOrigin:"top left"}}/></div>}
+    <div ref={ref} className="fa-left" style={{width:Math.round(VW*sc)}}>
+      {h>0&&<div style={{position:"absolute",inset:0,overflow:"hidden"}}><LoadingIframe src={src} title={title} style={{width:VW,height:Math.round(h/sc),transform:`scale(${sc})`,transformOrigin:"top left"}}/></div>}
       <a href={src} target="_blank" rel="noreferrer" className="fa-full" aria-label="Open the prototype full screen">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         <span>Open full screen ↗</span>
@@ -2008,7 +2017,7 @@ export default function Portfolio(){
       <section id="thinking" className="page-section" style={{padding:"56px 64px",background:"var(--cream)"}}>
         <div className="ov">PM Thinking & Analysis</div>
         <h2 className="st">Beyond <em>execution</em></h2>
-        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Real product problems, worked end to end. Root causes diagnosed, requirements written, and two ideas taken further into a live analytics dashboard and a working app prototype.</p>
+        <p style={{fontSize:14,color:"var(--ink-mu)",maxWidth:500,marginBottom:36,fontWeight:300,lineHeight:1.75}}>Some problems need a diagnosis. Some need a spec. A few have to be built before anyone believes the answer. This is how I think through all three.</p>
         <div className="ag">{(moreAnalyses?ANALYSES:ANALYSES.slice(0,4)).map(item=><AnalysisCard key={item.id} item={item} onClick={()=>setActiveAnalysis(item)}/>)}</div>
         <button onClick={()=>setMoreAnalyses(!moreAnalyses)} className="iweb" style={{marginTop:18}}>{moreAnalyses?"Show fewer ↑":"See more analyses ↓"}</button>
       </section>
