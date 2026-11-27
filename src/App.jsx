@@ -1853,7 +1853,7 @@ function AnalysisCard({item,onClick}){
             <div className="an-phones">{item.cardImages.map(src=><img key={src} src={src} alt="" loading="lazy" decoding="async"/>)}</div>
           </div>
         ):item.cardImage?(
-          <img src={item.cardImage} alt="" loading="lazy" decoding="async"/>
+          <img src={item.cardImage} alt="" loading="lazy" decoding="async" style={{objectPosition:"left top"}}/>
         ):item.sheetUrl?(
           <LoadingIframe src={item.sheetUrl.replace(/\/edit.*$/,"/preview")+(item.sheetUrl.includes("gid=")?"?"+item.sheetUrl.split("?")[1]:"")} title="Sheet" style={{width:"150%",height:"150%",transform:"scale(.68)",transformOrigin:"top left",pointerEvents:"none"}}/>
         ):item.embedLink?(
